@@ -6,18 +6,18 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class ImportAbstract
 {
-    protected $data = null;
+    protected $data = array();
 
-    public function getData($source)
+    public function request($source)
     {
-        // temporarily use local file
-        if (($contents = file_get_contents($source, 'r')) !== false) {
-            $this->data = new Crawler($contents);
+        if (($content = file_get_contents($source, 'r')) !== false) {
+            $this->data = simplexml_load_string($content);
         }
 
         return $this->data;
     }
 
+    abstract function __toString();
     abstract function run();
 }
 

@@ -1,2 +1,2 @@
-flights:
+api_info:
     url: http://flydata.avinor.no/XmlFeed.asp
