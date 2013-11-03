@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<orm-designer version="2.2.1.736" name="MittFly" mvc="Symfony2" orm="Doctrine2" uuid="67b61591-894c-4816-adfd-0e7968ae102f">
+  <module name="FriggFlyBundle" import-format="Doctrine2Php" import-path="src/Frigg/FlyBundle/Entity" uuid="28b9de9d-87d4-4c2e-b2a0-4cf48f8b3805">
+    <entity name="Airline" uuid="0e903327-aa42-4446-b248-37d08727dd67">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="665ead1b-eddb-4c8d-a68f-5108733b0241"/>
+      <field name="code" type="string" size="20" unique="true" uuid="6a5a722f-b6b4-41ab-81ce-3f9e2c7605fb"/>
+      <field name="name" type="string" size="255" uuid="8088be11-61b4-4ad1-9bcc-a583f6683793"/>
+    </entity>
+    <entity name="Airport" uuid="2170e12d-2e6a-4a7b-9db4-a61b86dbc311">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="1743b3f4-9212-400f-97a7-4422bed7fbb5"/>
+      <field name="code" type="string" size="20" unique="true" uuid="08a6a1b3-a5e3-4558-8511-c16f6c15825b"/>
+      <field name="name" type="string" size="255" uuid="c197f8a4-b490-48e9-ae3e-a1bdb1b232c8"/>
+    </entity>
+    <entity name="FlightStatus" description="1" uuid="63844a23-2450-47da-98a2-8039df4bc956">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="21e5ded9-850c-42aa-a246-8fac314c250b"/>
+      <field name="code" type="string" size="1" unique="true" uuid="f60f8314-fe38-4c3e-8c9f-36b11fb1cbae"/>
+      <field name="text_eng" type="string" size="255" uuid="ae0cc5a6-b118-43fc-9cd8-c11781fe16d5"/>
+      <field name="text_no" type="string" size="255" uuid="af65999c-472c-46a0-9d0a-328919252758"/>
+    </entity>
+    <entity name="AirportViaFlight" uuid="1bd16212-2e60-4b5a-9768-53576b7afb9d">
+      <field name="airport_id" type="integer" required="true" primary="true" uuid="4c61ecc6-9641-44d3-95f8-d1b2dd065ff9"/>
+      <field name="flight_id" type="integer" required="true" primary="true" uuid="de9c4a51-72b8-4ea6-b2bd-911e348261ea"/>
+    </entity>
+    <many-to-many mn-entity="AirportViaFlight" caption="New ManyToMany" uuid="780f5b8f-6ec1-4bcc-9a74-6f54a4d52de0">
+      <many-to-many-entity name="Flight" owning-side="true" alias="via_flights" uuid="85d0a0ff-5342-4dc1-8f74-f1d2a65e1143">
+        <many-to-many-field from="flight_id" to="id"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="Airport" owning-side="false" alias="via_airports" uuid="b551424e-e381-4947-9808-418f3d2c2c86">
+        <many-to-many-field from="airport_id" to="id"/>
+      </many-to-many-entity>
+    </many-to-many>
+    <entity name="Flight" uuid="c173d970-2cc3-4053-8458-523df376f7e8">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="e2621e8f-4c3c-454e-99ac-e64095c4e28b"/>
+      <field name="flight_id" type="integer" unique="true" uuid="5706a88a-5ab6-4d4c-b23c-e9943f6ea863"/>
+      <field name="airline_id" type="integer" required="true" uuid="5f6d7965-5b64-462f-b969-42ec7dbb5bb3"/>
+      <field name="dom_int" type="string" size="1" unique="true" uuid="ffeef7fc-e3e4-4f79-bd16-5231c8fd1a11"/>
+      <field name="schedule_time" type="string" size="255" required="true" uuid="43ee58d6-5e28-491c-b6fe-97879a4d6dd6"/>
+      <field name="arr_dep" type="string" size="1" uuid="b6b903ec-0f77-4930-9549-5493a41deddc"/>
+      <field name="airport_id" type="integer" required="true" uuid="a9460abe-821f-4398-9613-6eaa3242f436"/>
+      <field name="flight_status_id" type="integer" required="true" uuid="9b7f1c00-3d97-4e32-a173-ef608c5558a3"/>
+      <field name="flight_status_time" type="string" size="255" uuid="b3c49c4f-1b87-474b-9419-47ec0536cc5d"/>
+      <field name="check_in" type="string" size="10" uuid="dc82e186-2aaf-4a21-9e65-7fc7eebee1aa"/>
+      <field name="gate" type="string" size="10" uuid="87b95156-bc8d-4f0a-a0f7-cc5b3cff7682"/>
+      <field name="delayed" type="boolean" uuid="7c5e7095-3e09-462d-aac0-b194141e2312"/>
+    </entity>
+    <association from="Flight" to="Airline" caption="Flight (NULL)" owner-alias="flights" inverse-alias="airline" uuid="6ec332a5-c87e-4621-bf77-09face03d6c3">
+      <association-field from="airline_id" to="id"/>
+    </association>
+    <association from="Flight" to="Airport" caption="Airport (NULL)" owner-alias="flights" inverse-alias="airport" uuid="5e392973-2929-47e8-9c51-a7a3908dd4bd">
+      <association-field from="airport_id" to="id"/>
+    </association>
+    <association from="Flight" to="FlightStatus" caption="FlightStatus (NULL)" owner-alias="Flights" inverse-alias="FlightStatus" uuid="0bbdb252-d748-4662-b8c7-d3dac55c26ae">
+      <association-field from="flight_status_id" to="id"/>
+    </association>
+  </module>
+  <visual-data>
+    <entity uuid="0e903327-aa42-4446-b248-37d08727dd67" position-x="277" position-y="83" size-x="0" size-x2="98" size-y="0" size-y2="59"/>
+    <entity uuid="1bd16212-2e60-4b5a-9768-53576b7afb9d" position-x="-213" position-y="397" size-x="0" size-x2="97" size-y="0" size-y2="60"/>
+    <entity uuid="2170e12d-2e6a-4a7b-9db4-a61b86dbc311" position-x="35" position-y="396" size-x="0" size-x2="98" size-y="0" size-y2="59"/>
+    <module uuid="28b9de9d-87d4-4c2e-b2a0-4cf48f8b3805" bk-color="4294638066" position-x="61" position-y="72" size-x="243" size-x2="703" size-y="193" size-y2="478"/>
+    <association uuid="5e392973-2929-47e8-9c51-a7a3908dd4bd" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="-10"/>
+    <entity uuid="63844a23-2450-47da-98a2-8039df4bc956" position-x="27" position-y="-130" size-x="0" size-x2="110" size-y="0" size-y2="73"/>
+    <project uuid="67b61591-894c-4816-adfd-0e7968ae102f" size-x="232" size-x2="1038" size-y="171" size-y2="653"/>
+    <entity uuid="c173d970-2cc3-4053-8458-523df376f7e8" position-x="10" position-y="20"/>
+  </visual-data>
+</orm-designer>
