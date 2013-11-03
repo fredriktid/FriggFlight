@@ -1,0 +1,3 @@
+frigg_fly:
+    resource: "@FriggFlyBundle/Controller"
+    type: annotation

@@ -1,0 +1,7 @@
+parameters:
+#    frigg_fly.example.class: Frigg\FlyBundle\Example
+
+services:
+#    frigg_fly.example:
+#        class: %frigg_fly.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
