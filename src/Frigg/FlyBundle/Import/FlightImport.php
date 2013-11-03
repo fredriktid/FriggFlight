@@ -4,9 +4,8 @@ namespace Frigg\FlyBundle\Import;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DomCrawler\Crawler;
 
-class FlightImport extends ImportBase
+class FlightImport extends ImportAbstract
 {
     private $container;
     private $config;
@@ -19,15 +18,9 @@ class FlightImport extends ImportBase
 
     public function run()
     {
-        //var_dump($this->config);
-        $rootDir = $this->container->get('kernel')->getRootDir();;
-        // temporarily use local file
-        if (($contents = file_get_contents($rootDir . '/../xml/flights.xml', 'r')) !== false) {
-            $crawler = new Crawler($contents);
-            foreach ($crawler as $domElement) {
-                //var_dump($domElement->hasChildNodes()); die;
-            }
+        $source = sprintf('%s/../xml/flights.xml', $this->container->get('kernel')->getRootDir());
+        foreach ($this->getData($source) as $domElement) {
+            // import...
         }
     }
 }
-
