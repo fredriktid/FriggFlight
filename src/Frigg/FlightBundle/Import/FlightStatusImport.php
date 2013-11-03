@@ -1,10 +1,10 @@
 <?php
 
-namespace Frigg\FlyBundle\Import;
+namespace Frigg\FlightBundle\Import;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Frigg\FlyBundle\Entity\FlightStatus;
+use Frigg\FlightBundle\Entity\FlightStatus;
 
 class FlightStatusImport extends ImportAbstract
 {
@@ -32,7 +32,7 @@ class FlightStatusImport extends ImportAbstract
         if ($data = $this->request($source)) {
             foreach ($data as $item) {
                 if ($item['code'] && $item['code']) {
-                    if (!$flightStatus = $em->getRepository('FriggFlyBundle:FlightStatus')->findOneByCode($item['code'])) {
+                    if (!$flightStatus = $em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($item['code'])) {
                         $flightStatus = new FlightStatus;
                     }
 

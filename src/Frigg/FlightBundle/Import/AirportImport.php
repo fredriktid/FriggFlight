@@ -1,16 +1,16 @@
 <?php
 
-namespace Frigg\FlyBundle\Import;
+namespace Frigg\FlightBundle\Import;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Frigg\FlyBundle\Entity\Airline;
+use Frigg\FlightBundle\Entity\Airport;
 
-class AirlineImport extends ImportAbstract
+class AirportImport extends ImportAbstract
 {
     private $container;
     private $config;
-    private $airlines = array();
+    private $airports = array();
 
     public function __construct(ContainerInterface $container, $configFile)
     {
@@ -20,29 +20,29 @@ class AirlineImport extends ImportAbstract
 
     public function __toString()
     {
-        return sprintf('Imported %d airlines (loaded %d)%s', count($this->airlines), count($this->data), PHP_EOL);
+        return sprintf('Imported %d airports (loaded %d)%s', count($this->airports), count($this->data), PHP_EOL);
     }
 
     public function run()
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
         // $source = $this->config['api_info', 'url']
-        $source = sprintf('%s/../xml/airlineNames.asp.xml', $this->container->get('kernel')->getRootDir());
+        $source = sprintf('%s/../xml/airportNames.asp.xml', $this->container->get('kernel')->getRootDir());
 
         if ($data = $this->request($source)) {
             foreach ($data as $item) {
                 if ($item['code'] && $item['code']) {
-                    if (!$airline = $em->getRepository('FriggFlyBundle:Airline')->findOneByCode($item['code'])) {
-                        $airline = new Airline;
+                    if (!$airport = $em->getRepository('FriggFlightBundle:Airport')->findOneByCode($item['code'])) {
+                        $airport = new Airport;
                     }
 
-                    $airline->setCode($item['code']);
-                    $airline->setName($item['name']);
+                    $airport->setCode($item['code']);
+                    $airport->setName($item['name']);
 
-                    $em->persist($airline);
+                    $em->persist($airport);
                     $em->flush();
 
-                    $this->airlines[] = $airline;
+                    $this->airports[] = $airport;
                 }
             }
         }

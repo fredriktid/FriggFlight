@@ -1,4 +1,4 @@
-FriggFly 0.1
+FriggFlight 0.1
 ========
 
 A fly data analyzer.

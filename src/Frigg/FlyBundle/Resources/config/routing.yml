@@ -1,3 +1,0 @@
-frigg_fly_homepage:
-    pattern:  /
-    defaults: { _controller: FriggFlyBundle:Default:index }

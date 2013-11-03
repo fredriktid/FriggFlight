@@ -1,10 +1,10 @@
 <?php
 
-namespace Frigg\FlyBundle\Import;
+namespace Frigg\FlightBundle\Import;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Frigg\FlyBundle\Entity\Flight;
+use Frigg\FlightBundle\Entity\Flight;
 
 class FlightImport extends ImportAbstract
 {
@@ -32,7 +32,7 @@ class FlightImport extends ImportAbstract
                 foreach ($data->flights as $item) {
                     foreach ($item->flight as $flight)
                     {
-                        if (!$flightObject = $em->getRepository('FriggFlyBundle:Flight')->findOneByUnique($flight['uniqueID'])) {
+                        if (!$flightObject = $em->getRepository('FriggFlightBundle:Flight')->findOneByUnique($flight['uniqueID'])) {
                             $flightObject = new Flight;
                         }
 
@@ -43,16 +43,16 @@ class FlightImport extends ImportAbstract
                         $flightObject->setArrDep((string) $flight->arr_dep);
                         $flightObject->setCheckIn((string) $flight->check_in);
 
-                        if ($airlineObject = $em->getRepository('FriggFlyBundle:Airline')->findOneByCode($flight->airline)) {
+                        if ($airlineObject = $em->getRepository('FriggFlightBundle:Airline')->findOneByCode($flight->airline)) {
                             $flightObject->setAirline($airlineObject);
                         };
 
-                        if ($airportObject = $em->getRepository('FriggFlyBundle:Airport')->findOneByCode($flight->airport)) {
+                        if ($airportObject = $em->getRepository('FriggFlightBundle:Airport')->findOneByCode($flight->airport)) {
                             $flightObject->setAirport($airportObject);
                         };
 
                         if (isset($flight->status)) {
-                            if ($flightStatus = $em->getRepository('FriggFlyBundle:FlightStatus')->findOneByCode($flight->status)) {
+                            if ($flightStatus = $em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($flight->status)) {
                                 $flightObject->setFlightStatus($flightStatus);
                             };
                         }
