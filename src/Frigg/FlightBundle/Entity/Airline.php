@@ -1,13 +1,13 @@
 <?php
 
-namespace Frigg\FlyBundle\Entity;
+namespace Frigg\FlightBundle\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
  */
-class Airport
+class Airline
 {
     /**
      * @ORM\Id
@@ -27,27 +27,21 @@ class Airport
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Flight", mappedBy="airport")
+     * @ORM\OneToMany(targetEntity="Flight", mappedBy="airline")
      */
     private $flights;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Flight", mappedBy="via_airports")
-     */
-    private $via_flights;
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->flights = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->via_flights = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -58,19 +52,19 @@ class Airport
      * Set code
      *
      * @param string $code
-     * @return Airport
+     * @return Airline
      */
     public function setCode($code)
     {
         $this->code = $code;
-    
+
         return $this;
     }
 
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -81,19 +75,19 @@ class Airport
      * Set name
      *
      * @param string $name
-     * @return Airport
+     * @return Airline
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -103,22 +97,22 @@ class Airport
     /**
      * Add flights
      *
-     * @param \Frigg\FlyBundle\Entity\Flight $flights
-     * @return Airport
+     * @param \Frigg\FlightBundle\Entity\Flight $flights
+     * @return Airline
      */
-    public function addFlight(\Frigg\FlyBundle\Entity\Flight $flights)
+    public function addFlight(\Frigg\FlightBundle\Entity\Flight $flights)
     {
         $this->flights[] = $flights;
-    
+
         return $this;
     }
 
     /**
      * Remove flights
      *
-     * @param \Frigg\FlyBundle\Entity\Flight $flights
+     * @param \Frigg\FlightBundle\Entity\Flight $flights
      */
-    public function removeFlight(\Frigg\FlyBundle\Entity\Flight $flights)
+    public function removeFlight(\Frigg\FlightBundle\Entity\Flight $flights)
     {
         $this->flights->removeElement($flights);
     }
@@ -126,43 +120,10 @@ class Airport
     /**
      * Get flights
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFlights()
     {
         return $this->flights;
-    }
-
-    /**
-     * Add via_flights
-     *
-     * @param \Frigg\FlyBundle\Entity\Flight $viaFlights
-     * @return Airport
-     */
-    public function addViaFlight(\Frigg\FlyBundle\Entity\Flight $viaFlights)
-    {
-        $this->via_flights[] = $viaFlights;
-    
-        return $this;
-    }
-
-    /**
-     * Remove via_flights
-     *
-     * @param \Frigg\FlyBundle\Entity\Flight $viaFlights
-     */
-    public function removeViaFlight(\Frigg\FlyBundle\Entity\Flight $viaFlights)
-    {
-        $this->via_flights->removeElement($viaFlights);
-    }
-
-    /**
-     * Get via_flights
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getViaFlights()
-    {
-        return $this->via_flights;
     }
 }

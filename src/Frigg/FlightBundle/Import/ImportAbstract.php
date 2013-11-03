@@ -1,6 +1,6 @@
 <?php
 
-namespace Frigg\FlyBundle\Import;
+namespace Frigg\FlightBundle\Import;
 
 use Symfony\Component\DomCrawler\Crawler;
 

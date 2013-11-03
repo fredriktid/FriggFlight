@@ -1,6 +1,6 @@
 <?php
 
-namespace Frigg\FlyBundle\Entity;
+namespace Frigg\FlightBundle\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
 
@@ -42,11 +42,11 @@ class FlightStatus
     {
         $this->flights = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,14 +62,14 @@ class FlightStatus
     public function setCode($code)
     {
         $this->code = $code;
-    
+
         return $this;
     }
 
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -85,14 +85,14 @@ class FlightStatus
     public function setTextEng($textEng)
     {
         $this->text_eng = $textEng;
-    
+
         return $this;
     }
 
     /**
      * Get text_eng
      *
-     * @return string 
+     * @return string
      */
     public function getTextEng()
     {
@@ -108,14 +108,14 @@ class FlightStatus
     public function setTextNo($textNo)
     {
         $this->text_no = $textNo;
-    
+
         return $this;
     }
 
     /**
      * Get text_no
      *
-     * @return string 
+     * @return string
      */
     public function getTextNo()
     {
@@ -125,22 +125,22 @@ class FlightStatus
     /**
      * Add flights
      *
-     * @param \Frigg\FlyBundle\Entity\Flight $flights
+     * @param \Frigg\FlightBundle\Entity\Flight $flights
      * @return FlightStatus
      */
-    public function addFlight(\Frigg\FlyBundle\Entity\Flight $flights)
+    public function addFlight(\Frigg\FlightBundle\Entity\Flight $flights)
     {
         $this->flights[] = $flights;
-    
+
         return $this;
     }
 
     /**
      * Remove flights
      *
-     * @param \Frigg\FlyBundle\Entity\Flight $flights
+     * @param \Frigg\FlightBundle\Entity\Flight $flights
      */
-    public function removeFlight(\Frigg\FlyBundle\Entity\Flight $flights)
+    public function removeFlight(\Frigg\FlightBundle\Entity\Flight $flights)
     {
         $this->flights->removeElement($flights);
     }
@@ -148,7 +148,7 @@ class FlightStatus
     /**
      * Get flights
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFlights()
     {

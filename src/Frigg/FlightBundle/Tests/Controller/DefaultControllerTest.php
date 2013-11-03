@@ -1,6 +1,6 @@
 <?php
 
-namespace Frigg\FlyBundle\Tests\Controller;
+namespace Frigg\FlightBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

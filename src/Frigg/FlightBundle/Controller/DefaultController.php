@@ -1,6 +1,6 @@
 <?php
 
-namespace Frigg\FlyBundle\Controller;
+namespace Frigg\FlightBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -11,10 +11,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="frigg_fly_homepage")
+     * @Route("/", name="frigg_flight_homepage")
      */
     public function indexAction()
     {
-        return $this->render('FriggFlyBundle:Default:index.html.twig');
+        return $this->render('FriggFlightBundle:Default:index.html.twig');
     }
 }

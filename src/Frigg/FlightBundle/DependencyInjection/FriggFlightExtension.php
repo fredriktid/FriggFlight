@@ -1,6 +1,6 @@
 <?php
 
-namespace Frigg\FlyBundle\DependencyInjection;
+namespace Frigg\FlightBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class FriggFlyExtension extends Extension
+class FriggFlightExtension extends Extension
 {
     /**
      * {@inheritDoc}

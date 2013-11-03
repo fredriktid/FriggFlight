@@ -1,6 +1,6 @@
 <?php
 
-namespace Frigg\FlyBundle\Entity;
+namespace Frigg\FlightBundle\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
 
@@ -317,10 +317,10 @@ class Flight
     /**
      * Set airline
      *
-     * @param \Frigg\FlyBundle\Entity\Airline $airline
+     * @param \Frigg\FlightBundle\Entity\Airline $airline
      * @return Flight
      */
-    public function setAirline(\Frigg\FlyBundle\Entity\Airline $airline)
+    public function setAirline(\Frigg\FlightBundle\Entity\Airline $airline)
     {
         $this->airline = $airline;
 
@@ -330,7 +330,7 @@ class Flight
     /**
      * Get airline
      *
-     * @return \Frigg\FlyBundle\Entity\Airline
+     * @return \Frigg\FlightBundle\Entity\Airline
      */
     public function getAirline()
     {
@@ -340,10 +340,10 @@ class Flight
     /**
      * Set airport
      *
-     * @param \Frigg\FlyBundle\Entity\Airport $airport
+     * @param \Frigg\FlightBundle\Entity\Airport $airport
      * @return Flight
      */
-    public function setAirport(\Frigg\FlyBundle\Entity\Airport $airport)
+    public function setAirport(\Frigg\FlightBundle\Entity\Airport $airport)
     {
         $this->airport = $airport;
 
@@ -353,7 +353,7 @@ class Flight
     /**
      * Get airport
      *
-     * @return \Frigg\FlyBundle\Entity\Airport
+     * @return \Frigg\FlightBundle\Entity\Airport
      */
     public function getAirport()
     {
@@ -363,10 +363,10 @@ class Flight
     /**
      * Set flight_status
      *
-     * @param \Frigg\FlyBundle\Entity\FlightStatus $flightStatus
+     * @param \Frigg\FlightBundle\Entity\FlightStatus $flightStatus
      * @return Flight
      */
-    public function setFlightStatus(\Frigg\FlyBundle\Entity\FlightStatus $flightStatus)
+    public function setFlightStatus(\Frigg\FlightBundle\Entity\FlightStatus $flightStatus)
     {
         $this->flight_status = $flightStatus;
 
@@ -376,7 +376,7 @@ class Flight
     /**
      * Get flight_status
      *
-     * @return \Frigg\FlyBundle\Entity\FlightStatus
+     * @return \Frigg\FlightBundle\Entity\FlightStatus
      */
     public function getFlightStatus()
     {
@@ -386,10 +386,10 @@ class Flight
     /**
      * Add via_airports
      *
-     * @param \Frigg\FlyBundle\Entity\Airport $viaAirports
+     * @param \Frigg\FlightBundle\Entity\Airport $viaAirports
      * @return Flight
      */
-    public function addViaAirport(\Frigg\FlyBundle\Entity\Airport $viaAirports)
+    public function addViaAirport(\Frigg\FlightBundle\Entity\Airport $viaAirports)
     {
         $this->via_airports[] = $viaAirports;
 
@@ -399,9 +399,9 @@ class Flight
     /**
      * Remove via_airports
      *
-     * @param \Frigg\FlyBundle\Entity\Airport $viaAirports
+     * @param \Frigg\FlightBundle\Entity\Airport $viaAirports
      */
-    public function removeViaAirport(\Frigg\FlyBundle\Entity\Airport $viaAirports)
+    public function removeViaAirport(\Frigg\FlightBundle\Entity\Airport $viaAirports)
     {
         $this->via_airports->removeElement($viaAirports);
     }

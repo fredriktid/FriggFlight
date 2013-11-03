@@ -1,6 +1,6 @@
 <?php
 
-namespace Frigg\FlyBundle\Command;
+namespace Frigg\FlightBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,7 +14,7 @@ class ImportCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('friggfly:import')
+            ->setName('frigg_flight:import')
             ->setDescription('Import flights')
             ->addArgument(
                 'type',
@@ -33,28 +33,28 @@ class ImportCommand extends ContainerAwareCommand
         switch($type) {
             case 'flight':
                 $output->writeln('Running flight importer');
-                $importer = $container->get('frigg_fly.flight_import');
+                $importer = $container->get('frigg_flight.flight_import');
                 $importer->run();
                 echo $importer;
                 break;
 
             case 'flight_status':
                 $output->writeln('Running flight status importer');
-                $importer = $container->get('frigg_fly.flight_status_import');
+                $importer = $container->get('frigg_flight.flight_status_import');
                 $importer->run();
                 echo $importer;
                 break;
 
             case 'airport':
                 $output->writeln('Running airport importer');
-                $importer = $container->get('frigg_fly.airport_import');
+                $importer = $container->get('frigg_flight.airport_import');
                 $importer->run();
                 echo $importer;
                 break;
 
             case 'airline':
                 $output->writeln('Running airline importer');
-                $importer = $container->get('frigg_fly.airline_import');
+                $importer = $container->get('frigg_flight.airline_import');
                 $importer->run();
                 echo $importer;
                 break;
