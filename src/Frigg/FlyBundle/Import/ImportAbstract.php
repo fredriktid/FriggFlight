@@ -8,7 +8,7 @@ abstract class ImportAbstract
 {
     protected $data = array();
 
-    public function request($source)
+    protected function request($source)
     {
         if (($content = file_get_contents($source, 'r')) !== false) {
             $this->data = simplexml_load_string($content);
@@ -17,7 +17,7 @@ abstract class ImportAbstract
         return $this->data;
     }
 
-    abstract function __toString();
-    abstract function run();
+    abstract public function __toString();
+    abstract public function run();
 }
 
