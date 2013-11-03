@@ -1,7 +1,8 @@
 parameters:
-#    frigg_fly.example.class: Frigg\FlyBundle\Example
+    frigg_fly.flight_import.class: Frigg\FlyBundle\Import\FlightImport
+    frigg_fly.flight_import.config: "%kernel.root_dir%/../src/Frigg/FlyBundle/Resources/config/flight_import.yml"
 
 services:
-#    frigg_fly.example:
-#        class: %frigg_fly.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    frigg_fly.flight_import:
+        class: %frigg_fly.flight_import.class%
+        arguments: [ @service_container, %frigg_fly.flight_import.config%  ]
