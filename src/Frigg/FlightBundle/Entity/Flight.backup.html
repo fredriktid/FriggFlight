@@ -17,14 +17,14 @@ class Flight
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="integer", nullable=false)
      */
-    private $remote;
+    private $unique;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $identifier;
+    private $flight;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -44,6 +44,11 @@ class Flight
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $flight_status_time;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $check_in;
 
     /**
@@ -54,7 +59,7 @@ class Flight
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $is_delayed;
+    private $delayed;
 
     /**
      * @ORM\ManyToOne(targetEntity="Airline", inversedBy="flights", cascade={"persist"})
@@ -69,11 +74,6 @@ class Flight
     private $airport;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $flight_status_time;
-
-    /**
      * @ORM\ManyToOne(targetEntity="FlightStatus", inversedBy="flights", cascade={"persist"})
      * @ORM\JoinColumn(name="flight_status_id", referencedColumnName="id", nullable=true)
      */
@@ -82,13 +82,12 @@ class Flight
     /**
      * @ORM\ManyToMany(targetEntity="Airport", inversedBy="via_flights")
      * @ORM\JoinTable(
-     *     name="FlightViaAiport",
+     *     name="AirportViaFlight",
      *     joinColumns={@ORM\JoinColumn(name="flight_id", referencedColumnName="id", nullable=true)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="airport_id", referencedColumnName="id", nullable=true)}
      * )
      */
     private $via_airports;
-
 
     /**
      * Constructor
@@ -109,49 +108,49 @@ class Flight
     }
 
     /**
-     * Set remote
+     * Set flight
      *
-     * @param string $remote
+     * @param string $flight
      * @return Flight
      */
-    public function setRemote($remote)
+    public function setFlight($flight)
     {
-        $this->remote = $remote;
+        $this->flight = $flight;
 
         return $this;
     }
 
     /**
-     * Get remote
+     * Get flight
      *
      * @return string
      */
-    public function getRemote()
+    public function getFlight()
     {
-        return $this->remote;
+        return $this->flight;
     }
 
     /**
-     * Set identifier
+     * Set unique
      *
-     * @param string $identifier
+     * @param integer $unique
      * @return Flight
      */
-    public function setIdentifier($identifier)
+    public function setUnique($unique)
     {
-        $this->identifier = $identifier;
+        $this->unique = $unique;
 
         return $this;
     }
 
     /**
-     * Get identifier
+     * Get unique
      *
-     * @return string
+     * @return integer
      */
-    public function getIdentifier()
+    public function getUnique()
     {
-        return $this->identifier;
+        return $this->unique;
     }
 
     /**
@@ -224,6 +223,29 @@ class Flight
     }
 
     /**
+     * Set flight_status_time
+     *
+     * @param string $flightStatusTime
+     * @return Flight
+     */
+    public function setFlightStatusTime($flightStatusTime)
+    {
+        $this->flight_status_time = $flightStatusTime;
+
+        return $this;
+    }
+
+    /**
+     * Get flight_status_time
+     *
+     * @return string
+     */
+    public function getFlightStatusTime()
+    {
+        return $this->flight_status_time;
+    }
+
+    /**
      * Set check_in
      *
      * @param string $checkIn
@@ -270,14 +292,14 @@ class Flight
     }
 
     /**
-     * Set is_delayed
+     * Set delayed
      *
-     * @param boolean $is_delayed
+     * @param boolean $delayed
      * @return Flight
      */
-    public function setIsDelayed($is_delayed)
+    public function setDelayed($delayed)
     {
-        $this->is_delayed = $is_delayed;
+        $this->delayed = $delayed;
 
         return $this;
     }
@@ -287,32 +309,9 @@ class Flight
      *
      * @return boolean
      */
-    public function getIsDelayed()
+    public function getDelayed()
     {
-        return $this->is_delayed;
-    }
-
-    /**
-     * Set flight_status_time
-     *
-     * @param string $flightStatusTime
-     * @return Flight
-     */
-    public function setFlightStatusTime($flightStatusTime)
-    {
-        $this->flight_status_time = $flightStatusTime;
-
-        return $this;
-    }
-
-    /**
-     * Get flight_status_time
-     *
-     * @return string
-     */
-    public function getFlightStatusTime()
-    {
-        return $this->flight_status_time;
+        return $this->delayed;
     }
 
     /**
@@ -321,7 +320,7 @@ class Flight
      * @param \Frigg\FlightBundle\Entity\Airline $airline
      * @return Flight
      */
-    public function setAirline(\Frigg\FlightBundle\Entity\Airline $airline = null)
+    public function setAirline(\Frigg\FlightBundle\Entity\Airline $airline)
     {
         $this->airline = $airline;
 
@@ -344,7 +343,7 @@ class Flight
      * @param \Frigg\FlightBundle\Entity\Airport $airport
      * @return Flight
      */
-    public function setAirport(\Frigg\FlightBundle\Entity\Airport $airport = null)
+    public function setAirport(\Frigg\FlightBundle\Entity\Airport $airport)
     {
         $this->airport = $airport;
 
@@ -367,7 +366,7 @@ class Flight
      * @param \Frigg\FlightBundle\Entity\FlightStatus $flightStatus
      * @return Flight
      */
-    public function setFlightStatus(\Frigg\FlightBundle\Entity\FlightStatus $flightStatus = null)
+    public function setFlightStatus(\Frigg\FlightBundle\Entity\FlightStatus $flightStatus)
     {
         $this->flight_status = $flightStatus;
 

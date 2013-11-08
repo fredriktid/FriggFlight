@@ -18,18 +18,15 @@ class FlightStatusImport extends ImportAbstract
         $this->config = Yaml::parse(file_get_contents($configFile));
     }
 
-    public function __toString()
+    public function output()
     {
-        return sprintf('Imported %d flight statuses (loaded %d)%s', count($this->flightStatuses), count($this->data), PHP_EOL);
+        return sprintf('Imported %d flight statuses', count($this->flightStatuses));
     }
 
     public function run()
     {
-        $em = $this->container->get('doctrine.orm.entity_manager');
-        // $source = $this->config['api_info', 'url']
-        $source = sprintf('%s/../xml/flightStatuses.asp.xml', $this->container->get('kernel')->getRootDir());
-
-        if ($data = $this->request($source)) {
+        if ($data = $this->request($this->config['source'])) {
+            $em = $this->container->get('doctrine.orm.entity_manager');
             foreach ($data as $item) {
                 if ($item['code'] && $item['code']) {
                     if (!$flightStatus = $em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($item['code'])) {
@@ -41,11 +38,10 @@ class FlightStatusImport extends ImportAbstract
                     $flightStatus->setTextNo($item['statusTextNo']);
 
                     $em->persist($flightStatus);
-                    $em->flush();
-
                     $this->flightStatuses[] = $flightStatus;
                 }
             }
+            $em->flush();
         }
     }
 }

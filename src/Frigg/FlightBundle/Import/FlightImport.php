@@ -5,6 +5,9 @@ namespace Frigg\FlightBundle\Import;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Frigg\FlightBundle\Entity\Flight;
+use Frigg\FlightBundle\Entity\FlightStatus;
+use Frigg\FlightBundle\Entity\Airline;
+use Frigg\FlightBundle\Entity\Airport;
 
 class FlightImport extends ImportAbstract
 {
@@ -18,55 +21,88 @@ class FlightImport extends ImportAbstract
         $this->config = Yaml::parse(file_get_contents($configFile));
     }
 
-    public function __toString()
+    public function output()
     {
-        return sprintf('Imported %d flights (loaded %d)%s', count($this->flights), count($this->data), PHP_EOL);
+        return sprintf('Imported %d flights', count($this->flights));
     }
 
     public function run()
     {
+        if (!isset($this->config['airports'])) {
+            return false;
+        }
+
         $em = $this->container->get('doctrine.orm.entity_manager');
-        $source = sprintf('%s/../xml/flights.xml', $this->container->get('kernel')->getRootDir());
-        if ($data = $this->request($source)) {
-            if (is_object($data)) {
-                foreach ($data->flights as $item) {
-                    foreach ($item->flight as $flight)
-                    {
-                        if (!$flightObject = $em->getRepository('FriggFlightBundle:Flight')->findOneByUnique($flight['uniqueID'])) {
-                            $flightObject = new Flight;
-                        }
 
-                        $flightObject->setUnique((int) $flight['uniqueID']);
-                        $flightObject->setFlight((string) $flight->flight_id);
-                        $flightObject->setDomInt((string) $flight->dom_int);
-                        $flightObject->setScheduleTime((string) $flight->schedule_time);
-                        $flightObject->setArrDep((string) $flight->arr_dep);
-                        $flightObject->setCheckIn((string) $flight->check_in);
+        foreach($this->config['airports'] as $airportImportCode) {
 
-                        if ($airlineObject = $em->getRepository('FriggFlightBundle:Airline')->findOneByCode($flight->airline)) {
-                            $flightObject->setAirline($airlineObject);
-                        };
+            $params = array(
+                'airport' => $airportImportCode,
+                'TimeFrom' => 1,
+                'TimeTo' => 182,
+                'Direction' => 'D',
+                'lastUpdate' => '2009-03-10T15:03:00Z'
+            );
 
-                        if ($airportObject = $em->getRepository('FriggFlightBundle:Airport')->findOneByCode($flight->airport)) {
-                            $flightObject->setAirport($airportObject);
-                        };
+            $source = sprintf('%s?%s', $this->config['source'], implode('&', array_map(function($key, $val) {
+                return sprintf('%s=%s', urlencode($key), urlencode($val));
+              },
+              array_keys($params), $params))
+            );
 
-                        if (isset($flight->status)) {
-                            if ($flightStatus = $em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($flight->status)) {
-                                $flightObject->setFlightStatus($flightStatus);
-                            };
-                        }
+            if ($data = $this->request($source)) {
+                foreach ($data->flights->flight as $flightNode) {
+                    if (!$flightObject = $em->getRepository('FriggFlightBundle:Flight')->findOneByRemote($flightNode['uniqueID'])) {
+                        $flightObject = new Flight;
+                    }
 
-                        $delayed = (isset($item->delayed) && $item->delayed == 'Y') ? true : false;
-                        $flightObject->setDelayed($delayed);
+                    $flightObject->setRemote($flightNode['uniqueID']);
+                    $flightObject->setIdentifier($flightNode->flight_id);
 
-                        $gate = (isset($item->gate)) ? $item->gate : '';
-                        $flightObject->setgate($gate);
+                    $flightObject->setDomInt($flightNode->dom_int);
+                    $flightObject->setScheduleTime($flightNode->schedule_time);
+                    $flightObject->setArrDep($flightNode->arr_dep);
+                    $flightObject->setCheckIn($flightNode->check_in);
 
-                        $em->persist($flightObject);
+                    if (!$airlineObject = $em->getRepository('FriggFlightBundle:Airline')->findOneByCode($flightNode->airline)) {
+                        $airlineObject = new Airline;
+                        $airlineObject->setCode($flightNode->airline);
+                        $em->persist($airlineObject);
                         $em->flush();
                     }
+
+                    $flightObject->setAirline($airlineObject);
+
+                    if (!$airportObject = $em->getRepository('FriggFlightBundle:Airport')->findOneByCode($flightNode->airport)) {
+                        $airportObject = new Airport;
+                        $airportObject->setCode($flightNode->airport);
+                        $em->persist($airportObject);
+                        $em->flush();
+                    }
+
+                    $flightObject->setAirport($airportObject);
+
+                    if (isset($flightNode->status)) {
+                        $flightObject->setFlightStatusTime($flightNode->status['time']);
+                        if (!$flightStatusObject = $em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($flightNode->status['code'])) {
+                            $flightStatusObject = new FlightStatus;
+                            $flightStatusObject->setCode($flightNode->status['code']);
+                            $em->persist($flightStatusObject);
+                            $em->flush();
+                        }
+                        $flightObject->setFlightStatus($flightStatusObject);
+                    }
+
+                    $isDelayed = (isset($flightNode->delayed) && $flightNode->delayed == 'Y') ? true : false;
+                    $flightObject->setIsDelayed($isDelayed);
+
+                    $gate = (isset($flightNode->gate)) ? $flightNode->gate : '';
+                    $flightObject->setgate($gate);
+
+                    $em->persist($flightObject);
+                    $this->flights[] = $flightNode;
                 }
+                $em->flush();
             }
         }
     }

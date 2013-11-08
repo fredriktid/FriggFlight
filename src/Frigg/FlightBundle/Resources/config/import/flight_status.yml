@@ -1,2 +1,2 @@
-api_info:
-    url: http://flydata.avinor.no/flightStatuses.asp
+#source: http://flydata.avinor.no/flightStatuses.asp
+source: data/flightStatuses.asp.xml

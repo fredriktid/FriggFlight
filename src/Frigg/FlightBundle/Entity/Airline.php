@@ -17,7 +17,7 @@ class Airline
     private $id;
 
     /**
-     * @ORM\Column(type="string", unique=true, length=20, nullable=true)
+     * @ORM\Column(type="string", unique=true, length=20, nullable=false)
      */
     private $code;
 
@@ -30,6 +30,7 @@ class Airline
      * @ORM\OneToMany(targetEntity="Flight", mappedBy="airline")
      */
     private $flights;
+
     /**
      * Constructor
      */

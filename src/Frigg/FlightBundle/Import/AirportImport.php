@@ -18,18 +18,15 @@ class AirportImport extends ImportAbstract
         $this->config = Yaml::parse(file_get_contents($configFile));
     }
 
-    public function __toString()
+    public function output()
     {
-        return sprintf('Imported %d airports (loaded %d)%s', count($this->airports), count($this->data), PHP_EOL);
+        return sprintf('Imported %d airports', count($this->airports));
     }
 
     public function run()
     {
-        $em = $this->container->get('doctrine.orm.entity_manager');
-        // $source = $this->config['api_info', 'url']
-        $source = sprintf('%s/../xml/airportNames.asp.xml', $this->container->get('kernel')->getRootDir());
-
-        if ($data = $this->request($source)) {
+        if ($data = $this->request($this->config['source'])) {
+            $em = $this->container->get('doctrine.orm.entity_manager');
             foreach ($data as $item) {
                 if ($item['code'] && $item['code']) {
                     if (!$airport = $em->getRepository('FriggFlightBundle:Airport')->findOneByCode($item['code'])) {
@@ -40,11 +37,10 @@ class AirportImport extends ImportAbstract
                     $airport->setName($item['name']);
 
                     $em->persist($airport);
-                    $em->flush();
-
                     $this->airports[] = $airport;
                 }
             }
+            $em->flush();
         }
     }
 }

@@ -35,28 +35,28 @@ class ImportCommand extends ContainerAwareCommand
                 $output->writeln('Running flight importer');
                 $importer = $container->get('frigg_flight.flight_import');
                 $importer->run();
-                echo $importer;
+                $output->writeln($importer->output());
                 break;
 
             case 'flight_status':
                 $output->writeln('Running flight status importer');
                 $importer = $container->get('frigg_flight.flight_status_import');
                 $importer->run();
-                echo $importer;
+                $output->writeln($importer->output());
                 break;
 
             case 'airport':
                 $output->writeln('Running airport importer');
                 $importer = $container->get('frigg_flight.airport_import');
                 $importer->run();
-                echo $importer;
+                $output->writeln($importer->output());
                 break;
 
             case 'airline':
                 $output->writeln('Running airline importer');
                 $importer = $container->get('frigg_flight.airline_import');
                 $importer->run();
-                echo $importer;
+                $output->writeln($importer->output());
                 break;
 
             default:

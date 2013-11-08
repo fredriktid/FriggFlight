@@ -12,12 +12,13 @@ abstract class ImportAbstract
     {
         if (($content = file_get_contents($source, 'r')) !== false) {
             $this->data = simplexml_load_string($content);
+            return $this->data;
         }
 
-        return $this->data;
+        return false;
     }
 
-    abstract public function __toString();
+    abstract public function output();
     abstract public function run();
 }
 

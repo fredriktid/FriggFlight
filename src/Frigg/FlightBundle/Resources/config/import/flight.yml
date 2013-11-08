@@ -1,2 +1,7 @@
-api_info:
-    url: http://flydata.avinor.no/XmlFeed.asp
+source: http://flydata.avinor.no/XmlFeed.asp
+airports:
+    - OSL
+    - BGO
+    #- TRD
+    #- BOO
+    #- MJF
