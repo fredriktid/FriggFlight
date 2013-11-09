@@ -1,3 +1,5 @@
 frigg_fly:
-    resource: "@FriggFlightBundle/Controller"
-    type: annotation
+    type: rest
+    resource: "@FriggFlightBundle/Resources/config/routing.yml"
+    #resource: "@FriggFlightBundle/Controller"
+    #type: annotation

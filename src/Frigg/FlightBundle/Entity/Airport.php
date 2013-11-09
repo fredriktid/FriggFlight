@@ -3,9 +3,16 @@
 namespace Frigg\FlightBundle\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
-
+use Symfony\Component\Validator\Constraints;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 /**
- * @ORM\Entity
+ * Frigg\FlightBundle\Entity\Airport
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Frigg\FlightBundle\Entity\AirportRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Airport
 {
@@ -13,31 +20,43 @@ class Airport
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", unique=true, length=20, nullable=false)
+     *
+     * @Expose
      */
     private $code;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $name;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     *
+     * @Expose
      */
     private $is_avinor;
 
     /**
      * @ORM\OneToMany(targetEntity="Flight", mappedBy="airport")
+     *
+     * @Expose
      */
     private $flights;
 
     /**
      * @ORM\ManyToMany(targetEntity="Flight", mappedBy="via_airports")
+     *
+     * @Expose
      */
     private $via_flights;
 

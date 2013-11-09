@@ -1,3 +1,12 @@
-frigg_flight_homepage:
-    pattern:  /
-    defaults: { _controller: FriggFlightBundle:Default:index }
+#frigg_flight_homepage:
+#    pattern:  /
+#    defaults: { _controller: FriggFlightBundle:Default:index }
+
+airport:
+    type: rest
+    resource: Frigg\FlightBundle\Controller\AirportController
+
+flight:
+    type: rest
+    parent: airport
+    resource: Frigg\FlightBundle\Controller\FlightController
