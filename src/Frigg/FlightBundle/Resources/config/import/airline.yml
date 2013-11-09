@@ -1,2 +1,2 @@
-#source: http://flydata.avinor.no/airlineNames.asp
-source: data/airlineNames.asp.xml
+#target: http://flydata.avinor.no/airlineNames.asp
+target: data/airlineNames.asp.xml

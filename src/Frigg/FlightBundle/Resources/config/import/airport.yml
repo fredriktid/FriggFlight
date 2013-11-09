@@ -1,2 +1,49 @@
-#source: http://flydata.avinor.no/airportNames.asp
-source: data/airportNames.asp.xml
+#target: http://flydata.avinor.no/airportNames.asp
+target: data/airportNames.asp.xml
+avinor:
+    - ALF
+    - ANX
+    - BDU
+    - BGO
+    - BVG
+    - BOO
+    - BNN
+    - BJF
+    - VDB
+    - FRO
+    - FDE
+    - HFT
+    - EVE
+    - HAA
+    - HAU
+    - HVG
+    - KKN
+    - KRS
+    - KSU
+    - LKL
+    - LKN
+    - MEH
+    - MQN
+    - MOL
+    - MJF
+    - OSY
+    - NVK
+    - OSL
+    - RRS
+    - RVK
+    - RET
+    - SDN
+    - SSJ
+    - SOG
+    - SVG
+    - SKN
+    - LYR
+    - SVJ
+    - SOJ
+    - TOS
+    - TRD
+    - VDS
+    - VAW
+    - VRY
+    - HOV
+    - AES

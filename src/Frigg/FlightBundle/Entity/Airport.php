@@ -27,6 +27,11 @@ class Airport
     private $name;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $is_avinor;
+
+    /**
      * @ORM\OneToMany(targetEntity="Flight", mappedBy="airport")
      */
     private $flights;
@@ -35,6 +40,7 @@ class Airport
      * @ORM\ManyToMany(targetEntity="Flight", mappedBy="via_airports")
      */
     private $via_flights;
+
     /**
      * Constructor
      */
@@ -164,5 +170,28 @@ class Airport
     public function getViaFlights()
     {
         return $this->via_flights;
+    }
+
+    /**
+     * Set is_avinor
+     *
+     * @param boolean $isAvinor
+     * @return Airport
+     */
+    public function setIsAvinor($isAvinor)
+    {
+        $this->is_avinor = $isAvinor;
+
+        return $this;
+    }
+
+    /**
+     * Get is_avinor
+     *
+     * @return boolean
+     */
+    public function getIsAvinor()
+    {
+        return $this->is_avinor;
     }
 }

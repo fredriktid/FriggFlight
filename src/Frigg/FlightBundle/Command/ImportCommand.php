@@ -19,9 +19,28 @@ class ImportCommand extends ContainerAwareCommand
             ->addArgument(
                 'type',
                 InputArgument::REQUIRED,
-                'What to import (e.g. flights)?'
+                'What to import (e.g. flight)?'
             )
-        ;
+            ->addOption(
+                'from',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'How many hours in the past (default 1)',
+                1
+            )
+            ->addOption(
+                'to',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'How many hours in the future (default 7)',
+                7
+            )
+            ->addOption(
+                'updates',
+                null,
+                InputOption::VALUE_NONE,
+                'Only updates since last run'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -33,7 +52,12 @@ class ImportCommand extends ContainerAwareCommand
         switch($type) {
             case 'flight':
                 $output->writeln('Running flight importer');
+                $time = array();
+                $time['from'] = (int) $input->getOption('from');
+                $time['to'] = (int) $input->getOption('to');
                 $importer = $container->get('frigg_flight.flight_import');
+                $importer->setUpdates($input->getOption('updates'));
+                $importer->setTime($time);
                 $importer->run();
                 $output->writeln($importer->output());
                 break;
@@ -64,6 +88,6 @@ class ImportCommand extends ContainerAwareCommand
                 break;
         }
 
-        $output->writeln(sprintf('Took %.02f ms', ((microtime(true) - $timer) * 1000)));
+        $output->writeln(sprintf('Took %.02f seconds', ((microtime(true) - $timer))));
     }
 }

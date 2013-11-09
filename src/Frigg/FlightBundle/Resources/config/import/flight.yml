@@ -1,7 +1,1 @@
-source: http://flydata.avinor.no/XmlFeed.asp
-airports:
-    - OSL
-    - BGO
-    #- TRD
-    #- BOO
-    #- MJF
+target: http://flydata.avinor.no/XmlFeed.asp

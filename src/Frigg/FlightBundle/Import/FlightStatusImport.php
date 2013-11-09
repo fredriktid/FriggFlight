@@ -6,15 +6,14 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Frigg\FlightBundle\Entity\FlightStatus;
 
-class FlightStatusImport extends ImportAbstract
+class FlightStatusImport extends AvinorClient
 {
-    private $container;
-    private $config;
-    private $flightStatuses = array();
+    protected $config = array();
+    protected $flightStatuses = array();
 
     public function __construct(ContainerInterface $container, $configFile)
     {
-        $this->container = $container;
+        parent::__construct($container);
         $this->config = Yaml::parse(file_get_contents($configFile));
     }
 
@@ -25,11 +24,10 @@ class FlightStatusImport extends ImportAbstract
 
     public function run()
     {
-        if ($data = $this->request($this->config['source'])) {
-            $em = $this->container->get('doctrine.orm.entity_manager');
+        if ($data = $this->request($this->config['target'])) {
             foreach ($data as $item) {
                 if ($item['code'] && $item['code']) {
-                    if (!$flightStatus = $em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($item['code'])) {
+                    if (!$flightStatus = $this->em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($item['code'])) {
                         $flightStatus = new FlightStatus;
                     }
 
@@ -37,11 +35,13 @@ class FlightStatusImport extends ImportAbstract
                     $flightStatus->setTextEng($item['statusTextEn']);
                     $flightStatus->setTextNo($item['statusTextNo']);
 
-                    $em->persist($flightStatus);
-                    $this->flightStatuses[] = $flightStatus;
+                    $this->em->persist($flightStatus);
+                    $this->flightStatuses[] = $flightStatus->getId();
                 }
             }
-            $em->flush();
+
+            $this->em->flush();
+            $this->setLastUpdated();
         }
     }
 }

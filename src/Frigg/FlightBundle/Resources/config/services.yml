@@ -11,7 +11,7 @@ parameters:
 services:
     frigg_flight.flight_import:
         class: %frigg_flight.flight_import.class%
-        arguments: [ @service_container, %frigg_flight.flight_import.config%  ]
+        arguments: [ @service_container, %frigg_flight.flight_import.config%, %frigg_flight.airport_import.config%  ]
 
     frigg_flight.flight_status_import:
         class: %frigg_flight.flight_status_import.class%

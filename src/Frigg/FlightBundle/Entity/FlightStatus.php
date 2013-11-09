@@ -35,6 +35,7 @@ class FlightStatus
      * @ORM\OneToMany(targetEntity="Flight", mappedBy="flight_status")
      */
     private $flights;
+
     /**
      * Constructor
      */

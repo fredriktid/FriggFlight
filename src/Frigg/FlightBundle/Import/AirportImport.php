@@ -6,15 +6,14 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Frigg\FlightBundle\Entity\Airport;
 
-class AirportImport extends ImportAbstract
+class AirportImport extends AvinorClient
 {
-    private $container;
-    private $config;
-    private $airports = array();
+    protected $config = array();
+    protected $airports = array();
 
     public function __construct(ContainerInterface $container, $configFile)
     {
-        $this->container = $container;
+        parent::__construct($container);
         $this->config = Yaml::parse(file_get_contents($configFile));
     }
 
@@ -25,22 +24,26 @@ class AirportImport extends ImportAbstract
 
     public function run()
     {
-        if ($data = $this->request($this->config['source'])) {
-            $em = $this->container->get('doctrine.orm.entity_manager');
+        if ($data = $this->request($this->config['target'])) {
+            $avinorAirports = $this->config['avinor'];
             foreach ($data as $item) {
                 if ($item['code'] && $item['code']) {
-                    if (!$airport = $em->getRepository('FriggFlightBundle:Airport')->findOneByCode($item['code'])) {
+                    $isAvinorAirport = (in_array($item['code'], $avinorAirports));
+                    if (!$airport = $this->em->getRepository('FriggFlightBundle:Airport')->findOneByCode($item['code'])) {
                         $airport = new Airport;
                     }
 
                     $airport->setCode($item['code']);
                     $airport->setName($item['name']);
+                    $airport->setIsAvinor($isAvinorAirport);
 
-                    $em->persist($airport);
-                    $this->airports[] = $airport;
+                    $this->em->persist($airport);
+                    $this->airports[] = $airport->getId();
                 }
             }
-            $em->flush();
+
+            $this->em->flush();
+            $this->setLastUpdated();
         }
     }
 }
