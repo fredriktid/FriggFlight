@@ -42,7 +42,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
         $entity = $this->getEntity($id);
 
         return array(
-            'entity' => $entity,
+            'entity' => $entity->getName(),
         );
     }
 

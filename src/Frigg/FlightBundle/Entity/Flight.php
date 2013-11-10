@@ -3,9 +3,16 @@
 namespace Frigg\FlightBundle\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
-
+use Symfony\Component\Validator\Constraints;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 /**
- * @ORM\Entity
+ * Frigg\FlightBundle\Entity\Airport
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Frigg\FlightBundle\Entity\FlightRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Flight
 {
@@ -13,69 +20,95 @@ class Flight
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     *
+     * @Expose
      */
     private $remote;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $identifier;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $dom_int;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $schedule_time;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $arr_dep;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $check_in;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $gate;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     *
+     * @Expose
      */
     private $is_delayed;
 
     /**
      * @ORM\ManyToOne(targetEntity="Airline", inversedBy="flights", cascade={"persist"})
      * @ORM\JoinColumn(name="airline_id", referencedColumnName="id", nullable=true)
+     *
+     * @Expose
      */
     private $airline;
 
     /**
      * @ORM\ManyToOne(targetEntity="Airport", inversedBy="flights", cascade={"persist"})
      * @ORM\JoinColumn(name="airport_id", referencedColumnName="id", nullable=true)
+     *
+     * @Expose
      */
     private $airport;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $flight_status_time;
 
     /**
      * @ORM\ManyToOne(targetEntity="FlightStatus", inversedBy="flights", cascade={"persist"})
      * @ORM\JoinColumn(name="flight_status_id", referencedColumnName="id", nullable=true)
+     *
+     * @Expose
      */
     private $flight_status;
 
@@ -86,6 +119,8 @@ class Flight
      *     joinColumns={@ORM\JoinColumn(name="flight_id", referencedColumnName="id", nullable=true)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="airport_id", referencedColumnName="id", nullable=true)}
      * )
+     *
+     * @Expose
      */
     private $via_airports;
 

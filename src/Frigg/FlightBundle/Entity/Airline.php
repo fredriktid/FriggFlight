@@ -3,9 +3,17 @@
 namespace Frigg\FlightBundle\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
+use Symfony\Component\Validator\Constraints;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 
 /**
- * @ORM\Entity
+ * Frigg\FlightBundle\Entity\Airline
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Frigg\FlightBundle\Entity\AirlineRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Airline
 {
@@ -13,21 +21,29 @@ class Airline
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", unique=true, length=20, nullable=false)
+     *
+     * @Expose
      */
     private $code;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity="Flight", mappedBy="airline")
+     *
+     * @Expose
      */
     private $flights;
 
