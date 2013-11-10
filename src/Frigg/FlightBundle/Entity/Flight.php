@@ -20,8 +20,6 @@ class Flight
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @Expose
      */
     private $id;
 

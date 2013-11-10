@@ -6,7 +6,12 @@ airport:
     type: rest
     resource: Frigg\FlightBundle\Controller\AirportController
 
-flight:
+airport_flight:
     type: rest
     parent: airport
     resource: Frigg\FlightBundle\Controller\FlightController
+
+flight:
+    type: rest
+    resource: Frigg\FlightBundle\Controller\FlightController
+

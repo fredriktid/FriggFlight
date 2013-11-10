@@ -25,14 +25,19 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('FriggFlightBundle:Flight')->findBy(
+        if (!$airport = $em->getRepository('FriggFlightBundle:Airport')->findOneById($airportId)) {
+            throw $this->createNotFoundException('Unable to find airport entity');
+        }
+
+        $flights = $em->getRepository('FriggFlightBundle:Flight')->findBy(
             array(
                 'airport' => $airportId,
             )
         );
 
         return array(
-            'entities' => $entities,
+            'entity' => $airport,
+            'children' => $flights
         );
     }
 

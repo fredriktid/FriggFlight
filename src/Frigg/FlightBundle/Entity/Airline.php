@@ -21,8 +21,6 @@ class Airline
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @Expose
      */
     private $id;
 
@@ -43,7 +41,6 @@ class Airline
     /**
      * @ORM\OneToMany(targetEntity="Flight", mappedBy="airline")
      *
-     * @Expose
      */
     private $flights;
 
