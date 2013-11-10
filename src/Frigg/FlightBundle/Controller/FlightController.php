@@ -16,7 +16,7 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
     /**
      * Collection get action
      * @var Request $request
-     * @var integer $airportId Id of the entity's organisation
+     * @var integer $airportId Id of the entity's airport
      * @return array
      *
      * @Rest\View()
@@ -25,20 +25,25 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('FriggFlightBundle:Flight')->findBy(
+        if (!$airport = $em->getRepository('FriggFlightBundle:Airport')->findOneById($airportId)) {
+            throw $this->createNotFoundException('Unable to find airport entity');
+        }
+
+        $flights = $em->getRepository('FriggFlightBundle:Flight')->findBy(
             array(
-                'organisation' => $airportId,
+                'airport' => $airportId,
             )
         );
 
         return array(
-            'entities' => $entities,
+            'entity' => $airport,
+            'children' => $flights
         );
     }
 
     /**
      * Get action
-     * @var integer $airportId Id of the entity's organisation
+     * @var integer $airportId Id of the entity's airport
      * @var integer $id Id of the entity
      * @return array
      *
@@ -56,14 +61,14 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
     /**
      * Collection post action
      * @var Request $request
-     * @var integer $airportId Id of the entity's organisation
+     * @var integer $airportId Id of the entity's airport
      * @return View|array
      */
     public function cpostAction(Request $request, $airportId)
     {
-        /*$organisation = $this->getAirport($airportId);
+        /*$airport = $this->getAirport($airportId);
         $entity = new Flight();
-        $entity->setAirport($organisation);
+        $entity->setAirport($airport);
         $form = $this->createForm(new FlightType(), $entity);
         $form->bind($request);
 
@@ -74,7 +79,7 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
 
             return $this->redirectView(
                 $this->generateUrl(
-                    'get_organisation_user',
+                    'get_airport_user',
                     array(
                         'airportId' => $entity->getAirport()->getId(),
                         'id' => $entity->getId()
@@ -95,7 +100,7 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
     /**
      * Put action
      * @var Request $request
-     * @var integer $airportId Id of the entity's organisation
+     * @var integer $airportId Id of the entity's airport
      * @var integer $id Id of the entity
      * @return View|array
      */
@@ -123,7 +128,7 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
 
     /**
      * Delete action
-     * @var integer $airportId Id of the entity's organisation
+     * @var integer $airportId Id of the entity's airport
      * @var integer $id Id of the entity
      * @return View
      */
@@ -140,7 +145,7 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
 
     /**
      * Get entity instance
-     * @var integer $airportId Id of the entity's organisation
+     * @var integer $airportId Id of the entity's airport
      * @var integer $id Id of the entity
      * @return Flight
      */
@@ -151,7 +156,7 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
         $entity = $em->getRepository('FriggFlightBundle:Flight')->findOneBy(
             array(
                 'id' => $id,
-                'organisation' => $airportId,
+                'airport' => $airportId,
             )
         );
 
@@ -163,8 +168,8 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
     }
 
     /**
-     * Get organisation instance
-     * @var integer $id Id of the organisation
+     * Get airport instance
+     * @var integer $id Id of the airport
      * @return Airport
      */
     protected function getAirport($id)
@@ -174,7 +179,7 @@ class FlightController extends FOSRestController implements ClassResourceInterfa
         $entity = $em->getRepository('FriggFlightBundle:Airport')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find organisation entity');
+            throw $this->createNotFoundException('Unable to find airport entity');
         }
 
         return $entity;

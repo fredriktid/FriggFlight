@@ -16,11 +16,11 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new JMS\SerializerBundle\JMSSerializerBundle(),
-            new JMS\AopBundle\JMSAopBundle(),
-            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new FOS\RestBundle\FOSRestBundle(),
+            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new JMS\AopBundle\JMSAopBundle(),
+            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new Frigg\FlightBundle\FriggFlightBundle(),
         );
 

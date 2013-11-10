@@ -20,8 +20,6 @@ class Airport
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @Expose
      */
     private $id;
 
@@ -48,15 +46,11 @@ class Airport
 
     /**
      * @ORM\OneToMany(targetEntity="Flight", mappedBy="airport")
-     *
-     * @Expose
      */
     private $flights;
 
     /**
      * @ORM\ManyToMany(targetEntity="Flight", mappedBy="via_airports")
-     *
-     * @Expose
      */
     private $via_flights;
 

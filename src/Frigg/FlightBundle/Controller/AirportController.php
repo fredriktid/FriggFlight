@@ -25,9 +25,15 @@ class AirportController extends FOSRestController implements ClassResourceInterf
 
         $entities = $em->getRepository('FriggFlightBundle:Airport')->findAll();
 
-        return array(
-            'entities' => $entities,
-        );
+        $data = array();
+        foreach ($entities as $entity) {
+            $data[] = array(
+                'code' => $entity->getCode(),
+                'name' => $entity->getName()
+            );
+        }
+
+        return $data;
     }
 
     /**
@@ -42,7 +48,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
         $entity = $this->getEntity($id);
 
         return array(
-            'entity' => $entity,
+            'entity' => $entity->getName(),
         );
     }
 

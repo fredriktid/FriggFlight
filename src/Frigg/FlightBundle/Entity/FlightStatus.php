@@ -3,9 +3,17 @@
 namespace Frigg\FlightBundle\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
+use Symfony\Component\Validator\Constraints;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 
 /**
- * @ORM\Entity
+ * Frigg\FlightBundle\Entity\FlightStatus
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Frigg\FlightBundle\Entity\FlightStatusRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class FlightStatus
 {
@@ -18,16 +26,22 @@ class FlightStatus
 
     /**
      * @ORM\Column(type="string", unique=true, length=1, nullable=true)
+     *
+     * @Expose
      */
     private $code;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $text_eng;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Expose
      */
     private $text_no;
 
