@@ -3,21 +3,21 @@
 #    defaults: { _controller: FriggFlightBundle:Default:index }
 
 airport:
-    prefix: api
+    prefix: rest
     type: rest
     resource: Frigg\FlightBundle\Controller\AirportController
 
 airport_flight:
-    prefix: api
+    prefix: rest
     type: rest
     resource: Frigg\FlightBundle\Controller\AirportFlightController
 
 airline:
-    prefix: api
+    prefix: rest
     type: rest
     resource: Frigg\FlightBundle\Controller\AirlineController
 
 airline_flight:
-    prefix: api
+    prefix: rest
     type: rest
     resource: Frigg\FlightBundle\Controller\AirlineFlightController
