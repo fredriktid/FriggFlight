@@ -9,7 +9,7 @@ use Frigg\FlightBundle\Entity\FlightStatus;
 use Frigg\FlightBundle\Entity\Airline;
 use Frigg\FlightBundle\Entity\Airport;
 
-class FlightImport extends AvinorClient
+class FlightImport extends AvinorImportAbstract
 {
     protected $config = array();
     protected $airportConfig = array();

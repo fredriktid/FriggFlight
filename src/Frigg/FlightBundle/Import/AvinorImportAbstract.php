@@ -5,7 +5,7 @@ namespace Frigg\FlightBundle\Import;
 use Frigg\FlightBundle\Entity\LastUpdated;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-abstract class AvinorClient
+abstract class AvinorImportAbstract
 {
     protected $em = null;
     protected $container = null;
