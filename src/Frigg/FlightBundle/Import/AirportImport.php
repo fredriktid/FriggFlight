@@ -6,7 +6,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Frigg\FlightBundle\Entity\Airport;
 
-class AirportImport extends AvinorClient
+class AirportImport extends AvinorImportAbstract
 {
     protected $config = array();
     protected $airports = array();

@@ -6,7 +6,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Frigg\FlightBundle\Entity\FlightStatus;
 
-class FlightStatusImport extends AvinorClient
+class FlightStatusImport extends AvinorImportAbstract
 {
     protected $config = array();
     protected $flightStatuses = array();

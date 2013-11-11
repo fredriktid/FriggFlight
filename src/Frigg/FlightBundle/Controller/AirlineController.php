@@ -7,10 +7,10 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
-use Frigg\FlightBundle\Entity\Airport;
-//use Frigg\FlightBundle\Form\AirportType;
+use Frigg\FlightBundle\Entity\Airline;
+//use Frigg\FlightBundle\Form\AirlineType;
 
-class AirportController extends FOSRestController implements ClassResourceInterface
+class AirlineController extends FOSRestController implements ClassResourceInterface
 {
     /**
      * Collection get action
@@ -23,7 +23,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('FriggFlightBundle:Airport')->findAll();
+        $entities = $em->getRepository('FriggFlightBundle:Airline')->findAll();
 
         return array(
             'entities' => $entities
@@ -53,8 +53,8 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function cpostAction(Request $request)
     {
-        /*$entity = new Airport();
-        $form = $this->createForm(new AirportType(), $entity);
+        /*$entity = new Airline();
+        $form = $this->createForm(new AirlineType(), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -64,7 +64,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
 
             return $this->redirectView(
                 $this->generateUrl(
-                    'get_airport',
+                    'get_airline',
                     array('id' => $entity->getId())
                 ),
                 Codes::HTTP_CREATED
@@ -89,7 +89,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     public function putAction(Request $request, $id)
     {
         /*$entity = $this->getEntity($id);
-        $form = $this->createForm(new AirportType(), $entity);
+        $form = $this->createForm(new AirlineType(), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -128,16 +128,16 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     /**
      * Get entity instance
      * @var integer $id Id of the entity
-     * @return Airport
+     * @return Airline
      */
     protected function getEntity($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggFlightBundle:Airport')->find($id);
+        $entity = $em->getRepository('FriggFlightBundle:Airline')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find airport entity');
+            throw $this->createNotFoundException('Unable to find airline entity');
         }
 
         return $entity;
