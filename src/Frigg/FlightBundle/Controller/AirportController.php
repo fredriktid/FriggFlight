@@ -42,7 +42,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
         $entity = $this->getEntity($id);
 
         return array(
-            'entity' => $entity->getName(),
+            'entity' => $entity,
         );
     }
 
@@ -127,14 +127,14 @@ class AirportController extends FOSRestController implements ClassResourceInterf
 
     /**
      * Get entity instance
-     * @var integer $id Id of the entity
+     * @var integer $code Code of the entity
      * @return Airport
      */
-    protected function getEntity($id)
+    protected function getEntity($code)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggFlightBundle:Airport')->find($id);
+        $entity = $em->getRepository('FriggFlightBundle:Airport')->findOneByCode($code);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find airport entity');

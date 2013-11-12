@@ -104,7 +104,7 @@ class FlightImport extends AvinorImportAbstract
                     $gate = (isset($flightNode->gate) ? $flightNode->gate : '');
 
                     $flightObject->setRemote($flightNode['uniqueID']);
-                    $flightObject->setIdentifier($flightNode->flight_id);
+                    $flightObject->setCode($flightNode->flight_id);
                     $flightObject->setDomInt($flightNode->dom_int);
                     $flightObject->setScheduleTime($flightNode->schedule_time);
                     $flightObject->setArrDep($flightNode->arr_dep);

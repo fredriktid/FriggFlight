@@ -25,13 +25,13 @@ class AirportFlightController extends FOSRestController implements ClassResource
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$airport = $em->getRepository('FriggFlightBundle:Airport')->findOneById($airportId)) {
+        if (!$airport = $this->getAirport($airportId)) {
             throw $this->createNotFoundException('Unable to find airport entity');
         }
 
         $flights = $em->getRepository('FriggFlightBundle:Flight')->findBy(
             array(
-                'airport' => $airportId,
+                'airport' => $airport->getId(),
             )
         );
 
@@ -153,10 +153,14 @@ class AirportFlightController extends FOSRestController implements ClassResource
     {
         $em = $this->getDoctrine()->getManager();
 
+        if (!$airport = $this->getAirport($airportId)) {
+            return $this->createNotFoundException('Unable to find airport entity');
+        }
+
         $entity = $em->getRepository('FriggFlightBundle:Flight')->findOneBy(
             array(
-                'id' => $id,
-                'airport' => $airportId,
+                'code' => $id,
+                'airport' => $airport->getId(),
             )
         );
 
@@ -169,14 +173,14 @@ class AirportFlightController extends FOSRestController implements ClassResource
 
     /**
      * Get airport instance
-     * @var integer $id Id of the airport
+     * @var integer $code Code of the airport
      * @return Airport
      */
-    protected function getAirport($id)
+    protected function getAirport($code)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggFlightBundle:Airport')->find($id);
+        $entity = $em->getRepository('FriggFlightBundle:Airport')->findOneByCode($code);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find airport entity');

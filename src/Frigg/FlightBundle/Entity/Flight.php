@@ -35,7 +35,7 @@ class Flight
      *
      * @Expose
      */
-    private $identifier;
+    private $code;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -165,26 +165,26 @@ class Flight
     }
 
     /**
-     * Set identifier
+     * Set code
      *
-     * @param string $identifier
+     * @param string $code
      * @return Flight
      */
-    public function setIdentifier($identifier)
+    public function setCode($code)
     {
-        $this->identifier = $identifier;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get identifier
+     * Get code
      *
      * @return string
      */
-    public function getIdentifier()
+    public function getCode()
     {
-        return $this->identifier;
+        return $this->code;
     }
 
     /**
