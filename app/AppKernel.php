@@ -21,7 +21,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle($this),
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-            new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
+            //new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
             new Frigg\FlightBundle\FriggFlightBundle(),
         );
 
