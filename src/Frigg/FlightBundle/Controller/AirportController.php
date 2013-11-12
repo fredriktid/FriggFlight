@@ -134,7 +134,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggFlightBundle:Airport')->findOneByCode($code);
+        $entity = $em->getRepository('FriggFlightBundle:Airport')->find($code);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find airport entity');

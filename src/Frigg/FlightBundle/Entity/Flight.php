@@ -20,25 +20,25 @@ class Flight
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     *
-     * @Expose
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $remote;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=20, nullable=false)
      *
      * @Expose
      */
     private $code;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=1, nullable=true)
      *
      * @Expose
      */
@@ -52,21 +52,21 @@ class Flight
     private $schedule_time;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=1, nullable=true)
      *
      * @Expose
      */
     private $arr_dep;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=5, nullable=true)
      *
      * @Expose
      */
     private $check_in;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=5, nullable=true)
      *
      * @Expose
      */

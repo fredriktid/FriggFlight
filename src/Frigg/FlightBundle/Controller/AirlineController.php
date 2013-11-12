@@ -42,7 +42,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
         $entity = $this->getEntity($id);
 
         return array(
-            'entity' => $entity->getName(),
+            'entity' => $entity,
         );
     }
 
@@ -134,7 +134,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggFlightBundle:Airline')->findOneByCode($id);
+        $entity = $em->getRepository('FriggFlightBundle:Airline')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find airline entity');
