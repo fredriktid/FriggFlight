@@ -10,6 +10,7 @@ use JMS\Serializer\Annotation\Expose;
  * Frigg\FlightBundle\Entity\Airport
  *
  * @ORM\Table()
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Frigg\FlightBundle\Entity\FlightRepository")
  *
  * @ExclusionPolicy("all")
@@ -45,11 +46,26 @@ class Flight
     private $dom_int;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="datetime")
      *
      * @Expose
      */
     private $schedule_time;
+
+
+    /**
+     * @ORM\Column(type="datetime")
+     *
+     * @Expose
+     */
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="datetime")
+     *
+     * @Expose
+     */
+    private $modified_at;
 
     /**
      * @ORM\Column(type="string", length=1, nullable=true)
@@ -129,6 +145,22 @@ class Flight
     public function __construct()
     {
         $this->via_airports = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Now we tell doctrine that before we persist or update we call the updatedTimestamps() function.
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updateTimestamps()
+    {
+        $this->setModifiedAt(new \DateTime(date('Y-m-d H:i:s')));
+
+        if($this->getCreatedAt() == null)
+        {
+            $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
+        }
     }
 
     /**
@@ -448,5 +480,51 @@ class Flight
     public function getViaAirports()
     {
         return $this->via_airports;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Flight
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set modified_at
+     *
+     * @param \DateTime $modifiedAt
+     * @return Flight
+     */
+    public function setModifiedAt($modifiedAt)
+    {
+        $this->modified_at = $modifiedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get modified_at
+     *
+     * @return \DateTime 
+     */
+    public function getModifiedAt()
+    {
+        return $this->modified_at;
     }
 }

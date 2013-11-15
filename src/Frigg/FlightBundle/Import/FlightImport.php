@@ -52,6 +52,12 @@ class FlightImport extends AvinorImportAbstract
         $avinorAirports = $this->airportConfig['avinor'];
 
         foreach ($this->getAvinorAirports() as $i => $airport) {
+
+            // temporarily just oslo
+            if (!in_array($airport->getCode(), array('OSL'))) {
+                continue;
+            }
+
             $params = array();
             $params['airport'] = $airport->getCode();
             $params['TimeFrom'] = $this->time['from'];
@@ -106,7 +112,7 @@ class FlightImport extends AvinorImportAbstract
                     $flightObject->setRemote($flightNode['uniqueID']);
                     $flightObject->setCode($flightNode->flight_id);
                     $flightObject->setDomInt($flightNode->dom_int);
-                    $flightObject->setScheduleTime($flightNode->schedule_time);
+                    $flightObject->setScheduleTime(new \DateTime(date('Y-m-d H:i:s', strtotime($flightNode->schedule_time))));
                     $flightObject->setArrDep($flightNode->arr_dep);
                     $flightObject->setCheckIn($flightNode->check_in);
                     $flightObject->setAirline($airlineObject);
@@ -120,9 +126,6 @@ class FlightImport extends AvinorImportAbstract
 
                 $this->em->flush();
                 $this->setLastUpdated();
-
-                // tmp
-                break;
             }
         }
     }
