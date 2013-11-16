@@ -12,24 +12,21 @@ use Frigg\FlightBundle\Entity\Airport;
 class FlightImport extends AvinorImportAbstract
 {
     protected $config = array();
-    protected $airportConfig = array();
-    protected $flights = array();
     protected $onlyUpdates = false;
     protected $time = array(
         'from' => 1,
         'to' => 7
     );
 
-    public function __construct(ContainerInterface $container, $configFile, $airportConfigFile)
+    public function __construct(ContainerInterface $container, $configFile)
     {
         parent::__construct($container);
         $this->config = Yaml::parse(file_get_contents($configFile));
-        $this->airportConfig = Yaml::parse(file_get_contents($airportConfigFile));
     }
 
     public function output()
     {
-        return sprintf('Imported %d flights', count($this->flights));
+        return sprintf('Imported %d flights', count($this->data));
     }
 
     public function setUpdates($switch)
@@ -48,10 +45,10 @@ class FlightImport extends AvinorImportAbstract
 
     public function run()
     {
-        $lastUpdated = $this->lastUpdated();
-        $avinorAirports = $this->airportConfig['avinor'];
+        $lastUpdated = $this->getLastUpdated();
+        $airportService = $this->container->get('frigg_flight.airport_service');
 
-        foreach ($this->getAvinorAirports() as $i => $airport) {
+        foreach ($airportService->getAvinorAirports() as $i => $airport) {
 
             // temporarily just oslo
             if (!in_array($airport->getCode(), array('OSL'))) {
@@ -67,14 +64,17 @@ class FlightImport extends AvinorImportAbstract
                 $params['lastUpdate'] = sprintf('%sT%sZ', date('Y-m-d', $lastUpdated), date('H:i:s', $lastUpdated));
             }
 
+            // build endpoint address
             $target = sprintf('%s?%s', $this->config['target'], implode('&', array_map(function($key, $val) {
                 return sprintf('%s=%s', urlencode($key), urlencode($val));
               },
               array_keys($params), $params))
             );
 
-            if ($data = $this->request($target)) {
-                foreach ($data->flights->flight as $flightNode) {
+            // do request
+            if ($response = $this->request($target)) {
+                // handle response
+                foreach ($response->flights->flight as $flightNode) {
                     if (!$flightObject = $this->em->getRepository('FriggFlightBundle:Flight')->findOneByRemote($flightNode['uniqueID'])) {
                         $flightObject = new Flight;
                     }
@@ -96,7 +96,7 @@ class FlightImport extends AvinorImportAbstract
                     }
 
                     if (isset($flightNode->status)) {
-                        $flightObject->setFlightStatusTime($flightNode->status['time']);
+                        $flightObject->setFlightStatusTime(new \DateTime(date('Y-m-d H:i:s', strtotime($flightNode->status['time']))));
                         if (!$flightStatusObject = $this->em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($flightNode->status['code'])) {
                             $flightStatusObject = new FlightStatus;
                             $flightStatusObject->setCode($flightNode->status['code']);
@@ -116,12 +116,14 @@ class FlightImport extends AvinorImportAbstract
                     $flightObject->setArrDep($flightNode->arr_dep);
                     $flightObject->setCheckIn($flightNode->check_in);
                     $flightObject->setAirline($airlineObject);
-                    $flightObject->setAirport($airportObject);
+                    $flightObject->setAirport($airport);
+                    $flightObject->setOtherAirport($airportObject);
+
                     $flightObject->setIsDelayed($isDelayed);
                     $flightObject->setgate($gate);
 
                     $this->em->persist($flightObject);
-                    $this->flights[] = $flightObject->getId();
+                    $this->data[] = $flightObject->getId();
                 }
 
                 $this->em->flush();

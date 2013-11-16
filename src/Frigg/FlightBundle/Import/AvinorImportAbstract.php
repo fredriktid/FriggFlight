@@ -9,6 +9,8 @@ abstract class AvinorImportAbstract
 {
     protected $em = null;
     protected $container = null;
+
+    protected $response = array();
     protected $data = array();
 
     public function __construct(ContainerInterface $container)
@@ -25,8 +27,8 @@ abstract class AvinorImportAbstract
         printf('Request %s%s', $target, PHP_EOL);
         if (($content = file_get_contents($target, 'r')) !== false) {
             try {
-                $this->data = simplexml_load_string($content);
-                return $this->data;
+                $this->response = simplexml_load_string($content);
+                return $this->response;
             } catch(\Exception $e) {
                 printf('Error: %s%s', $e->getMessage(), PHP_EOL);
             }
@@ -35,7 +37,7 @@ abstract class AvinorImportAbstract
         return false;
     }
 
-    protected function lastUpdated()
+    protected function getLastUpdated()
     {
         if ($lastUpdated = $this->em->getRepository('FriggFlightBundle:LastUpdated')->findOneByClass(get_called_class())) {
             return $lastUpdated->getTimestamp();
@@ -58,13 +60,4 @@ abstract class AvinorImportAbstract
         $this->em->flush();
     }
 
-    protected function getAvinorAirports()
-    {
-        return $this->em->createQueryBuilder()->select('a')
-            ->from('FriggFlightBundle:Airport', 'a')
-            ->where('a.is_avinor = :is_avinor')
-            ->setParameter('is_avinor', true)
-            ->getQuery()
-            ->getResult();
-    }
 }

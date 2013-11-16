@@ -111,8 +111,17 @@ class Flight
      */
     private $airport;
 
+
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Airport", cascade={"persist"})
+     * @ORM\JoinColumn(name="other_airport_id", referencedColumnName="id", nullable=true)
+     *
+     * @Expose
+     */
+    private $other_airport;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
      *
      * @Expose
      */
@@ -491,14 +500,14 @@ class Flight
     public function setCreatedAt($createdAt)
     {
         $this->created_at = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get created_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -514,17 +523,40 @@ class Flight
     public function setModifiedAt($modifiedAt)
     {
         $this->modified_at = $modifiedAt;
-    
+
         return $this;
     }
 
     /**
      * Get modified_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getModifiedAt()
     {
         return $this->modified_at;
+    }
+
+    /**
+     * Set other_airport
+     *
+     * @param \Frigg\FlightBundle\Entity\Airport $otherAirport
+     * @return Flight
+     */
+    public function setOtherAirport(\Frigg\FlightBundle\Entity\Airport $otherAirport = null)
+    {
+        $this->other_airport = $otherAirport;
+
+        return $this;
+    }
+
+    /**
+     * Get other_airport
+     *
+     * @return \Frigg\FlightBundle\Entity\Airport
+     */
+    public function getOtherAirport()
+    {
+        return $this->other_airport;
     }
 }

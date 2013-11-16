@@ -23,17 +23,13 @@ class AirportFlightController extends FOSRestController implements ClassResource
      */
     public function cgetAction(Request $request, $airportId)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('FriggFlightBundle:Flight')->findBy(
-            array(
-                'airport' => $airportId,
-            )
-        );
+        $service = $this->container->get('frigg_flight.airport_service');
+        $service->setAirport($this->getAirport($airportId));
 
         return array(
-            'entities' => $entities
+            'entities' => $service->getScheduledFlights()
         );
+
     }
 
     /**

@@ -9,7 +9,6 @@ use Frigg\FlightBundle\Entity\Airport;
 class AirportImport extends AvinorImportAbstract
 {
     protected $config = array();
-    protected $airports = array();
 
     public function __construct(ContainerInterface $container, $configFile)
     {
@@ -19,14 +18,14 @@ class AirportImport extends AvinorImportAbstract
 
     public function output()
     {
-        return sprintf('Imported %d airports', count($this->airports));
+        return sprintf('Imported %d airports', count($this->data));
     }
 
     public function run()
     {
-        if ($data = $this->request($this->config['target'])) {
+        if ($response = $this->request($this->config['target'])) {
             $avinorAirports = $this->config['avinor'];
-            foreach ($data as $item) {
+            foreach ($response as $item) {
                 if ($item['code'] && $item['code']) {
                     $isAvinorAirport = (in_array($item['code'], $avinorAirports));
                     if (!$airport = $this->em->getRepository('FriggFlightBundle:Airport')->findOneByCode($item['code'])) {
@@ -38,7 +37,7 @@ class AirportImport extends AvinorImportAbstract
                     $airport->setIsAvinor($isAvinorAirport);
 
                     $this->em->persist($airport);
-                    $this->airports[] = $airport->getId();
+                    $this->data[] = $airport->getId();
                 }
             }
 

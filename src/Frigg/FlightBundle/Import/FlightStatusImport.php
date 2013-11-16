@@ -9,7 +9,6 @@ use Frigg\FlightBundle\Entity\FlightStatus;
 class FlightStatusImport extends AvinorImportAbstract
 {
     protected $config = array();
-    protected $flightStatuses = array();
 
     public function __construct(ContainerInterface $container, $configFile)
     {
@@ -19,13 +18,13 @@ class FlightStatusImport extends AvinorImportAbstract
 
     public function output()
     {
-        return sprintf('Imported %d flight statuses', count($this->flightStatuses));
+        return sprintf('Imported %d flight statuses', count($this->data));
     }
 
     public function run()
     {
-        if ($data = $this->request($this->config['target'])) {
-            foreach ($data as $item) {
+        if ($response = $this->request($this->config['target'])) {
+            foreach ($response as $item) {
                 if ($item['code'] && $item['code']) {
                     if (!$flightStatus = $this->em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($item['code'])) {
                         $flightStatus = new FlightStatus;
@@ -36,7 +35,7 @@ class FlightStatusImport extends AvinorImportAbstract
                     $flightStatus->setTextNo($item['statusTextNo']);
 
                     $this->em->persist($flightStatus);
-                    $this->flightStatuses[] = $flightStatus->getId();
+                    $this->data[] = $flightStatus->getId();
                 }
             }
 
