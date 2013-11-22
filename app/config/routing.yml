@@ -1,5 +1,10 @@
-frigg_fly:
+frigg_flight_rest:
     type: rest
+    prefix: /api
     resource: "@FriggFlightBundle/Resources/config/routing.yml"
     #resource: "@FriggFlightBundle/Controller"
     #type: annotation
+
+frigg_flight_web:
+    resource: "@FriggFlightBundle/Controller"
+    type: annotation

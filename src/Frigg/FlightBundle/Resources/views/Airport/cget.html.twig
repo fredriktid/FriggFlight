@@ -1,0 +1,5 @@
+<ul>
+{% for airport in entities %}
+    <li><a href="{{ path('get_airport', {'id': airport.id, '_format': 'html'}) }}">{{ airport.name }}</a> - <a href="{{ path('get_airport_flights', {'airportId': airport.id, '_format': 'html'}) }}">flights</a></li>
+{% endfor %}
+</ul>

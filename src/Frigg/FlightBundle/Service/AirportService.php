@@ -3,24 +3,24 @@
 namespace Frigg\FlightBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Frigg\FlightBundle\Entity\Airport;
 
-class AirportService
+class AirportService extends ServiceAbstract
 {
-    protected $container;
-    protected $em;
 
-    protected $airport = null;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $config)
     {
-        $this->container = $container;
-        $this->em = $this->container->get('doctrine.orm.entity_manager');
+        parent::__construct($container, $config);
     }
 
-    public function setAirport(Airport $airport)
+    public function getDefault()
     {
-        $this->airport = $airport;
+        $defaultId = (isset($this->config['default'])) ? $this->config['default'] : 0;
+
+        if ($defaultEntity = $this->em->getRepository('FriggFlightBundle:Airport')->find($defaultId)) {
+            return $defaultEntity;
+        }
+
+        return false;
     }
 
     public function getAvinorAirports()
@@ -35,7 +35,7 @@ class AirportService
 
     public function getScheduledFlights()
     {
-        if (is_null($this->airport)) {
+        if (is_null($this->entity)) {
             return array();
         }
 
@@ -43,8 +43,9 @@ class AirportService
             ->from('FriggFlightBundle:Flight', 'f')
             ->where('f.schedule_time >= :schedule_time')
             ->andWhere('f.airport = :airport')
+            ->orderBy('f.schedule_time', 'ASC')
             ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter('airport', $this->airport->getId())
+            ->setParameter('airport', $this->entity->getId())
             ->getQuery()
             ->getResult();
     }

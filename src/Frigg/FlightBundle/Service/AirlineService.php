@@ -3,30 +3,29 @@
 namespace Frigg\FlightBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Frigg\FlightBundle\Entity\Airline;
-use Frigg\FlightBundle\Entity\Airport;
 
-class AirlineService
+class AirlineService extends ServiceAbstract
 {
-    protected $container;
-    protected $em;
 
-    protected $airline = null;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $config)
     {
-        $this->container = $container;
-        $this->em = $this->container->get('doctrine.orm.entity_manager');
+        parent::__construct($container, $config);
     }
 
-    public function setAirline(Airline $airline)
+    public function getDefault()
     {
-        $this->airline = $airline;
+        $defaultId = (isset($this->config['default'])) ? $this->config['default'] : 0;
+
+        if ($defaultEntity = $this->em->getRepository('FriggFlightBundle:Airline')->find($defaultId)) {
+            return $defaultEntity;
+        }
+
+        return false;
     }
 
     public function getScheduledFlights()
     {
-        if (is_null($this->airline)) {
+        if (is_null($this->entity)) {
             return array();
         }
 
@@ -35,7 +34,7 @@ class AirlineService
             ->where('f.schedule_time >= :schedule_time')
             ->andWhere('f.airline = :airline')
             ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter('airline', $this->airline->getId())
+            ->setParameter('airline', $this->entity->getId())
             ->getQuery()
             ->getResult();
     }

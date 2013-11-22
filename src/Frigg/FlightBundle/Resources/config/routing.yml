@@ -1,19 +1,15 @@
-#frigg_flight_homepage:
-#    pattern:  /
-#    defaults: { _controller: FriggFlightBundle:Default:index }
-
 airport:
     type: rest
-    resource: Frigg\FlightBundle\Controller\AirportController
+    resource: Frigg\FlightBundle\Controller\Rest\AirportController
 
 airport_flight:
     type: rest
-    resource: Frigg\FlightBundle\Controller\AirportFlightController
+    resource: Frigg\FlightBundle\Controller\Rest\AirportFlightController
 
 airline:
     type: rest
-    resource: Frigg\FlightBundle\Controller\AirlineController
+    resource: Frigg\FlightBundle\Controller\Rest\AirlineController
 
 airline_flight:
     type: rest
-    resource: Frigg\FlightBundle\Controller\AirlineFlightController
+    resource: Frigg\FlightBundle\Controller\Rest\AirlineFlightController

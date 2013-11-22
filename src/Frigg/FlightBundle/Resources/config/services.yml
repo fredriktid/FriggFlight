@@ -13,11 +13,11 @@ parameters:
 services:
     frigg_flight.airline_service:
         class: %frigg_flight.airline_service.class%
-        arguments: [ @service_container ]
+        arguments: [ @service_container, %frigg_flight.airline_import.config% ]
 
     frigg_flight.airport_service:
         class: %frigg_flight.airport_service.class%
-        arguments: [ @service_container ]
+        arguments: [ @service_container,  %frigg_flight.airport_import.config% ]
 
     frigg_flight.flight_import:
         class: %frigg_flight.flight_import.class%

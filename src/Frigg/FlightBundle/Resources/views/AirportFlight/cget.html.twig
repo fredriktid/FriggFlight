@@ -1,5 +1,13 @@
-{{ entity.code }} {{ entity.name }}
+{{ airport.name }}
 <hr>
-{% for flight in children %}
-    {{ flight.code }}<br>
+<ul>
+{% for flight in flights %}
+    <li>{{ flight.getOtherAirport.name }}
+        <ul>
+            <li>{{ flight.getCode }}</li>
+            <li>{{ flight.getAirline.name }}</li>
+            <li>{{ flight.getScheduleTime.format('d.m.Y H:i:s') }}</li>
+        </ul>
+    </li>
 {% endfor %}
+</ul>

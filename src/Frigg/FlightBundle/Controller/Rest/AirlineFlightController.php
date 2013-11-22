@@ -1,6 +1,6 @@
 <?php
 
-namespace Frigg\FlightBundle\Controller;
+namespace Frigg\FlightBundle\Controller\Rest;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -24,10 +24,11 @@ class AirlineFlightController extends FOSRestController implements ClassResource
     public function cgetAction(Request $request, $airlineId)
     {
         $service = $this->container->get('frigg_flight.airline_service');
-        $service->setAirline($this->getAirline($airlineId));
+        $service->setEntity($this->getAirline($airlineId));
 
         return array(
-            'entities' => $service->getScheduledFlights()
+            'airline' => $service->getEntity(),
+            'flights' => $service->getScheduledFlights()
         );
     }
 

@@ -1,2 +1,4 @@
 #target: http://flydata.avinor.no/airlineNames.asp
 target: data/airlineNames.asp.xml
+default: SK
+repository: Airport
