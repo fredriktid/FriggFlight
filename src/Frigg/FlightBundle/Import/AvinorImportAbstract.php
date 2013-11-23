@@ -20,6 +20,7 @@ abstract class AvinorImportAbstract
     }
 
     abstract public function output();
+
     abstract public function run();
 
     protected function request($target)

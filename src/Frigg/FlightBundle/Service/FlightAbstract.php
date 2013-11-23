@@ -5,7 +5,7 @@ namespace Frigg\FlightBundle\Service;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Frigg\FlightBundle\Entity\Airport;
 
-abstract class ServiceAbstract
+abstract class FlightAbstract
 {
     protected $config;
     protected $container;
@@ -20,8 +20,6 @@ abstract class ServiceAbstract
         $this->em = $this->container->get('doctrine.orm.entity_manager');
     }
 
-    abstract public function getDefault();
-
     public function setEntity($entity)
     {
         $this->entity = $entity;
@@ -35,4 +33,9 @@ abstract class ServiceAbstract
 
         return $this->entity;
     }
+
+    abstract protected function getDefault();
+
+    abstract public function getScheduledFlights();
+
 }

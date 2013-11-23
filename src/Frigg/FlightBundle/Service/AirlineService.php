@@ -4,7 +4,7 @@ namespace Frigg\FlightBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AirlineService extends ServiceAbstract
+class AirlineService extends FlightAbstract
 {
 
     public function __construct(ContainerInterface $container, $config)
@@ -12,7 +12,7 @@ class AirlineService extends ServiceAbstract
         parent::__construct($container, $config);
     }
 
-    public function getDefault()
+    protected function getDefault()
     {
         $defaultId = (isset($this->config['default'])) ? $this->config['default'] : 0;
 
