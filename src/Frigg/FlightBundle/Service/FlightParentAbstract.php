@@ -97,19 +97,22 @@ abstract class FlightParentAbstract
         return $this;
     }
 
-    /**
-     * Set new flight linked with current parent
-     * @var integer $parentId
-     * @var integer $flightId
-     * @return FlightParentAbstract
-     **/
-    abstract public function setFlightById($parentId, $flightId);
-
-    /**
-     * Fetch scheduled flights from parent
+    /**w
+     * Get all loaded flights
      * @return array
      **/
-    abstract public function getFlights();
+    public function getFlights()
+    {
+        if (!$this->parent) {
+            throw new \Exception('Missing airport entity in service');
+        }
+
+        if (!$this->flights) {
+            $this->flights = $this->loadFlights();
+        }
+
+        return $this->flights;
+    }
 
     /**
      * Set new flights to instance
@@ -123,7 +126,21 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Count all flights loaded in current instance
+     * Set new flight linked with current parent
+     * @var integer $parentId
+     * @var integer $flightId
+     * @return FlightParentAbstract
+     **/
+    abstract public function setFlightById($parentId, $flightId);
+
+    /**
+     * Fetch scheduled flights for this context
+     * @return array
+     **/
+    abstract protected function loadFlights();
+
+    /**
+     * Count loaded flights
      * @return integer
      **/
     public function getFlightsCount()
@@ -132,7 +149,7 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Get value from associated session key
+     * Get session data in this context
      * @return mixed
      **/
     public function getSession()
@@ -141,52 +158,73 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Append a value to user session
+     * Append (or prepend) to session data in this context
      * @var mixed $value
      * @return FlightParentAbstract
      **/
-    public function appendSession($value)
+    public function appendSession($value, $clear = false, $prependInstead = false)
     {
-        $currentValue = $this->getSession();
-        if (!$this->isValidSessionValue($currentValue)) {
-            $currentValue = array();
-        } elseif (!is_array($currentValue)) {
-            $currentValue = array($currentValue);
+        $sessionValue = $this->getSession();
+
+        if (is_null($value) || $clear) {
+            $sessionValue = array();
         }
 
-        $currentValue[] = $value;
-        $this->setSession($currentValue);
+        if (!is_array($sessionValue)) {
+            $sessionValue = array($sessionValue);
+        }
+
+        if ($prependInstead) {
+            array_unshift($sessionValue, $value);
+        } else {
+            array_push($sessionValue, $value);
+        }
+
+        $this->setSession($sessionValue);
+
         return $this;
     }
 
     /**
-     * Sets value in associated session key
+     * Set session data in this context
      * @var mixed $value
      * @var bool $defaultToEntityId
      * @return FlightParentAbstract
      **/
     public function setSession($value, $defaultToEntityId = false)
     {
-        if (!$this->isValidSessionValue($value)) {
-            $value = $this->getSession();
-            if ($defaultToEntityId) {
-                if (!$this->isValidSessionValue($value)) {
-                    $value = $this->getDefaultParentId();
-                }
+        $priorityList = array(
+            array(
+                'type' => 'variable',
+                'data' => $value
+            ),
+            array(
+                'type' => 'function',
+                'data' => 'getSession'
+            )
+        );
+
+        $sessionValue = null;
+        foreach ($priorityList as $item) {
+            switch ($item['type']) {
+                case 'variable':
+                    $sessionValue = $item['data'];
+                    break;
+                case 'function':
+                    $sessionValue = call_user_func_array(array($this, $item['data']));
+                    break;
             }
         }
 
-        $this->session->set(get_called_class(), $value);
-        return $this;
-    }
+        if (is_null($sessionValue) && $defaultToEntityId) {
+            $sessionValue = $this->getDefaultParentId();
+        }
 
-    /**
-     * Validate session value, may be 0 but not null/false/blank etc
-     * @var mixed $value
-     * @return bool
-     **/
-    protected function isValidSessionValue($value)
-    {
-        return ($value || $value === 0);
+        if (!is_null($sessionValue)) {
+            $this->session->set(get_called_class(), $sessionValue);
+            return true;
+        }
+
+        return false;
     }
 }

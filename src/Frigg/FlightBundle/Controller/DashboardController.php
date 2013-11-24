@@ -19,8 +19,8 @@ class DashboardController extends Controller
         $airportService = $this->container->get('frigg_flight.airport_service');
         $airlineService = $this->container->get('frigg_flight.airline_service');
 
-        $airportId = $airportService->setSession($request->query->get('airportId'), true);
-        $airlineId = $airlineService->setSession($request->query->get('airlineId'), true);
+        $airportService->setSession($request->query->get('airportId'), true);
+        $airlineService->setSession($request->query->get('airlineId'), true);
 
         return $this->render('FriggFlightBundle:Dashboard:index.html.twig', array(
             'airportId' => $airportService->getSession(),
