@@ -22,7 +22,9 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             //new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
             new Frigg\FlightBundle\FriggFlightBundle(),
+
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

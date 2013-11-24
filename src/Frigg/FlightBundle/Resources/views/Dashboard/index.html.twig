@@ -1,4 +1,11 @@
-flyapi.no<br>coming soon...
-<p>
-{{ airlineId }}<br>
-{{ airportId }}
+{% extends 'FriggFlightBundle::layout.html.twig' %}
+
+{% block content %}
+    <p>
+        flyapi.no
+    </p>
+    <p>
+        airline: {{ airlineId }}<br>
+        airport: {{ airportId }}
+    </p>
+{% endblock content %}

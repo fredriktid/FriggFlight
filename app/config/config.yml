@@ -4,7 +4,7 @@ imports:
 
 framework:
     #esi:             ~
-    #translator:      { fallback: %locale% }
+    translator:      { fallback: en }
     secret:          %secret%
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -74,3 +74,8 @@ fos_rest:
     format_listener: true
     view:
         view_response_listener: 'force'
+
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: Frigg\FlightBundle\Entity\User
