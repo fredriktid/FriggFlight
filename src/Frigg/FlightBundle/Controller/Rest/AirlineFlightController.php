@@ -28,7 +28,7 @@ class AirlineFlightController extends FOSRestController implements ClassResource
             $airlineService->setEntityById($airlineId);
             return array(
                 'success' => true,
-                'data' => $airlineService->getData()
+                'data' => $airlineService->getFlights()
             );
         } catch (\Exception $e) {
             return array(

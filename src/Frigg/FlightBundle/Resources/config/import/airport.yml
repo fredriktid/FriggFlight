@@ -1,7 +1,6 @@
 #target: http://flydata.avinor.no/airportNames.asp
 target: data/airportNames.asp.xml
-default: OSL
-repository: Airport
+default: 1119 # OSL
 avinor:
     - ALF
     - ANX

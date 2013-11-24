@@ -1,14 +1,19 @@
-FriggFlight 0.1
+FriggFlight 0.1 Alpha
 ========
 
-A modern REST API of the data provided by Avinor. Built using Symfony2.
+A modern REST API of the data [provided by Avinor](http://www.avinor.no/avinor/trafikk/50_Flydata). Built with [Symfony 2.3](https://github.com/symfony/symfony).
 
-Currently under heavy development so the structure is still subject to big changes. Though the base API structure is nearing completion.
+Currently under heavy, sporadic development so everything is subject to change at any time. However, the REST API structure is nearing completion.
+
+No documentation is available yet. Meanwhile you can probably figure out how it works by looking at the routing table.
+
+	php app/console router:debug
 
 **Here's what we got so far:**
 
+- [x] [Stage](http://dev.flyapi.no)- and [production](http://www.flyapi.no) environments
 - [x] Imports
-    - [x] Flight
+    - [x] Flight w/options
     - [x] Airline
     - [x] Airport
     - [x] FlightStatus
@@ -37,4 +42,6 @@ Currently under heavy development so the structure is still subject to big chang
     - [ ] Flight surveillance
     - [ ] User accounts
     - [ ] Documentation
+- [ ] Deployment procedure using Git post-update-hooks
+- [ ] Server monitoring w/alerts
 - [ ] Unit tests

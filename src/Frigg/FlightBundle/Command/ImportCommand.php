@@ -11,6 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 class ImportCommand extends ContainerAwareCommand
 {
+    /**
+    * Configuration of command
+    **/
     protected function configure()
     {
         $this
@@ -43,6 +46,11 @@ class ImportCommand extends ContainerAwareCommand
             );
     }
 
+    /**
+    * Execute command
+    * @var InputInterface $input
+    * @var OutputInterface $output
+    **/
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $timer = microtime(true);
@@ -84,7 +92,7 @@ class ImportCommand extends ContainerAwareCommand
                 break;
 
             default:
-                $output->writeln('Unknown type');
+                $output->writeln('Unknown type.');
                 break;
         }
 

@@ -13,27 +13,47 @@ class FlightImport extends AvinorImportAbstract
 {
     protected $config = array();
     protected $onlyUpdates = false;
-    protected $time = array(
-        'from' => 1,
-        'to' => 7
-    );
+    protected $time = array();
 
+    /**
+     * Subclass constructor
+     * @var ContainerInterface $container
+     * @var array $configFile
+     **/
     public function __construct(ContainerInterface $container, $configFile)
     {
         parent::__construct($container);
         $this->config = Yaml::parse(file_get_contents($configFile));
+        $this->time = array(
+            'from' => $this->config['defaults']['time']['from'],
+            'to' => $this->config['defaults']['time']['to']
+        );
     }
 
+    /**
+     * Print output of import status
+     * @return string
+     **/
     public function output()
     {
         return sprintf('Imported %d flights', count($this->data));
     }
 
+    /**
+     * Switch for only-updates vs full import
+     * @return FlightImport
+     **/
     public function setUpdates($switch)
     {
         $this->onlyUpdates = (bool) $switch;
+        return $this;
     }
 
+    /**
+     * Set a new time interval for import
+     * @var array $time Interval of hours for import
+     * @return FlightImport
+     **/
     public function setTime($time)
     {
         if (is_array($time)) {
@@ -43,6 +63,10 @@ class FlightImport extends AvinorImportAbstract
         return $this;
     }
 
+    /**
+     * Execute flight importer
+     * @return FlightImport
+     **/
     public function run()
     {
         $lastUpdated = $this->getLastUpdated();
@@ -130,5 +154,7 @@ class FlightImport extends AvinorImportAbstract
                 $this->setLastUpdated();
             }
         }
+
+        return $this;
     }
 }

@@ -6,16 +6,30 @@ use Doctrine\ORM\EntityManager;
 
 class AirportService extends FlightAbstract
 {
-    public function __construct(EntityManager $entityManager, $config)
+    /**
+     * Subclass constructor
+     * @var EntityManager $entityManager Doctrine entity manager
+     * @var array $configFile Airport configuration file
+     **/
+    public function __construct(EntityManager $entityManager, $configFile)
     {
-        parent::__construct($entityManager, $config);
+        parent::__construct($entityManager, $configFile);
     }
 
+    /**
+     * Get all parent entities
+     * @return array
+     **/
     public function getAll()
     {
         return $this->em->getRepository('FriggFlightBundle:Airport')->findAll();
     }
 
+    /**
+     * Set parent entity by Id in instance
+     * @var integer $entityId Id of airport to fetch
+     * @return AirportService
+     **/
     public function setEntityById($entityId)
     {
         $entity = $this->em->getRepository('FriggFlightBundle:Airport')->find($entityId);
@@ -24,9 +38,16 @@ class AirportService extends FlightAbstract
             throw new \Exception('Unable to find airport entity');
         }
 
-        $this->entity = $entity;
+        $this->setEntity($entity);
+        return $this;
     }
 
+    /**
+     * Set new flight entity in instance
+     * @var integer $entityId Id of airport to fetch
+     * @var integer $flightId Id of flight to fetch
+     * @return AirportService
+     **/
     public function setFlightById($entityId, $flightId)
     {
         $entity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
@@ -40,20 +61,14 @@ class AirportService extends FlightAbstract
             throw new \Exception('Unable to find flight entity');
         }
 
-        $this->flight = $entity;
+        $this->setFlight($entity);
+        return $this;
     }
 
-    protected function getDefaultEntity()
-    {
-        $defaultId = (isset($this->config['default'])) ? $this->config['default'] : 0;
-
-        if (!$defaultEntity = $this->em->getRepository('FriggFlightBundle:Airport')->find($defaultId)) {
-            throw new \Exception('Unable to find default airport entity');
-        }
-
-        return $defaultEntity;
-    }
-
+    /**
+     * Get list of Avinor airports
+     * @return array
+     **/
     public function getAvinorAirports()
     {
         return $this->em->createQueryBuilder()->select('a')
@@ -64,22 +79,28 @@ class AirportService extends FlightAbstract
             ->getResult();
     }
 
-    public function getData()
+    /**
+     * Fetch scheduled flights from parent entity
+     * @return array
+     **/
+    public function getFlights()
     {
         if (!$this->entity) {
             throw new \Exception('Missing airport entity in service');
         }
 
-        $this->data = $this->em->createQueryBuilder()->select('f')
-            ->from('FriggFlightBundle:Flight', 'f')
-            ->where('f.schedule_time >= :schedule_time')
-            ->andWhere('f.airport = :airport')
-            ->orderBy('f.schedule_time', 'ASC')
-            ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter('airport', $this->entity->getId())
-            ->getQuery()
-            ->getResult();
+        if (!$this->flights) {
+            $this->flights = $this->em->createQueryBuilder()->select('f')
+                ->from('FriggFlightBundle:Flight', 'f')
+                ->where('f.schedule_time >= :schedule_time')
+                ->andWhere('f.airport = :airport')
+                ->orderBy('f.schedule_time', 'ASC')
+                ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
+                ->setParameter('airport', $this->entity->getId())
+                ->getQuery()
+                ->getResult();
+        }
 
-        return $this->data;
+        return $this->flights;
     }
 }

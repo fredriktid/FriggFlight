@@ -27,7 +27,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
             $airportService->setEntityById($airportId);
             return array(
                 'success' => true,
-                'data' => $airportService->getData()
+                'data' => $airportService->getFlights()
             );
         } catch (\Exception $e) {
             return array(

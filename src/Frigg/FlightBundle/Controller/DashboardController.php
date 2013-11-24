@@ -16,12 +16,15 @@ class DashboardController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $airportCode = $request->query->get('airport');
-        $airlineCode = $request->query->get('airline');
+        $airportService = $this->container->get('frigg_flight.airport_service');
+        $airlineService = $this->container->get('frigg_flight.airline_service');
+
+        $airportId = ($request->query->get('airportId')) ? $request->query->get('airportId') : $airportService->getDefaultEntityId();
+        $airlineId = ($request->query->get('airlineId')) ? $request->query->get('airlineId') : $airlineService->getDefaultEntityId();
 
         return $this->render('FriggFlightBundle:Dashboard:index.html.twig', array(
-            'airport_code' => $airportCode,
-            'airline_code' => $airlineCode
+            'airportId' => $airportId,
+            'airlineId' => $airlineId
         ));
     }
 }

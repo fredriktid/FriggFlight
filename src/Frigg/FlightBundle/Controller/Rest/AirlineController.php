@@ -4,7 +4,6 @@ namespace Frigg\FlightBundle\Controller\Rest;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,20 +72,20 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
      */
     public function cpostAction(Request $request)
     {
-        $entity = new Airline();
-        $form = $this->createForm(new AirlineType(), $entity);
+        $airlineEntity = new Airline();
+        $form = $this->createForm(new AirlineType(), $airlineEntity);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            $em->persist($airlineEntity);
             $em->flush();
 
             return $this->redirectView(
                 $this->generateUrl(
                     'get_airline',
                     array(
-                        'airlineId' => $entity->getId()
+                        'airlineId' => $airlineEntity->getId()
                     )
                 ),
                 Codes::HTTP_CREATED
@@ -110,7 +109,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
 
         try {
             $airlineService->setEntityById($airlineId);
-            $entity = $airlineService->getEntity();
+            $airlineEntity = $airlineService->getEntity();
         } catch (\Exception $e) {
             return array(
                 'success' => false,
@@ -118,12 +117,12 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
             );
         }
 
-        $form = $this->createForm(new AirlineType(), $entity);
+        $form = $this->createForm(new AirlineType(), $airlineEntity);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            $em->persist($airlineEntity);
             $em->flush();
 
             return $this->view(null, Codes::HTTP_NO_CONTENT);
@@ -145,7 +144,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
 
         try {
             $airlineService->setEntityById($airlineId);
-            $entity = $airlineService->getEntity();
+            $airlineEntity = $airlineService->getEntity();
         } catch (\Exception $e) {
             return array(
                 'success' => false,
@@ -154,7 +153,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
         }
 
         $em = $this->getDoctrine()->getManager();
-        $em->remove($entity);
+        $em->remove($airlineEntity);
         $em->flush();
 
         return $this->view(null, Codes::HTTP_NO_CONTENT);

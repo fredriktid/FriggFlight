@@ -10,21 +10,34 @@ class AirportImport extends AvinorImportAbstract
 {
     protected $config = array();
 
+    /**
+     * Subclass constructor
+     * @var ContainerInterface $container
+     * @var array $configFile
+     **/
     public function __construct(ContainerInterface $container, $configFile)
     {
         parent::__construct($container);
         $this->config = Yaml::parse(file_get_contents($configFile));
     }
 
+    /**
+     * Print output of import status
+     * @return string
+     **/
     public function output()
     {
         return sprintf('Imported %d airports', count($this->data));
     }
 
+    /**
+     * Execute airport importer
+     * @return AirportImport
+     **/
     public function run()
     {
         if ($response = $this->request($this->config['target'])) {
-            $avinorAirports = $this->config['avinor'];
+            $avinorAirports = (isset($this->config['avinor'])) ? $this->config['avinor'] : array();
             foreach ($response as $item) {
                 if ($item['code'] && $item['code']) {
                     $isAvinorAirport = (in_array($item['code'], $avinorAirports));
@@ -44,5 +57,7 @@ class AirportImport extends AvinorImportAbstract
             $this->em->flush();
             $this->setLastUpdated();
         }
+
+        return $this;
     }
 }

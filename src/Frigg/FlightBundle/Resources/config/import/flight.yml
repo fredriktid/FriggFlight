@@ -1,2 +1,5 @@
 target: http://flydata.avinor.no/XmlFeed.asp
-repository: Flight
+defaults:
+    time:
+        from: 1
+        to: 7
