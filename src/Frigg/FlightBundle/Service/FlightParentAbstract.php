@@ -24,15 +24,15 @@ abstract class FlightParentAbstract
 
     /**
      * Parent constructor
-     * @var EntityManager $entityManager
+     * @var EntityManager $em
      * @var SessionInterface $session
-     * @var array $configFile
+     * @var string $config
      **/
-    public function __construct(EntityManager $entityManager, SessionInterface $session, $configFile)
+    public function __construct(EntityManager $em, SessionInterface $session, $config)
     {
-        $this->em = $entityManager;
+        $this->em = $em;
         $this->session = $session;
-        $this->config = Yaml::parse(file_get_contents($configFile));
+        $this->config = Yaml::parse(file_get_contents($config));
     }
 
     /**
@@ -42,8 +42,8 @@ abstract class FlightParentAbstract
     abstract public function getAll();
 
     /**
-     * Get parent entity instance
-     * @return object
+     * Get parent entity in context
+     * @return mixed
      **/
     public function getEntity()
     {
@@ -51,8 +51,8 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Set parent entity in instance
-     * @var object $entity Parent entity of flights
+     * Set parent entity in context
+     * @var mixed $entity
      * @return FlightParentAbstract
      **/
     public function setEntity($entity)
@@ -62,8 +62,8 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Set parent entity by Id in instance
-     * @var integer $entityId Id of airport to fetch
+     * Set parent entity by Id in context
+     * @var integer $entityId
      * @return FlightParentAbstract
      **/
     abstract public function setEntityById($entityId);
@@ -78,7 +78,7 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Get current flight entity
+     * Get current flight entity in context
      * @return Flight
      **/
     public function getFlight()
@@ -87,7 +87,7 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Set flight entity in instance
+     * Set flight entity in context
      * @var Flight $flight
      * @return FlightParentAbstract
      **/
@@ -98,7 +98,7 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Set new flight entity in instance
+     * Set new flight entity linked with current parent
      * @var integer $entityId
      * @var integer $flightId
      * @return FlightParentAbstract

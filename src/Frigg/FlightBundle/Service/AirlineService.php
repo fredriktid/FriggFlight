@@ -10,7 +10,7 @@ class AirlineService extends FlightParentAbstract
     /**
      * Subclass constructor
      * @var EntityManager $em
-     * @var array $configFile
+     * @var string $configFile
      **/
     public function __construct(EntityManager $em, SessionInterface $session, $config)
     {
@@ -27,7 +27,7 @@ class AirlineService extends FlightParentAbstract
     }
 
     /**
-     * Set parent entity by Id in instance
+     * Set airline entity by Id
      * @var integer $entityId Id of airline to fetch
      * @return AirlineService
      **/
@@ -44,9 +44,9 @@ class AirlineService extends FlightParentAbstract
     }
 
     /**
-     * Set new flight entity in instance
-     * @var integer $entityId Id of airline to fetch
-     * @var integer $flightId Id of flight to fetch
+     * Set new flight entity linked with current airline
+     * @var integer $entityId
+     * @var integer $flightId
      * @return AirlineService
      **/
     public function setFlightById($entityId, $flightId)
@@ -67,7 +67,7 @@ class AirlineService extends FlightParentAbstract
     }
 
     /**
-     * Fetch scheduled flights from parent entity
+     * Fetch scheduled flights from current airline
      * @return array
      **/
     public function getFlights()
