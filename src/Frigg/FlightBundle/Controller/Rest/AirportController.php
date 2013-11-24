@@ -22,10 +22,18 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function cgetAction(Request $request)
     {
-        $airportService = $this->container->get('frigg_flight.airport_service');
-        return array(
-            'data' => $airportService->getAll()
-        );
+        try {
+            $airportService = $this->container->get('frigg_flight.airport_service');
+            return array(
+                'success' => true,
+                'data' => $airportService->getAll()
+            );
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'data' => $e->getMessage()
+            );
+        }
     }
 
     /**
@@ -38,10 +46,18 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function avinorAction()
     {
-        $airportService = $this->container->get('frigg_flight.airport_service');
-        return array(
-            'data' => $airportService->getAvinorAirports()
-        );
+        try {
+            $airportService = $this->container->get('frigg_flight.airport_service');
+            return array(
+                'success' => true,
+                'data' => $airportService->getAvinorAirports()
+            );
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'data' => $e->getMessage()
+            );
+        }
     }
 
     /**
@@ -59,7 +75,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
             $airportService = $this->container->get('frigg_flight.airport_service');
             $airportService->setEntityById($airportId);
             return array(
-                'success' => false,
+                'success' => true,
                 'data' => array()
             );
         } catch (\Exception $e) {
@@ -101,19 +117,21 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function cpostAction(Request $request)
     {
-        /*$entity = new Airport();
-        $form = $this->createForm(new AirportType(), $entity);
+        /*$airportEntity = new Airport();
+        $form = $this->createForm(new AirportType(), $airportEntity);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            $em->persist($airportEntity);
             $em->flush();
 
             return $this->redirectView(
                 $this->generateUrl(
                     'get_airport',
-                    array('id' => $entity->getId())
+                    array(
+                        'airportId' => $airportEntity->getId()
+                    )
                 ),
                 Codes::HTTP_CREATED
             );
@@ -131,18 +149,29 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     /**
      * Put action
      * @var Request $request
-     * @var integer $airportId Id of the entity
+     * @var integer $airportId Id of the airport entity
      * @return View|array
      */
     public function putAction(Request $request, $airportId)
     {
-        /*$entity = $this->getEntity($airportId);
-        $form = $this->createForm(new AirportType(), $entity);
+        /*
+        try {
+            $airportService = $this->container->get('frigg_flight.airport_service');
+            $airportService->setEntityById($airportId);
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'data' => $e->getMessage()
+            );
+        }
+
+        $airportEntity = $airportService->getEntity();
+        $form = $this->createForm(new AirportType(), $airportEntity);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            $em->persist($airportEntity);
             $em->flush();
 
             return $this->view(null, Codes::HTTP_NO_CONTENT);
@@ -164,10 +193,19 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function deleteAction($airportId)
     {
-        /*$entity = $this->getEntity($airportId);
-
+        /*
+        try {
+            $airportService = $this->container->get('frigg_flight.airport_service');
+            $airportService->setEntityById($airportId);
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'data' => $e->getMessage()
+            );
+        }
+        $airportEntity = airportService->getEntity();
         $em = $this->getDoctrine()->getManager();
-        $em->remove($entity);
+        $em->remove($airportEntity);
         $em->flush();*/
 
         return $this->view(null, Codes::HTTP_NO_CONTENT);

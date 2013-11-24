@@ -72,23 +72,35 @@ class AirlineFlightController extends FOSRestController implements ClassResource
      */
     public function cpostAction(Request $request, $airlineId)
     {
-        /*$airline = $this->getAirline($airlineId);
-        $entity = new Flight();
-        $entity->setAirline($airline);
-        $form = $this->createForm(new FlightType(), $entity);
+        /*
+        try {
+            $airlineService = $this->container->get('frigg_flight.airline_service');
+            $airlineService->setEntityById($airlineId);
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'data' => $e->getMessage()
+            );
+        }
+
+        $airlineEntity = $airlineService->getEntity();
+
+        $flightEntity = new Flight();
+        $flightEntity->setAirline($airlineEntity);
+        $form = $this->createForm(new FlightType(), $flightEntity);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            $em->persist($flightEntity);
             $em->flush();
 
             return $this->redirectView(
                 $this->generateUrl(
                     'get_airline_flight',
                     array(
-                        'airlineId' => $entity->getAirline()->getId(),
-                        'id' => $entity->getId()
+                        'airlineId' => $flightEntity->getAirline()->getId(),
+                        'flightId' => $flightEntity->getId()
                     )
                 ),
                 Codes::HTTP_CREATED
@@ -112,13 +124,24 @@ class AirlineFlightController extends FOSRestController implements ClassResource
      */
     public function putAction(Request $request, $airlineId, $flightId)
     {
-        /*$entity = $this->getEntity($airlineId, $flightId);
-        $form = $this->createForm(new FlightType(), $entity);
+        /*
+        try {
+            $airlineService = $this->container->get('frigg_flight.airline_service');
+            $airlineService->setFlightById($airlineId, $flightId);
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'data' => $e->getMessage()
+            );
+        }
+
+        $flightEntity = $airlineService->getFlight();
+        $form = $this->createForm(new FlightType(), $flightEntity);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            $em->persist($flightEntity);
             $em->flush();
 
             return $this->view(null, Codes::HTTP_NO_CONTENT);
@@ -140,10 +163,21 @@ class AirlineFlightController extends FOSRestController implements ClassResource
      */
     public function deleteAction($airlineId, $flightId)
     {
-        /*$entity = $this->getEntity($airlineId, $flightId);
+        /*
+        try {
+            $airlineService = $this->container->get('frigg_flight.airline_service');
+            $airlineService->setFlightById($airportId, $flightId);
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'data' => $e->getMessage()
+            );
+        }
+
+        $flightEntity = $airlineService->getFlight();
 
         $em = $this->getDoctrine()->getManager();
-        $em->remove($entity);
+        $em->remove($flightEntity);
         $em->flush();
         */
         return $this->view(null, Codes::HTTP_NO_CONTENT);

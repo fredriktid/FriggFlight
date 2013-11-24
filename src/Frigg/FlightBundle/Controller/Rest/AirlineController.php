@@ -63,7 +63,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
      */
     public function delayedAction($airlineId)
     {
-        return array($airlineId);
+        return array();
     }
 
 
@@ -86,7 +86,9 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
             return $this->redirectView(
                 $this->generateUrl(
                     'get_airline',
-                    array('id' => $entity->getId())
+                    array(
+                        'airlineId' => $entity->getId()
+                    )
                 ),
                 Codes::HTTP_CREATED
             );
