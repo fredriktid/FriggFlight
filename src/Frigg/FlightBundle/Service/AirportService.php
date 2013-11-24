@@ -90,7 +90,7 @@ class AirportService extends FlightAbstract
         }
 
         if (!$this->flights) {
-            $this->flights = $this->em->createQueryBuilder()->select('f')
+            $this->setFlights($this->em->createQueryBuilder()->select('f')
                 ->from('FriggFlightBundle:Flight', 'f')
                 ->where('f.schedule_time >= :schedule_time')
                 ->andWhere('f.airport = :airport')
@@ -98,9 +98,10 @@ class AirportService extends FlightAbstract
                 ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
                 ->setParameter('airport', $this->entity->getId())
                 ->getQuery()
-                ->getResult();
+                ->getResult()
+            );
         }
 
-        return $this->flights;
+        return $this->getFlights();
     }
 }

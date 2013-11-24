@@ -108,6 +108,17 @@ abstract class FlightAbstract
     abstract public function getFlights();
 
     /**
+     * Set new flights to instance
+     * @var array $flights
+     * @return FlightAbstract
+     **/
+    public function setFlights($flights)
+    {
+        $this->flights = $flights;
+        return $this;
+    }
+
+    /**
      * Count all flights loaded in current instance
      * @return integer
      **/

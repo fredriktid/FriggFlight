@@ -61,7 +61,7 @@ class AirlineService extends FlightAbstract
             throw new \Exception('Unable to find flight entity');
         }
 
-        $this->flight = $entity;
+        $this->setFlight($entity);
         return $this;
     }
 
@@ -76,16 +76,17 @@ class AirlineService extends FlightAbstract
         }
 
         if (!$this->flights) {
-            $this->flights = $this->em->createQueryBuilder()->select('f')
+            $this->setFlights($this->em->createQueryBuilder()->select('f')
                 ->from('FriggFlightBundle:Flight', 'f')
                 ->where('f.schedule_time >= :schedule_time')
                 ->andWhere('f.airline = :airline')
                 ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
                 ->setParameter('airline', $this->entity->getId())
                 ->getQuery()
-                ->getResult();
+                ->getResult()
+            );
         }
 
-        return $this->flights;
+        return $this->getFlights();
     }
 }

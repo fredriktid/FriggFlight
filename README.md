@@ -32,6 +32,7 @@ No documentation is available yet. Meanwhile you can probably figure out how it 
 
 - [ ] Rest API
 	- [ ] QueryParameters
+	- [ ] getFlights() must accomodate flight_status_time
 - [ ] Security
     - [ ] FOSUserBundle
     - [ ] FOSOAuthServerBundle
