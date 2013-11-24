@@ -59,9 +59,8 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
      * @return array
      *
      * @Rest\View()
-     * @Get
      */
-    public function delayedAction($airlineId)
+    public function cgetDelayedAction($airlineId)
     {
         return array();
     }
@@ -74,7 +73,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
      */
     public function cpostAction(Request $request)
     {
-        /*$entity = new Airline();
+        $entity = new Airline();
         $form = $this->createForm(new AirlineType(), $entity);
         $form->bind($request);
 
@@ -96,10 +95,6 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
 
         return array(
             'form' => $form,
-        );*/
-
-        return array(
-            'form' => false
         );
     }
 
@@ -113,7 +108,6 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
     {
         $airlineService = $this->container->get('frigg_flight.airline_service');
 
-        /*
         try {
             $airlineService->setEntityById($airlineId);
             $entity = $airlineService->getEntity();
@@ -137,10 +131,6 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
 
         return array(
             'form' => $form,
-        );*/
-
-        return array(
-            'form' => false
         );
     }
 
@@ -153,7 +143,6 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
     {
         $airlineService = $this->container->get('frigg_flight.airline_service');
 
-        /*
         try {
             $airlineService->setEntityById($airlineId);
             $entity = $airlineService->getEntity();
@@ -166,7 +155,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($entity);
-        $em->flush();*/
+        $em->flush();
 
         return $this->view(null, Codes::HTTP_NO_CONTENT);
     }

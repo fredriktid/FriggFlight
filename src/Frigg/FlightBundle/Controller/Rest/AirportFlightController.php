@@ -8,8 +8,7 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
 use Frigg\FlightBundle\Entity\Flight;
-use Frigg\FlightBundle\Entity\Airport;
-//use Frigg\FlightBundle\Form\FlightType;
+use Frigg\FlightBundle\Form\FlightType;
 
 class AirportFlightController extends FOSRestController implements ClassResourceInterface
 {
@@ -72,7 +71,6 @@ class AirportFlightController extends FOSRestController implements ClassResource
      */
     public function cpostAction(Request $request, $airportId)
     {
-        /*
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
             $airportService->setEntityById($airportId);
@@ -108,10 +106,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
         }
 
         return array(
-            'form' => $form,
-        );*/
-        return array(
-            'form' => false
+            'form' => $form
         );
     }
 
@@ -124,7 +119,6 @@ class AirportFlightController extends FOSRestController implements ClassResource
      */
     public function putAction(Request $request, $airportId, $flightId)
     {
-        /*
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
             $airportService->setFlightById($airportId, $flightId);
@@ -149,9 +143,6 @@ class AirportFlightController extends FOSRestController implements ClassResource
 
         return array(
             'form' => $form,
-        );*/
-        return array(
-            'form' => false
         );
     }
 
@@ -163,7 +154,6 @@ class AirportFlightController extends FOSRestController implements ClassResource
      */
     public function deleteAction($airportId, $flightId)
     {
-        /*
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
             $airportService->setFlightById($airportId, $flightId);
@@ -175,10 +165,9 @@ class AirportFlightController extends FOSRestController implements ClassResource
         }
 
         $flightEntity = $airportService->getFlight();
-
         $em = $this->getDoctrine()->getManager();
         $em->remove($flightEntity);
-        $em->flush();*/
+        $em->flush();
 
         return $this->view(null, Codes::HTTP_NO_CONTENT);
     }

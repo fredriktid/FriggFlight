@@ -9,7 +9,7 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
 use Frigg\FlightBundle\Entity\Airport;
-//use Frigg\FlightBundle\Form\AirportType;
+use Frigg\FlightBundle\Form\AirportType;
 
 class AirportController extends FOSRestController implements ClassResourceInterface
 {
@@ -42,9 +42,8 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      * @return array
      *
      * @Rest\View()
-     * @Get
      */
-    public function avinorAction()
+    public function cgetAvinorAction()
     {
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
@@ -67,9 +66,8 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      * @return array
      *
      * @Rest\View()
-     * @Get
      */
-    public function graphAction(Request $request, $airportId)
+    public function cgetGraphAction(Request $request, $airportId)
     {
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
@@ -117,7 +115,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function cpostAction(Request $request)
     {
-        /*$airportEntity = new Airport();
+        $airportEntity = new Airport();
         $form = $this->createForm(new AirportType(), $airportEntity);
         $form->bind($request);
 
@@ -139,10 +137,6 @@ class AirportController extends FOSRestController implements ClassResourceInterf
 
         return array(
             'form' => $form,
-        );*/
-
-        return array(
-            'form' => false
         );
     }
 
@@ -154,7 +148,6 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function putAction(Request $request, $airportId)
     {
-        /*
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
             $airportService->setEntityById($airportId);
@@ -179,10 +172,6 @@ class AirportController extends FOSRestController implements ClassResourceInterf
 
         return array(
             'form' => $form,
-        );*/
-
-        return array(
-            'form' => false
         );
     }
 
@@ -193,7 +182,6 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function deleteAction($airportId)
     {
-        /*
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
             $airportService->setEntityById($airportId);
@@ -203,10 +191,11 @@ class AirportController extends FOSRestController implements ClassResourceInterf
                 'data' => $e->getMessage()
             );
         }
-        $airportEntity = airportService->getEntity();
+
+        $airportEntity = $airportService->getEntity();
         $em = $this->getDoctrine()->getManager();
         $em->remove($airportEntity);
-        $em->flush();*/
+        $em->flush();
 
         return $this->view(null, Codes::HTTP_NO_CONTENT);
     }

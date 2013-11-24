@@ -9,7 +9,7 @@ use FOS\Rest\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
 use Frigg\FlightBundle\Entity\Flight;
 use Frigg\FlightBundle\Entity\Airline;
-//use Frigg\FlightBundle\Form\FlightType;
+use Frigg\FlightBundle\Form\FlightType;
 
 class AirlineFlightController extends FOSRestController implements ClassResourceInterface
 {
@@ -72,7 +72,6 @@ class AirlineFlightController extends FOSRestController implements ClassResource
      */
     public function cpostAction(Request $request, $airlineId)
     {
-        /*
         try {
             $airlineService = $this->container->get('frigg_flight.airline_service');
             $airlineService->setEntityById($airlineId);
@@ -109,9 +108,6 @@ class AirlineFlightController extends FOSRestController implements ClassResource
 
         return array(
             'form' => $form,
-        );*/
-        return array(
-            'form' => false
         );
     }
 
@@ -124,7 +120,6 @@ class AirlineFlightController extends FOSRestController implements ClassResource
      */
     public function putAction(Request $request, $airlineId, $flightId)
     {
-        /*
         try {
             $airlineService = $this->container->get('frigg_flight.airline_service');
             $airlineService->setFlightById($airlineId, $flightId);
@@ -149,9 +144,6 @@ class AirlineFlightController extends FOSRestController implements ClassResource
 
         return array(
             'form' => $form,
-        );*/
-        return array(
-            'form' => false
         );
     }
 
@@ -163,7 +155,6 @@ class AirlineFlightController extends FOSRestController implements ClassResource
      */
     public function deleteAction($airlineId, $flightId)
     {
-        /*
         try {
             $airlineService = $this->container->get('frigg_flight.airline_service');
             $airlineService->setFlightById($airportId, $flightId);
@@ -179,7 +170,7 @@ class AirlineFlightController extends FOSRestController implements ClassResource
         $em = $this->getDoctrine()->getManager();
         $em->remove($flightEntity);
         $em->flush();
-        */
+
         return $this->view(null, Codes::HTTP_NO_CONTENT);
 
     }
