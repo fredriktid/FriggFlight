@@ -9,7 +9,7 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
 use Frigg\FlightBundle\Entity\Airline;
-//use Frigg\FlightBundle\Form\AirlineType;
+use Frigg\FlightBundle\Form\AirlineType;
 
 class AirlineController extends FOSRestController implements ClassResourceInterface
 {

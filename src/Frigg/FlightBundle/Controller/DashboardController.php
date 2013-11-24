@@ -9,18 +9,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 
-class DefaultController extends Controller
+class DashboardController extends Controller
 {
     /**
-     * @Route("/", name="frigg_flight_homepage")
+     * @Route("/", name="dashboard")
      */
     public function indexAction(Request $request)
     {
         $airportCode = $request->query->get('airport');
+        $airlineCode = $request->query->get('airline');
 
-        return $this->render('FriggFlightBundle:Default:index.html.twig', array(
+        return $this->render('FriggFlightBundle:Dashboard:index.html.twig', array(
             'airport_code' => $airportCode,
-            'airport' => false
+            'airline_code' => $airlineCode
         ));
     }
 }
