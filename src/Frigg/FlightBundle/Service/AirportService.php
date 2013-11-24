@@ -2,25 +2,56 @@
 
 namespace Frigg\FlightBundle\Service;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\EntityManager;
 
 class AirportService extends FlightAbstract
 {
-
-    public function __construct(ContainerInterface $container, $config)
+    public function __construct(EntityManager $entityManager, $config)
     {
-        parent::__construct($container, $config);
+        parent::__construct($entityManager, $config);
     }
 
-    protected function getDefault()
+    public function getAll()
+    {
+        return $this->em->getRepository('FriggFlightBundle:Airport')->findAll();
+    }
+
+    public function setEntityById($entityId)
+    {
+        $entity = $this->em->getRepository('FriggFlightBundle:Airport')->find($entityId);
+
+        if (!$entity) {
+            throw new \Exception('Unable to find airport entity');
+        }
+
+        $this->entity = $entity;
+    }
+
+    public function setFlightById($entityId, $flightId)
+    {
+        $entity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
+            array(
+                'id' => $flightId,
+                'airport' => $entityId,
+            )
+        );
+
+        if (!$entity) {
+            throw new \Exception('Unable to find flight entity');
+        }
+
+        $this->flight = $entity;
+    }
+
+    protected function getDefaultEntity()
     {
         $defaultId = (isset($this->config['default'])) ? $this->config['default'] : 0;
 
-        if ($defaultEntity = $this->em->getRepository('FriggFlightBundle:Airport')->find($defaultId)) {
-            return $defaultEntity;
+        if (!$defaultEntity = $this->em->getRepository('FriggFlightBundle:Airport')->find($defaultId)) {
+            throw new \Exception('Unable to find default airport entity');
         }
 
-        return false;
+        return $defaultEntity;
     }
 
     public function getAvinorAirports()
@@ -33,13 +64,13 @@ class AirportService extends FlightAbstract
             ->getResult();
     }
 
-    public function getScheduledFlights()
+    public function getData()
     {
-        if (is_null($this->entity)) {
-            return array();
+        if (!$this->entity) {
+            throw new \Exception('Missing airport entity in service');
         }
 
-        return $this->em->createQueryBuilder()->select('f')
+        $this->data = $this->em->createQueryBuilder()->select('f')
             ->from('FriggFlightBundle:Flight', 'f')
             ->where('f.schedule_time >= :schedule_time')
             ->andWhere('f.airport = :airport')
@@ -48,5 +79,7 @@ class AirportService extends FlightAbstract
             ->setParameter('airport', $this->entity->getId())
             ->getQuery()
             ->getResult();
+
+        return $this->data;
     }
 }

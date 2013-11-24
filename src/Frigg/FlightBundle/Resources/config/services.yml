@@ -13,11 +13,11 @@ parameters:
 services:
     frigg_flight.airline_service:
         class: %frigg_flight.airline_service.class%
-        arguments: [ @service_container, %frigg_flight.airline.config% ]
+        arguments: [ @doctrine.orm.entity_manager, %frigg_flight.airline.config% ]
 
     frigg_flight.airport_service:
         class: %frigg_flight.airport_service.class%
-        arguments: [ @service_container,  %frigg_flight.airport.config% ]
+        arguments: [ @doctrine.orm.entity_manager,  %frigg_flight.airport.config% ]
 
     frigg_flight.flight_import:
         class: %frigg_flight.flight_import.class%

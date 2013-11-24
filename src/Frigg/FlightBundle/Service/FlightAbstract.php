@@ -2,23 +2,32 @@
 
 namespace Frigg\FlightBundle\Service;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Frigg\FlightBundle\Entity\Airport;
+use Doctrine\ORM\EntityManager;
 
 abstract class FlightAbstract
 {
-    protected $config;
-    protected $container;
     protected $em;
+    protected $config;
 
-    protected $entity = null;
+    protected $entity = null; // parent entity
+    protected $flight = null; // flight entity
+    protected $data = array(); // collection of flights
 
-    public function __construct(ContainerInterface $container, $config)
+    public function __construct(EntityManager $entityManager, $config)
     {
+        $this->em = $entityManager;
         $this->config = $config;
-        $this->container = $container;
-        $this->em = $this->container->get('doctrine.orm.entity_manager');
     }
+
+    abstract public function getAll();
+
+    abstract public function setEntityById($entityId);
+
+    abstract public function setFlightById($entityId, $flightId);
+
+    abstract protected function getDefaultEntity();
+
+    abstract public function getData();
 
     public function setEntity($entity)
     {
@@ -28,14 +37,24 @@ abstract class FlightAbstract
     public function getEntity()
     {
         if (is_null($this->entity)) {
-            return $this->getDefault();
+            return $this->getDefaultEntity();
         }
 
         return $this->entity;
     }
 
-    abstract protected function getDefault();
+    public function setFlight($flight)
+    {
+        $this->flight = $flight;
+    }
 
-    abstract public function getScheduledFlights();
+    public function getFlight()
+    {
+        return $this->flight;
+    }
 
+    public function getDataCount()
+    {
+        return count($this->data);
+    }
 }
