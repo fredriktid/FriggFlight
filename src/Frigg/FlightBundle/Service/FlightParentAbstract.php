@@ -195,7 +195,7 @@ abstract class FlightParentAbstract
     public function setSession($value, $defaultToEntityId = false)
     {
         $sessionValue = null;
-        $priorityList = array(
+        $fallbackList = array(
             array(
                 'type' => 'variable',
                 'data' => $value,
@@ -208,17 +208,17 @@ abstract class FlightParentAbstract
             )
         );
 
-        foreach ($priorityList as $item) {
+        foreach ($fallbackList as $i => $data) {
             if (!is_null($sessionValue)) {
                 break;
             }
 
-            switch ($item['type']) {
+            switch ($data['type']) {
                 case 'variable':
-                    $sessionValue = $item['data'];
+                    $sessionValue = $data['data'];
                     break;
                 case 'function':
-                    $sessionValue = call_user_func_array(array($this, $item['data']), $item['params']);
+                    $sessionValue = call_user_func_array(array($this, $data['data']), $data['params']);
                     break;
             }
         }
@@ -228,7 +228,11 @@ abstract class FlightParentAbstract
         }
 
         if (!is_null($sessionValue)) {
-            $this->session->set(get_called_class(), $sessionValue);
+            $currentSession = $this->getSession();
+            if ($sessionValue !== $currentSession) {
+                $this->session->set(get_called_class(), $sessionValue);
+            }
+
             return true;
         }
 
