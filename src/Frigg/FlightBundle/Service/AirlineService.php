@@ -4,6 +4,7 @@ namespace Frigg\FlightBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AirlineService extends FlightParentAbstract
 {
@@ -36,7 +37,7 @@ class AirlineService extends FlightParentAbstract
         $entity = $this->em->getRepository('FriggFlightBundle:Airline')->find($parentId);
 
         if (!$entity) {
-            throw new \Exception('Unable to find airline entity');
+            throw new NotFoundHttpException('Unable to find airline entity');
         }
 
         $this->setParent($entity);
@@ -59,7 +60,7 @@ class AirlineService extends FlightParentAbstract
         );
 
         if (!$entity) {
-            throw new \Exception('Unable to find flight entity');
+            throw new NotFoundHttpException('Unable to find flight entity');
         }
 
         $this->setFlight($entity);
@@ -73,7 +74,7 @@ class AirlineService extends FlightParentAbstract
     protected function loadFlights()
     {
         if (!$this->parent) {
-            throw new \Exception('Unable to load flights. Airline missing.');
+            throw new NotFoundHttpException('Unable to load flights. Airline missing.');
         }
 
         return $this->em->createQueryBuilder()->select('f')

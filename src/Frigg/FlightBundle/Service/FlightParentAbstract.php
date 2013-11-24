@@ -5,6 +5,7 @@ namespace Frigg\FlightBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 abstract class FlightParentAbstract
 {
@@ -51,6 +52,15 @@ abstract class FlightParentAbstract
     }
 
     /**
+     * Get the default Id of the current parent
+     * @return integer
+     **/
+    public function getDefaultParentId()
+    {
+        return (isset($this->config['default']) ? $this->config['default'] : null);
+    }
+
+    /**
      * Set parent entity in context
      * @var mixed $entity
      * @return FlightParentAbstract
@@ -67,15 +77,6 @@ abstract class FlightParentAbstract
      * @return FlightParentAbstract
      **/
     abstract public function setParentById($parentId);
-
-    /**
-     * Get the default Id of the current parent
-     * @return integer
-     **/
-    public function getDefaultParentId()
-    {
-        return (isset($this->config['default']) ? $this->config['default'] : 0);
-    }
 
     /**
      * Get current flight in context
@@ -104,7 +105,7 @@ abstract class FlightParentAbstract
     public function getFlights()
     {
         if (!$this->parent) {
-            throw new \Exception('Missing airport entity in service');
+            throw new NotFoundHttpException('Unable to get flights. Missing parent entity.');
         }
 
         if (!$this->flights) {
@@ -193,25 +194,31 @@ abstract class FlightParentAbstract
      **/
     public function setSession($value, $defaultToEntityId = false)
     {
+        $sessionValue = null;
         $priorityList = array(
             array(
                 'type' => 'variable',
-                'data' => $value
+                'data' => $value,
+                'params' => null
             ),
             array(
                 'type' => 'function',
-                'data' => 'getSession'
+                'data' => 'getSession',
+                'params' => array()
             )
         );
 
-        $sessionValue = null;
         foreach ($priorityList as $item) {
+            if (!is_null($sessionValue)) {
+                break;
+            }
+
             switch ($item['type']) {
                 case 'variable':
                     $sessionValue = $item['data'];
                     break;
                 case 'function':
-                    $sessionValue = call_user_func_array(array($this, $item['data']));
+                    $sessionValue = call_user_func_array(array($this, $item['data']), $item['params']);
                     break;
             }
         }
