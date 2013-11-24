@@ -3,17 +3,18 @@
 namespace Frigg\FlightBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class AirlineService extends FlightAbstract
+class AirlineService extends FlightParentAbstract
 {
     /**
      * Subclass constructor
-     * @var EntityManager $entityManager Doctrine entity manger
-     * @var array $configFile Airline configuration file
+     * @var EntityManager $em
+     * @var array $configFile
      **/
-    public function __construct(EntityManager $entityManager, $configFile)
+    public function __construct(EntityManager $em, SessionInterface $session, $config)
     {
-        parent::__construct($entityManager, $configFile);
+        parent::__construct($em, $session, $config);
     }
 
     /**

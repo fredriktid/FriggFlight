@@ -2,14 +2,16 @@
 
 namespace Frigg\FlightBundle\Service;
 
-use Symfony\Component\Yaml\Yaml;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-abstract class FlightAbstract
+abstract class FlightParentAbstract
 {
     /* Injected dependencies */
     protected $em;
     protected $config;
+    protected $session;
 
     /* Parent entity */
     protected $entity = null;
@@ -22,12 +24,14 @@ abstract class FlightAbstract
 
     /**
      * Parent constructor
-     * @var EntityManager $entityManager Doctrine entity manger
-     * @var array $configFile Parent entity configuration file
+     * @var EntityManager $entityManager
+     * @var SessionInterface $session
+     * @var array $configFile
      **/
-    public function __construct(EntityManager $entityManager, $configFile)
+    public function __construct(EntityManager $entityManager, SessionInterface $session, $configFile)
     {
         $this->em = $entityManager;
+        $this->session = $session;
         $this->config = Yaml::parse(file_get_contents($configFile));
     }
 
@@ -49,7 +53,7 @@ abstract class FlightAbstract
     /**
      * Set parent entity in instance
      * @var object $entity Parent entity of flights
-     * @return FlightAbstract
+     * @return FlightParentAbstract
      **/
     public function setEntity($entity)
     {
@@ -60,7 +64,7 @@ abstract class FlightAbstract
     /**
      * Set parent entity by Id in instance
      * @var integer $entityId Id of airport to fetch
-     * @return FlightAbstract
+     * @return FlightParentAbstract
      **/
     abstract public function setEntityById($entityId);
 
@@ -85,7 +89,7 @@ abstract class FlightAbstract
     /**
      * Set flight entity in instance
      * @var Flight $flight
-     * @return FlightAbstract
+     * @return FlightParentAbstract
      **/
     public function setFlight($flight)
     {
@@ -97,7 +101,7 @@ abstract class FlightAbstract
      * Set new flight entity in instance
      * @var integer $entityId
      * @var integer $flightId
-     * @return FlightAbstract
+     * @return FlightParentAbstract
      **/
     abstract public function setFlightById($entityId, $flightId);
 
@@ -110,7 +114,7 @@ abstract class FlightAbstract
     /**
      * Set new flights to instance
      * @var array $flights
-     * @return FlightAbstract
+     * @return FlightParentAbstract
      **/
     public function setFlights($flights)
     {
@@ -125,5 +129,65 @@ abstract class FlightAbstract
     public function getFlightsCount()
     {
         return count($this->flights);
+    }
+
+    /**
+     * Get value from associated session key
+     * @return mixed
+     **/
+    public function getSession()
+    {
+        return $this->session->get(get_called_class());
+    }
+
+    /**
+     * Append a value to user session
+     * @var mixed $value
+     * @return FlightParentAbstract
+     **/
+    public function appendSession($value)
+    {
+        $currentValue = $this->getSession();
+        if (!$this->isValidSessionValue($currentValue)) {
+            $currentValue = array();
+        } elseif (!is_array($currentValue)) {
+            $currentValue = array($currentValue);
+        }
+
+        $currentValue[] = $value;
+        $this->setSession($currentValue);
+        return $this;
+    }
+
+    /**
+     * Sets value in associated session key
+     * @var mixed $value
+     * @var bool $defaultToEntityId
+     * @return FlightParentAbstract
+     **/
+    public function setSession($value, $defaultToEntityId = false)
+    {
+        $key = get_called_class();
+        if (!$this->isValidSessionValue($value)) {
+            $value = $this->getSession($key);
+            if ($defaultToEntityId) {
+                if (!$this->isValidSessionValue($value)) {
+                    $value = $this->getDefaultEntityId();
+                }
+            }
+        }
+
+        $this->session->set($key, $value);
+        return $this;
+    }
+
+    /**
+     * Validate session value, may be 0 but not null/false/blank etc
+     * @var mixed $value
+     * @return bool
+     **/
+    protected function isValidSessionValue($value)
+    {
+        return ($value || $value === 0);
     }
 }
