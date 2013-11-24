@@ -7,14 +7,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AvinorImportAbstract
 {
-     /* Injected dependencies */
     protected $em = null;
     protected $container = null;
 
-    /* Response from import endpoint */
     protected $response = array();
-
-    /* Processed import data */
     protected $data = array();
 
     /**
@@ -28,7 +24,7 @@ abstract class AvinorImportAbstract
     }
 
     /**
-     * Print output of import status
+     * Print import status
      * @return string
      **/
     abstract public function output();
@@ -63,7 +59,7 @@ abstract class AvinorImportAbstract
      * Get last updated timestamp
      * @return string
      **/
-    protected function getLastUpdated()
+    final protected function getLastUpdated()
     {
         if ($lastUpdated = $this->em->getRepository('FriggFlightBundle:LastUpdated')->findOneByClass(get_called_class())) {
             return $lastUpdated->getTimestamp();
@@ -76,7 +72,7 @@ abstract class AvinorImportAbstract
      * Update last updated timestamp to now
      * @return AvinorImportAbstract
      **/
-    protected function setLastUpdated()
+    final protected function setLastUpdated()
     {
         $importerClass = get_called_class();
         if (!$lastUpdated = $this->em->getRepository('FriggFlightBundle:LastUpdated')->findOneByClass($importerClass)) {

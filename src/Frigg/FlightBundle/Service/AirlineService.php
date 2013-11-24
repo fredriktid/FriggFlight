@@ -9,9 +9,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class AirlineService extends FlightParentAbstract
 {
     /**
-     * Subclass constructor
+     * Airline subclass constructor
      * @var EntityManager $em
-     * @var string $configFile
+     * @var string $config
      **/
     public function __construct(EntityManager $em, SessionInterface $session, $config)
     {
@@ -19,7 +19,7 @@ class AirlineService extends FlightParentAbstract
     }
 
     /**
-     * Get all parent entities
+     * Get all airline entities
      * @return array
      **/
     public function getAll()
@@ -28,8 +28,8 @@ class AirlineService extends FlightParentAbstract
     }
 
     /**
-     * Set airline entity by Id
-     * @var integer $parentId Id of airline to fetch
+     * Set airline entity
+     * @var integer $parentId
      * @return AirlineService
      **/
     public function setParentById($parentId)
@@ -45,7 +45,7 @@ class AirlineService extends FlightParentAbstract
     }
 
     /**
-     * Set new flight linked with current airline
+     * Set new flight linked with this airline
      * @var integer $parentId
      * @var integer $flightId
      * @return AirlineService
@@ -68,12 +68,12 @@ class AirlineService extends FlightParentAbstract
     }
 
      /**
-     * Fetch scheduled flights for this airline
+     * Fetch scheduled flights group for this airline
      * @return array
      **/
-    protected function loadFlights()
+    protected function loadFlightsGroup()
     {
-        if (!$this->parent) {
+        if (!$this->parentEntity) {
             throw new NotFoundHttpException('Unable to load flights. Airline missing.');
         }
 
@@ -82,7 +82,7 @@ class AirlineService extends FlightParentAbstract
             ->where('f.schedule_time >= :schedule_time')
             ->andWhere('f.airline = :airline')
             ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter('airline', $this->parent->getId())
+            ->setParameter('airline', $this->parentEntity->getId())
             ->getQuery()
             ->getResult();
     }

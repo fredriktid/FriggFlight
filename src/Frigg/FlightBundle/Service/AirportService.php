@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class AirportService extends FlightParentAbstract
 {
     /**
-     * Subclass constructor
+     * Airport subclass constructor
      * @var EntityManager $em
      * @var string $config
      **/
@@ -19,7 +19,7 @@ class AirportService extends FlightParentAbstract
     }
 
     /**
-     * Get all parent entities
+     * Get all airport entities
      * @return array
      **/
     public function getAll()
@@ -28,47 +28,47 @@ class AirportService extends FlightParentAbstract
     }
 
     /**
-     * Set airport entity by Id
+     * Set airport entity
      * @var integer $parentId
      * @return AirportService
      **/
     public function setParentById($parentId)
     {
-        $entity = $this->em->getRepository('FriggFlightBundle:Airport')->find($parentId);
+        $airportEntity = $this->em->getRepository('FriggFlightBundle:Airport')->find($parentId);
 
-        if (!$entity) {
+        if (!$airportEntity) {
             throw new NotFoundHttpException('Unable to find airport entity');
         }
 
-        $this->setParent($entity);
+        $this->setParent($airportEntity);
         return $this;
     }
 
     /**
-     * Set new flight linked with current airport
+     * Set flight entity in context of parent
      * @var integer $parentId
      * @var integer $flightId
      * @return AirportService
      **/
     public function setFlightById($parentId, $flightId)
     {
-        $entity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
+        $flightEntity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
             array(
                 'id' => $flightId,
                 'airport' => $parentId,
             )
         );
 
-        if (!$entity) {
+        if (!$flightEntity) {
             throw new NotFoundHttpException('Unable to find flight entity');
         }
 
-        $this->setFlight($entity);
+        $this->setFlight($flightEntity);
         return $this;
     }
 
     /**
-     * Get list of Avinor airports
+     * Get all Avinor airports
      * @return array
      **/
     public function getAvinorAirports()
@@ -82,12 +82,12 @@ class AirportService extends FlightParentAbstract
     }
 
     /**
-     * Fetch scheduled flights this airport
+     * Fetch scheduled flights group for this airport
      * @return array
      **/
-    protected function loadFlights()
+    protected function loadFlightsGroup()
     {
-        if (!$this->parent) {
+        if (!$this->parentEntity) {
             throw new NotFoundHttpException('Unable to load flights. Missing parent entity.');
         }
 
@@ -97,7 +97,7 @@ class AirportService extends FlightParentAbstract
             ->andWhere('f.airport = :airport')
             ->orderBy('f.schedule_time', 'ASC')
             ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter('airport', $this->parent->getId())
+            ->setParameter('airport', $this->parentEntity->getId())
             ->getQuery()
             ->getResult();
     }

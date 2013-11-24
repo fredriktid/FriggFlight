@@ -11,9 +11,9 @@ use Frigg\FlightBundle\Entity\Airport;
 
 class FlightImport extends AvinorImportAbstract
 {
-    protected $config = array();
+    protected $config;
+    protected $time;
     protected $onlyUpdates = false;
-    protected $time = array();
 
     /**
      * Subclass constructor
@@ -31,7 +31,7 @@ class FlightImport extends AvinorImportAbstract
     }
 
     /**
-     * Print output of import status
+     * Print import status
      * @return string
      **/
     public function output()

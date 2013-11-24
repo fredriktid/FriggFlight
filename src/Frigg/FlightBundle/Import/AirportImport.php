@@ -22,7 +22,7 @@ class AirportImport extends AvinorImportAbstract
     }
 
     /**
-     * Print output of import status
+     * Print import status
      * @return string
      **/
     public function output()

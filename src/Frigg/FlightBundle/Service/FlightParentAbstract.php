@@ -9,22 +9,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 abstract class FlightParentAbstract
 {
-    /* Injected dependencies */
     protected $em;
     protected $config;
     protected $session;
 
-    /* Parent entity */
-    protected $parent = null;
-
-    /* Single flight entity */
+    protected $parentEntity = null;
     protected $flight = null;
-
-    /* Collection of flights */
     protected $flights = array();
 
     /**
-     * Parent constructor
+     * Flight parent constructor
      * @var EntityManager $em
      * @var SessionInterface $session
      * @var string $config
@@ -46,28 +40,28 @@ abstract class FlightParentAbstract
      * Get parent entity in context
      * @return mixed
      **/
-    public function getParent()
+    final public function getParent()
     {
-        return $this->parent;
+        return $this->parentEntity;
     }
 
     /**
      * Get the default Id of the current parent
      * @return integer
      **/
-    public function getDefaultParentId()
+    final public function getDefaultParentId()
     {
         return (isset($this->config['default']) ? $this->config['default'] : null);
     }
 
     /**
      * Set parent entity in context
-     * @var mixed $entity
+     * @var mixed $parent
      * @return FlightParentAbstract
      **/
-    public function setParent($entity)
+    final public function setParent($parentEntity)
     {
-        $this->parent = $entity;
+        $this->parentEntity = $parentEntity;
         return $this;
     }
 
@@ -82,52 +76,52 @@ abstract class FlightParentAbstract
      * Get current flight in context
      * @return Flight
      **/
-    public function getFlight()
+    final public function getFlight()
     {
         return $this->flight;
     }
 
     /**
      * Set flight in context
-     * @var Flight $flight
+     * @var Flight $flightEntity
      * @return FlightParentAbstract
      **/
-    public function setFlight($flight)
+    final public function setFlight($flightEntity)
     {
-        $this->flight = $flight;
+        $this->flight = $flightEntity;
         return $this;
     }
 
-    /**w
+    /**
      * Get all loaded flights
      * @return array
      **/
-    public function getFlights()
+    final public function getFlights()
     {
-        if (!$this->parent) {
+        if (!$this->parentEntity) {
             throw new NotFoundHttpException('Unable to get flights. Missing parent entity.');
         }
 
-        if (!$this->flights) {
-            $this->flights = $this->loadFlights();
+        if (!$this->flightsGroup) {
+            $this->flightsGroup = $this->loadFlightsGroup();
         }
 
-        return $this->flights;
+        return $this->flightsGroup;
     }
 
     /**
-     * Set new flights to instance
+     * Set flights
      * @var array $flights
      * @return FlightParentAbstract
      **/
-    public function setFlights($flights)
+    final public function setFlights($flightsGroup)
     {
-        $this->flights = $flights;
+        $this->flightsGroup = $flightsGroup;
         return $this;
     }
 
     /**
-     * Set new flight linked with current parent
+     * Set flight entity in context of parent
      * @var integer $parentId
      * @var integer $flightId
      * @return FlightParentAbstract
@@ -135,25 +129,25 @@ abstract class FlightParentAbstract
     abstract public function setFlightById($parentId, $flightId);
 
     /**
-     * Fetch scheduled flights for this context
+     * Fetch scheduled flights group for this context
      * @return array
      **/
-    abstract protected function loadFlights();
+    abstract protected function loadFlightsGroup();
 
     /**
      * Count loaded flights
      * @return integer
      **/
-    public function getFlightsCount()
+    final public function getFlightsCount()
     {
-        return count($this->flights);
+        return count($this->flightsGroup);
     }
 
     /**
      * Get session data in this context
      * @return mixed
      **/
-    public function getSession()
+    final public function getSession()
     {
         return $this->session->get(get_called_class());
     }
@@ -163,7 +157,7 @@ abstract class FlightParentAbstract
      * @var mixed $value
      * @return FlightParentAbstract
      **/
-    public function appendSession($value, $clear = false, $prependInstead = false)
+    final public function appendSession($value, $clear = false, $prependInstead = false)
     {
         $sessionValue = $this->getSession();
 
