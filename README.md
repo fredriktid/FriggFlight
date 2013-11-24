@@ -9,7 +9,7 @@ No documentation is available yet. Meanwhile you can probably figure out how it 
 
 	php app/console router:debug
 
-**Here's what we got so far:**
+**Here's what I got so far:**
 
 - [x] [Stage](http://dev.flyapi.no)- and [production](http://www.flyapi.no) environments
 - [x] Imports
