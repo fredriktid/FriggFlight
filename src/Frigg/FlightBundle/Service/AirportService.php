@@ -28,33 +28,33 @@ class AirportService extends FlightParentAbstract
 
     /**
      * Set airport entity by Id
-     * @var integer $entityId
+     * @var integer $parentId
      * @return AirportService
      **/
-    public function setEntityById($entityId)
+    public function setParentById($parentId)
     {
-        $entity = $this->em->getRepository('FriggFlightBundle:Airport')->find($entityId);
+        $entity = $this->em->getRepository('FriggFlightBundle:Airport')->find($parentId);
 
         if (!$entity) {
             throw new \Exception('Unable to find airport entity');
         }
 
-        $this->setEntity($entity);
+        $this->setParent($entity);
         return $this;
     }
 
     /**
-     * Set new flight entity linked with current airport
-     * @var integer $entityId
+     * Set new flight linked with current airport
+     * @var integer $parentId
      * @var integer $flightId
      * @return AirportService
      **/
-    public function setFlightById($entityId, $flightId)
+    public function setFlightById($parentId, $flightId)
     {
         $entity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
             array(
                 'id' => $flightId,
-                'airport' => $entityId,
+                'airport' => $parentId,
             )
         );
 
@@ -86,7 +86,7 @@ class AirportService extends FlightParentAbstract
      **/
     public function getFlights()
     {
-        if (!$this->entity) {
+        if (!$this->parent) {
             throw new \Exception('Missing airport entity in service');
         }
 
@@ -97,12 +97,12 @@ class AirportService extends FlightParentAbstract
                 ->andWhere('f.airport = :airport')
                 ->orderBy('f.schedule_time', 'ASC')
                 ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-                ->setParameter('airport', $this->entity->getId())
+                ->setParameter('airport', $this->parent->getId())
                 ->getQuery()
                 ->getResult()
             );
         }
 
-        return $this->getFlights();
+        return $this->flights;
     }
 }

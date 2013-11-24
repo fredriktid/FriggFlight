@@ -25,7 +25,7 @@ class AirlineFlightController extends FOSRestController implements ClassResource
     {
         try {
             $airlineService = $this->container->get('frigg_flight.airline_service');
-            $airlineService->setEntityById($airlineId);
+            $airlineService->setParentById($airlineId);
             return array(
                 'success' => true,
                 'data' => $airlineService->getFlights()
@@ -54,7 +54,7 @@ class AirlineFlightController extends FOSRestController implements ClassResource
             $airlineService->setFlightById($airlineId, $flightId);
             return array(
                 'success' => true,
-                'data' => $airlineService->getEntity()
+                'data' => $airlineService->getFlight()
             );
         } catch (\Exception $e) {
             return array(
@@ -74,7 +74,7 @@ class AirlineFlightController extends FOSRestController implements ClassResource
     {
         try {
             $airlineService = $this->container->get('frigg_flight.airline_service');
-            $airlineService->setEntityById($airlineId);
+            $airlineService->setParentById($airlineId);
         } catch (\Exception $e) {
             return array(
                 'success' => false,
@@ -82,7 +82,7 @@ class AirlineFlightController extends FOSRestController implements ClassResource
             );
         }
 
-        $airlineEntity = $airlineService->getEntity();
+        $airlineEntity = $airlineService->getParent();
 
         $flightEntity = new Flight();
         $flightEntity->setAirline($airlineEntity);

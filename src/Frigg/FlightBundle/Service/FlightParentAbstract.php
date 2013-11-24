@@ -14,7 +14,7 @@ abstract class FlightParentAbstract
     protected $session;
 
     /* Parent entity */
-    protected $entity = null;
+    protected $parent = null;
 
     /* Single flight entity */
     protected $flight = null;
@@ -45,9 +45,9 @@ abstract class FlightParentAbstract
      * Get parent entity in context
      * @return mixed
      **/
-    public function getEntity()
+    public function getParent()
     {
-        return $this->entity;
+        return $this->parent;
     }
 
     /**
@@ -55,30 +55,30 @@ abstract class FlightParentAbstract
      * @var mixed $entity
      * @return FlightParentAbstract
      **/
-    public function setEntity($entity)
+    public function setParent($entity)
     {
-        $this->entity = $entity;
+        $this->parent = $entity;
         return $this;
     }
 
     /**
      * Set parent entity by Id in context
-     * @var integer $entityId
+     * @var integer $parentId
      * @return FlightParentAbstract
      **/
-    abstract public function setEntityById($entityId);
+    abstract public function setParentById($parentId);
 
     /**
-     * Get the default Id of the current entity type
+     * Get the default Id of the current parent
      * @return integer
      **/
-    public function getDefaultEntityId()
+    public function getDefaultParentId()
     {
         return (isset($this->config['default']) ? $this->config['default'] : 0);
     }
 
     /**
-     * Get current flight entity in context
+     * Get current flight in context
      * @return Flight
      **/
     public function getFlight()
@@ -87,7 +87,7 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Set flight entity in context
+     * Set flight in context
      * @var Flight $flight
      * @return FlightParentAbstract
      **/
@@ -98,15 +98,15 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Set new flight entity linked with current parent
-     * @var integer $entityId
+     * Set new flight linked with current parent
+     * @var integer $parentId
      * @var integer $flightId
      * @return FlightParentAbstract
      **/
-    abstract public function setFlightById($entityId, $flightId);
+    abstract public function setFlightById($parentId, $flightId);
 
     /**
-     * Fetch scheduled flights from parent entity
+     * Fetch scheduled flights from parent
      * @return array
      **/
     abstract public function getFlights();
@@ -171,7 +171,7 @@ abstract class FlightParentAbstract
             $value = $this->getSession();
             if ($defaultToEntityId) {
                 if (!$this->isValidSessionValue($value)) {
-                    $value = $this->getDefaultEntityId();
+                    $value = $this->getDefaultParentId();
                 }
             }
         }

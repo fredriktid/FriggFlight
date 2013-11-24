@@ -70,7 +70,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     {
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
-            $airportService->setEntityById($airportId);
+            $airportService->setParentById($airportId);
             return array(
                 'success' => true,
                 'data' => array()
@@ -94,10 +94,10 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     {
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
-            $airportService->setEntityById($airportId);
+            $airportService->setParentById($airportId);
             return array(
                 'success' => true,
-                'data' => $airportService->getEntity(),
+                'data' => $airportService->getParent(),
             );
         } catch (\Exception $e) {
             return array(
@@ -149,7 +149,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     {
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
-            $airportService->setEntityById($airportId);
+            $airportService->setParentById($airportId);
         } catch (\Exception $e) {
             return array(
                 'success' => false,
@@ -157,7 +157,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
             );
         }
 
-        $airportEntity = $airportService->getEntity();
+        $airportEntity = $airportService->getParent();
         $form = $this->createForm(new AirportType(), $airportEntity);
         $form->bind($request);
 
@@ -183,7 +183,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     {
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
-            $airportService->setEntityById($airportId);
+            $airportService->setParentById($airportId);
         } catch (\Exception $e) {
             return array(
                 'success' => false,
@@ -191,7 +191,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
             );
         }
 
-        $airportEntity = $airportService->getEntity();
+        $airportEntity = $airportService->getParent();
         $em = $this->getDoctrine()->getManager();
         $em->remove($airportEntity);
         $em->flush();

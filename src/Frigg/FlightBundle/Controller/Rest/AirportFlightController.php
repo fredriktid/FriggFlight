@@ -24,7 +24,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
     {
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
-            $airportService->setEntityById($airportId);
+            $airportService->setParentById($airportId);
             return array(
                 'success' => true,
                 'data' => $airportService->getFlights()
@@ -52,7 +52,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
             $airportService->setFlightById($airportId, $flightId);
             return array(
                 'success' => true,
-                'data' => $airportService->getFlight(),
+                'data' => $airportService->getFlight()
             );
 
         } catch (\Exception $e) {
@@ -73,7 +73,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
     {
         try {
             $airportService = $this->container->get('frigg_flight.airport_service');
-            $airportService->setEntityById($airportId);
+            $airportService->setParentById($airportId);
         } catch (\Exception $e) {
             return array(
                 'success' => false,
@@ -81,7 +81,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
             );
         }
 
-        $airportEntity = $airportService->getEntity();
+        $airportEntity = $airportService->getParent();
 
         $flightEntity = new Flight();
         $flightEntity->setAirport($airportEntity);

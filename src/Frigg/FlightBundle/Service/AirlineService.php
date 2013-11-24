@@ -28,33 +28,33 @@ class AirlineService extends FlightParentAbstract
 
     /**
      * Set airline entity by Id
-     * @var integer $entityId Id of airline to fetch
+     * @var integer $parentId Id of airline to fetch
      * @return AirlineService
      **/
-    public function setEntityById($entityId)
+    public function setParentById($parentId)
     {
-        $entity = $this->em->getRepository('FriggFlightBundle:Airline')->find($entityId);
+        $entity = $this->em->getRepository('FriggFlightBundle:Airline')->find($parentId);
 
         if (!$entity) {
             throw new \Exception('Unable to find airline entity');
         }
 
-        $this->setEntity($entity);
+        $this->setParent($entity);
         return $this;
     }
 
     /**
-     * Set new flight entity linked with current airline
-     * @var integer $entityId
+     * Set new flight linked with current airline
+     * @var integer $parentId
      * @var integer $flightId
      * @return AirlineService
      **/
-    public function setFlightById($entityId, $flightId)
+    public function setFlightById($parentId, $flightId)
     {
         $entity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
             array(
                 'id' => $flightId,
-                'airline' => $entityId,
+                'airline' => $parentId,
             )
         );
 
@@ -72,7 +72,7 @@ class AirlineService extends FlightParentAbstract
      **/
     public function getFlights()
     {
-        if (!$this->entity) {
+        if (!$this->parent) {
             throw new \Exception('Missing airline entity in service');
         }
 
@@ -82,12 +82,12 @@ class AirlineService extends FlightParentAbstract
                 ->where('f.schedule_time >= :schedule_time')
                 ->andWhere('f.airline = :airline')
                 ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-                ->setParameter('airline', $this->entity->getId())
+                ->setParameter('airline', $this->parent->getId())
                 ->getQuery()
                 ->getResult()
             );
         }
 
-        return $this->getFlights();
+        return $this->flights;
     }
 }
