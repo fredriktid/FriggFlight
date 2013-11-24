@@ -66,28 +66,23 @@ class AirlineService extends FlightParentAbstract
         return $this;
     }
 
-    /**
-     * Fetch scheduled flights from current airline
+     /**
+     * Fetch scheduled flights for this airline
      * @return array
      **/
-    public function getFlights()
+    protected function loadFlights()
     {
         if (!$this->parent) {
-            throw new \Exception('Missing airline entity in service');
+            throw new \Exception('Unable to load flights. Airline missing.');
         }
 
-        if (!$this->flights) {
-            $this->setFlights($this->em->createQueryBuilder()->select('f')
-                ->from('FriggFlightBundle:Flight', 'f')
-                ->where('f.schedule_time >= :schedule_time')
-                ->andWhere('f.airline = :airline')
-                ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-                ->setParameter('airline', $this->parent->getId())
-                ->getQuery()
-                ->getResult()
-            );
-        }
-
-        return $this->flights;
+        return $this->em->createQueryBuilder()->select('f')
+            ->from('FriggFlightBundle:Flight', 'f')
+            ->where('f.schedule_time >= :schedule_time')
+            ->andWhere('f.airline = :airline')
+            ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter('airline', $this->parent->getId())
+            ->getQuery()
+            ->getResult();
     }
 }

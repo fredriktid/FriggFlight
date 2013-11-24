@@ -81,28 +81,23 @@ class AirportService extends FlightParentAbstract
     }
 
     /**
-     * Fetch scheduled flights from current airport
+     * Fetch scheduled flights this airport
      * @return array
      **/
-    public function getFlights()
+    protected function loadFlights()
     {
         if (!$this->parent) {
-            throw new \Exception('Missing airport entity in service');
+            throw new \Exception('Unable to load flights. Airport missing.');
         }
 
-        if (!$this->flights) {
-            $this->setFlights($this->em->createQueryBuilder()->select('f')
-                ->from('FriggFlightBundle:Flight', 'f')
-                ->where('f.schedule_time >= :schedule_time')
-                ->andWhere('f.airport = :airport')
-                ->orderBy('f.schedule_time', 'ASC')
-                ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-                ->setParameter('airport', $this->parent->getId())
-                ->getQuery()
-                ->getResult()
-            );
-        }
-
-        return $this->flights;
+        return $this->em->createQueryBuilder()->select('f')
+            ->from('FriggFlightBundle:Flight', 'f')
+            ->where('f.schedule_time >= :schedule_time')
+            ->andWhere('f.airport = :airport')
+            ->orderBy('f.schedule_time', 'ASC')
+            ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter('airport', $this->parent->getId())
+            ->getQuery()
+            ->getResult();
     }
 }

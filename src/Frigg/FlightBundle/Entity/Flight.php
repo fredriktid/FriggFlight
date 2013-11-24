@@ -166,7 +166,7 @@ class Flight
     {
         $this->setModifiedAt(new \DateTime(date('Y-m-d H:i:s')));
 
-        if($this->getCreatedAt() == null)
+        if ($this->getCreatedAt() == null)
         {
             $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
         }
