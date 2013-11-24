@@ -167,9 +167,8 @@ abstract class FlightParentAbstract
      **/
     public function setSession($value, $defaultToEntityId = false)
     {
-        $key = get_called_class();
         if (!$this->isValidSessionValue($value)) {
-            $value = $this->getSession($key);
+            $value = $this->getSession();
             if ($defaultToEntityId) {
                 if (!$this->isValidSessionValue($value)) {
                     $value = $this->getDefaultEntityId();
@@ -177,7 +176,7 @@ abstract class FlightParentAbstract
             }
         }
 
-        $this->session->set($key, $value);
+        $this->session->set(get_called_class(), $value);
         return $this;
     }
 
