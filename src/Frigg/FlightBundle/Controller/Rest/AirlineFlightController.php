@@ -28,7 +28,7 @@ class AirlineFlightController extends FOSRestController implements ClassResource
             $airlineService->setParentById($airlineId);
             return array(
                 'success' => true,
-                'data' => $airlineService->getFlights()
+                'data' => $airlineService->getFlightGroup()
             );
         } catch (\Exception $e) {
             return array(

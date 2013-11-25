@@ -36,8 +36,8 @@ class AirportImport extends AvinorImportAbstract
      **/
     public function run()
     {
-        if ($response = $this->request($this->config['target'])) {
-            $avinorAirports = (isset($this->config['avinor'])) ? $this->config['avinor'] : array();
+        if ($response = $this->request($this->config['import']['endpoint'])) {
+            $avinorAirports = (isset($this->config['import']['avinor'])) ? $this->config['import']['avinor'] : array();
             foreach ($response as $item) {
                 if ($item['code'] && $item['code']) {
                     $isAvinorAirport = (in_array($item['code'], $avinorAirports));

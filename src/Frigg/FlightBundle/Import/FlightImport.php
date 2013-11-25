@@ -25,8 +25,8 @@ class FlightImport extends AvinorImportAbstract
         parent::__construct($container);
         $this->config = Yaml::parse(file_get_contents($configFile));
         $this->time = array(
-            'from' => $this->config['defaults']['time']['from'],
-            'to' => $this->config['defaults']['time']['to']
+            'from' => $this->config['import']['time']['default']['from'],
+            'to' => $this->config['import']['time']['default']['to']
         );
     }
 
@@ -89,7 +89,7 @@ class FlightImport extends AvinorImportAbstract
             }
 
             // build endpoint address
-            $target = sprintf('%s?%s', $this->config['target'], implode('&', array_map(function($key, $val) {
+            $target = sprintf('%s?%s', $this->config['import']['endpoint'], implode('&', array_map(function($key, $val) {
                 return sprintf('%s=%s', urlencode($key), urlencode($val));
               },
               array_keys($params), $params))

@@ -14,8 +14,8 @@ abstract class FlightParentAbstract
     protected $session;
 
     protected $parentEntity = null;
-    protected $flight = null;
-    protected $flights = array();
+    protected $flightEntity = null;
+    protected $flightGroup = array();
 
     /**
      * Flight parent constructor
@@ -78,7 +78,7 @@ abstract class FlightParentAbstract
      **/
     final public function getFlight()
     {
-        return $this->flight;
+        return $this->flightEntity;
     }
 
     /**
@@ -88,35 +88,7 @@ abstract class FlightParentAbstract
      **/
     final public function setFlight($flightEntity)
     {
-        $this->flight = $flightEntity;
-        return $this;
-    }
-
-    /**
-     * Get all loaded flights
-     * @return array
-     **/
-    final public function getFlights()
-    {
-        if (!$this->parentEntity) {
-            throw new NotFoundHttpException('Unable to get flights. Missing parent entity.');
-        }
-
-        if (!$this->flightsGroup) {
-            $this->flightsGroup = $this->loadFlightsGroup();
-        }
-
-        return $this->flightsGroup;
-    }
-
-    /**
-     * Set flights
-     * @var array $flights
-     * @return FlightParentAbstract
-     **/
-    final public function setFlights($flightsGroup)
-    {
-        $this->flightsGroup = $flightsGroup;
+        $this->flightEntity = $flightEntity;
         return $this;
     }
 
@@ -129,18 +101,46 @@ abstract class FlightParentAbstract
     abstract public function setFlightById($parentId, $flightId);
 
     /**
+     * Get all loaded flights
+     * @return array
+     **/
+    final public function getFlightGroup()
+    {
+        if (!$this->parentEntity) {
+            throw new NotFoundHttpException('Unable to get flights. Missing parent entity.');
+        }
+
+        if (!$this->flightGroup) {
+            $this->flightGroup = $this->loadFlightGroup();
+        }
+
+        return $this->flightGroup;
+    }
+
+    /**
+     * Set flights
+     * @var array $flightGroup
+     * @return FlightParentAbstract
+     **/
+    final public function setFlightGroup($flightGroup)
+    {
+        $this->flightGroup = $flightGroup;
+        return $this;
+    }
+
+    /**
      * Fetch scheduled flights group for this context
      * @return array
      **/
-    abstract protected function loadFlightsGroup();
+    abstract protected function loadFlightGroup();
 
     /**
      * Count loaded flights
      * @return integer
      **/
-    final public function getFlightsCount()
+    final public function getFlightGroupCount()
     {
-        return count($this->flightsGroup);
+        return count($this->flightGroup);
     }
 
     /**

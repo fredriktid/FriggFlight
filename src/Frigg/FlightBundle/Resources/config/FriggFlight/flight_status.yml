@@ -1,2 +1,3 @@
-#target: http://flydata.avinor.no/flightStatuses.asp
-target: data/flightStatuses.asp.xml
+import:
+    #endpoint: http://flydata.avinor.no/flightStatuses.asp
+    endpoint: data/flightStatuses.asp.xml

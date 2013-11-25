@@ -36,7 +36,7 @@ class AirlineImport extends AvinorImportAbstract
      **/
     public function run()
     {
-        if ($response = $this->request($this->config['target'])) {
+        if ($response = $this->request($this->config['import']['endpoint'])) {
             foreach ($response as $item) {
                 if ($item['code'] && $item['code']) {
                     if (!$airline = $this->em->getRepository('FriggFlightBundle:Airline')->findOneByCode($item['code'])) {

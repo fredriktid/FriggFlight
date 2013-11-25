@@ -1,5 +1,6 @@
-target: http://flydata.avinor.no/XmlFeed.asp
-defaults:
+import:
+    endpoint: http://flydata.avinor.no/XmlFeed.asp
     time:
-        from: 1
-        to: 7
+        default:
+            from: 1
+            to: 7

@@ -85,7 +85,7 @@ class AirportService extends FlightParentAbstract
      * Fetch scheduled flights group for this airport
      * @return array
      **/
-    protected function loadFlightsGroup()
+    protected function loadFlightGroup()
     {
         if (!$this->parentEntity) {
             throw new NotFoundHttpException('Unable to load flights. Missing parent entity.');

@@ -36,7 +36,7 @@ class FlightStatusImport extends AvinorImportAbstract
      **/
     public function run()
     {
-        if ($response = $this->request($this->config['target'])) {
+        if ($response = $this->request($this->config['import']['endpoint'])) {
             foreach ($response as $item) {
                 if ($item['code'] && $item['code']) {
                     if (!$flightStatus = $this->em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($item['code'])) {

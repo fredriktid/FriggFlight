@@ -1,3 +1,4 @@
-#target: http://flydata.avinor.no/airlineNames.asp
-target: data/airlineNames.asp.xml
 default: 484 # SAS
+import:
+    #endpoint: http://flydata.avinor.no/airlineNames.asp
+    endpoint: data/airlineNames.asp.xml
