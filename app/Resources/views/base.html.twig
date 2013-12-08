@@ -1,13 +1,54 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}FlyAPI.no!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- bootstrap -->
+        <link href="{{ asset('css/bootstrap/bootstrap.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/bootstrap/bootstrap-overrides.css') }}" type="text/css" rel="stylesheet" />
+
+        <!-- libraries -->
+        <link href="{{ asset('css/lib/jquery-ui-1.10.2.custom.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/lib/font-awesome.css') }}" type="text/css" rel="stylesheet" />
+
+        <!-- global styles -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/compiled/layout.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/compiled/elements.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/compiled/icons.css') }}" />
+
+        <!-- this page specific styles -->
+        <link rel="stylesheet" href="{{ asset('css/compiled/index.css') }}" type="text/css" media="screen" />
+
+        <!-- open sans font -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css' />
+
+        <!-- lato font -->
+        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css' />
+
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block body %}
+        {% endblock %}
+        {% block javascripts %}
+            <!-- scripts -->
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/jquery-ui-1.10.2.custom.min.js') }}"></script>
+            <!-- knob -->
+            <script src="{{ asset('js/jquery.knob.js') }}"></script>
+            <!-- flot charts -->
+            <script src="{{ asset('js/jquery.flot.js') }}"></script>
+            <script src="{{ asset('js/jquery.flot.stack.js') }}"></script>
+            <script src="{{ asset('js/jquery.flot.resize.js') }}"></script>
+            <script src="{{ asset('js/theme.js') }}"></script>
+        {% endblock %}
     </body>
 </html>

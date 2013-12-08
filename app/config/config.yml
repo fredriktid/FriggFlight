@@ -37,6 +37,96 @@ assetic:
         #    jar: %kernel.root_dir%/Resources/java/compiler.jar
         #yui_css:
         #    jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
+    assets:
+        # css
+        bootstrap_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/bootstrap/bootstrap.css
+            filters:
+                - cssrewrite
+            output: css/bootstrap/bootstrap.css
+        bootstrap_overrides_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/bootstrap/bootstrap-overrides.css
+            filters:
+                - cssrewrite
+            output: css/bootstrap/bootstrap-overrides.css
+        jquery_ui_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/lib/jquery-ui-1.10.2.custom.css
+            filters:
+                - cssrewrite
+            output: css/lib/jquery-ui-1.10.2.custom.css
+        font_awesome_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/lib/font-awesome.css
+            filters:
+                - cssrewrite
+            output: css/lib/font-awesome.css
+        layout_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/compiled/layout.css
+            filters:
+                - cssrewrite
+            output: css/compiled/layout.css
+        elements_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/compiled/elements.css
+            filters:
+                - cssrewrite
+            output: css/compiled/elements.css
+        icons_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/compiled/icons.css
+            filters:
+                - cssrewrite
+            output: css/compiled/icons.css
+        # themes
+        theme_index_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/compiled/index.css
+            filters:
+                - cssrewrite
+            output: css/compiled/index.css
+        # skins
+        skin_dark_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/compiled/skins/dark.css
+            filters:
+                - cssrewrite
+            output: css/compiled/skins/dark.css
+        ## js
+        bootstrap_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/bootstrap.min.js
+            output: js/bootstrap.min.js
+        jquery_ui_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/jquery-ui-1.10.2.custom.min.js
+            output: js/jquery-ui-1.10.2.custom.min.js
+        knob_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/jquery.knob.js
+            output: js/jquery.knob.js
+        flot_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/jquery.flot.js
+            output: js/jquery.flot.js
+        flot_stack_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/jquery.flot.stack.js
+            output: js/jquery.flot.stack.js
+        flot_resize_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/jquery.flot.resize.js
+            output: js/jquery.flot.resize.js
+        theme_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/theme.js
+            output: js/theme.js
+
+
+
 
 # Doctrine Configuration
 doctrine:

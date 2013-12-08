@@ -147,7 +147,7 @@ abstract class FlightParentAbstract
      * Get session data in this context
      * @return mixed
      **/
-    final public function getSession()
+    public function getSession()
     {
         return $this->session->get(get_called_class());
     }
@@ -157,11 +157,11 @@ abstract class FlightParentAbstract
      * @var mixed $value
      * @return FlightParentAbstract
      **/
-    final public function appendSession($value, $clear = false, $prependInstead = false)
+    public function appendSession($value, $clear = false, $prependInstead = false)
     {
         $sessionValue = $this->getSession();
 
-        if (is_null($value) || $clear) {
+        if ($clear || is_null($sessionValue)) {
             $sessionValue = array();
         }
 
@@ -176,7 +176,6 @@ abstract class FlightParentAbstract
         }
 
         $this->setSession($sessionValue);
-
         return $this;
     }
 
