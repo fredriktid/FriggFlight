@@ -44,57 +44,57 @@ assetic:
                 - %kernel.root_dir%/../app/Resources/public/css/bootstrap/bootstrap.css
             filters:
                 - cssrewrite
-            output: css/bootstrap/bootstrap.css
+            output: css/bootstrap.css
         bootstrap_overrides_css:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/css/bootstrap/bootstrap-overrides.css
             filters:
                 - cssrewrite
-            output: css/bootstrap/bootstrap-overrides.css
+            output: css/bootstrap-overrides.css
         jquery_ui_css:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/css/lib/jquery-ui-1.10.2.custom.css
             filters:
                 - cssrewrite
-            output: css/lib/jquery-ui-1.10.2.custom.css
+            output: css/jquery-ui-1.10.2.custom.css
         font_awesome_css:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/css/lib/font-awesome.css
             filters:
                 - cssrewrite
-            output: css/lib/font-awesome.css
+            output: css/font-awesome.css
         layout_css:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/css/compiled/layout.css
             filters:
                 - cssrewrite
-            output: css/compiled/layout.css
+            output: css/layout.css
         elements_css:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/css/compiled/elements.css
             filters:
                 - cssrewrite
-            output: css/compiled/elements.css
+            output: css/elements.css
         icons_css:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/css/compiled/icons.css
             filters:
                 - cssrewrite
-            output: css/compiled/icons.css
+            output: css/icons.css
         # themes
         theme_index_css:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/css/compiled/index.css
             filters:
                 - cssrewrite
-            output: css/compiled/index.css
+            output: css/theme/index.css
         # skins
         skin_dark_css:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/css/compiled/skins/dark.css
             filters:
                 - cssrewrite
-            output: css/compiled/skins/dark.css
+            output: css/skins/dark.css
         ## js
         bootstrap_js:
             inputs:
