@@ -36,7 +36,7 @@ class ImportCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'How many hours in the future (default 7)',
-                7
+                24
             )
             ->addOption(
                 'updates',

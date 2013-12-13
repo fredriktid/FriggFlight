@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AirportService extends FlightParentAbstract
 {
+    protected $params = array();
+
     /**
      * Airport subclass constructor
      * @var EntityManager $em
@@ -25,6 +27,21 @@ class AirportService extends FlightParentAbstract
     public function getAll()
     {
         return $this->em->getRepository('FriggFlightBundle:Airport')->findAll();
+    }
+
+   /**
+     * Get session entity from session
+     * @return object
+     **/
+    public function getSessionEntity()
+    {
+        $entity = $this->em->getRepository('FriggFlightBundle:Airport')->find($this->getSession());
+
+        if (!$entity) {
+           throw new NotFoundHttpException('Unable to find airport entity');
+        }
+
+        return $entity;
     }
 
     /**
@@ -91,14 +108,57 @@ class AirportService extends FlightParentAbstract
             throw new NotFoundHttpException('Unable to load flights. Missing parent entity.');
         }
 
-        return $this->em->createQueryBuilder()->select('f')
+        // handle request params
+        $direction = $this->getParam('direction');
+        $isDelayed = ($this->getParam('is_delayed') == 'Y');
+        $fromTime = ($this->getParam('from_time')) ? $this->getParam('from_time') : mktime(0, 0, 0);
+        $toTime = ($this->getParam('to_time')) ? $this->getParam('to_time') : mktime(23, 59, 59);
+
+        $query = $this->em->createQueryBuilder()->select('f')
             ->from('FriggFlightBundle:Flight', 'f')
-            ->where('f.schedule_time >= :schedule_time')
-            ->andWhere('f.airport = :airport')
+            ->where('f.schedule_time >= :from_time')
+            ->andWhere('f.schedule_time <= :to_time');
+
+        if ($direction) {
+            $query->andWhere('f.arr_dep = :direction');
+            $query->setParameter('direction', $direction);
+        }
+
+        if ($isDelayed) {
+            $query->andWhere('f.is_delayed = :is_delayed');
+            $query->setParameter('is_delayed', $isDelayed);
+        }
+
+        $query->andWhere('f.airport = :airport')
             ->orderBy('f.schedule_time', 'ASC')
-            ->setParameter('schedule_time', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter('airport', $this->parentEntity->getId())
-            ->getQuery()
-            ->getResult();
+            ->setParameter('from_time', new \DateTime(date('Y-m-d H:i:s', (int) $fromTime)), \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter('to_time', new \DateTime(date('Y-m-d H:i:s', $toTime)), \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter('airport', $this->parentEntity->getId());
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function getGraphData()
+    {
+        $flightDirectionMap = array(
+            'departures' => 'D',
+            'arrivals' => 'A'
+        );
+
+        $data = array();
+        foreach($this->flightGroup as $i => $flight) {
+            foreach (range(1, 31) as $interval) {
+                if($flightDirection = array_search($flight->getArrDep(), $flightDirectionMap)) {
+                    $flightInterval = $flight->getScheduleTime()->format('d');
+                    if (!isset($data[$flightDirection][$flightInterval])) {
+                        $data[$flightDirection][$flightInterval] = 0;
+                    }
+                    $data[$flightDirection][$flightInterval]++;
+
+                }
+            }
+        }
+
+        return $data;
     }
 }

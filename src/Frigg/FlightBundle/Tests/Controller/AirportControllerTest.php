@@ -4,7 +4,7 @@ namespace Frigg\FlightBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DashboardControllerTest extends WebTestCase
+class AirportControllerTest extends WebTestCase
 {
     public function testIndex()
     {

@@ -194,3 +194,16 @@
     width: 53%; }
   #pad-wrapper .ui-elements .knob-wrapper + .knob-wrapper {
     margin-left: 35px; } }
+
+/* overrides */
+.navbar-brand {
+  color: #FFF;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.navbar-inverse .navbar-brand {
+  text-transform: none !important;
+  letter-spacing: 2px;
+}

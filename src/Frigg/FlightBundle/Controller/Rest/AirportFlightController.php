@@ -22,8 +22,17 @@ class AirportFlightController extends FOSRestController implements ClassResource
      */
     public function cgetAction(Request $request, $airportId)
     {
+        // load service
+        $airportService = $this->container->get('frigg_flight.airport_service');
+
+        // set params
+        $airportService
+            ->setParam('direction', $request->query->get('direction'))
+            ->setParam('from_time', $request->query->get('from_time'))
+            ->setParam('to_time', $request->query->get('to_time'))
+            ->setParam('is_delayed', $request->query->get('is_delayed'));
+
         try {
-            $airportService = $this->container->get('frigg_flight.airport_service');
             $airportService->setParentById($airportId);
             return array(
                 'success' => true,
@@ -36,6 +45,76 @@ class AirportFlightController extends FOSRestController implements ClassResource
             );
         }
     }
+
+    /**
+     * Count get action
+     * @var Request $request
+     * @var integer $airportId Id of the airport entity
+     * @return int
+     *
+     * @Rest\View()
+     */
+    public function cgetCountAction(Request $request, $airportId)
+    {
+        // load service
+        $airportService = $this->container->get('frigg_flight.airport_service');
+
+        // set params
+        $airportService
+            ->setParam('direction', $request->query->get('direction'))
+            ->setParam('from_time', $request->query->get('from_time'))
+            ->setParam('to_time', $request->query->get('to_time'))
+            ->setParam('is_delayed', $request->query->get('is_delayed'));
+
+        try {
+            $airportService->setParentById($airportId);
+            $airportService->getFlightGroup();
+            return array(
+                'success' => true,
+                'data' => $airportService->getFlightGroupCount()
+            );
+        } catch(\Exception $e) {
+            return array(
+                'success' => false,
+                'data' => $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * Graph data action
+     * @var Request $request
+     * @var integer $airportId Id of the airport entity
+     * @return int
+     *
+     * @Rest\View()
+     */
+    public function cgetGraphAction(Request $request, $airportId)
+    {
+        // load service
+        $airportService = $this->container->get('frigg_flight.airport_service');
+
+        // set params
+        $airportService
+            ->setParam('direction', $request->query->get('direction'))
+            ->setParam('from_time', $request->query->get('from_time'))
+            ->setParam('to_time', $request->query->get('to_time'));
+
+        try {
+            $airportService->setParentById($airportId);
+            $airportService->getFlightGroup();
+            return array(
+                'success' => true,
+                'data' => $airportService->getGraphData()
+            );
+        } catch(\Exception $e) {
+            return array(
+                'success' => false,
+                'data' => $e->getMessage()
+            );
+        }
+    }
+
 
     /**
      * Get flight instance

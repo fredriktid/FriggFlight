@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FlightStatusType extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -20,7 +20,7 @@ class FlightStatusType extends AbstractType
             ->add('text_no')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

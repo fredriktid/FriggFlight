@@ -9,22 +9,26 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 
-class DashboardController extends Controller
+class AirportController extends Controller
 {
     /**
-     * @Route("/", name="dashboard")
+     * @Route("/", name="home")
+     * @Route("/airports", name="airports_home")
      */
     public function indexAction(Request $request)
     {
         $airportService = $this->container->get('frigg_flight.airport_service');
-        $airlineService = $this->container->get('frigg_flight.airline_service');
-
         $airportService->setSession($request->query->get('airportId'), true);
-        $airlineService->setSession($request->query->get('airlineId'), true);
 
-        return $this->render('FriggFlightBundle:Dashboard:index.html.twig', array(
-            'airportId' => $airportService->getSession(),
-            'airlineId' => $airlineService->getSession()
+        try {
+            $currentAirport = $airportService->getSessionEntity();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $this->render('FriggFlightBundle:Airport:index.html.twig', array(
+            'current_airport' => $currentAirport,
+            'avinor_airports' => $airportService->getAvinorAirports()
         ));
     }
 }

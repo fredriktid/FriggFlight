@@ -16,6 +16,7 @@ abstract class FlightParentAbstract
     protected $parentEntity = null;
     protected $flightEntity = null;
     protected $flightGroup = array();
+    protected $params = array();
 
     /**
      * Flight parent constructor
@@ -73,6 +74,28 @@ abstract class FlightParentAbstract
     abstract public function setParentById($parentId);
 
     /**
+     * Get a parameter value
+     * @var string $key
+     * @return mixed
+     **/
+    public function getParam($key)
+    {
+        return (isset($this->params[$key])) ? $this->params[$key] : null;
+    }
+
+    /**
+     * Set a parameter key
+     * @var string $key
+     * @var mixed $value
+     * @return FlightParentAbstract
+     **/
+    public function setParam($key, $value)
+    {
+        $this->params[$key] = $value;
+        return $this;
+    }
+
+    /**
      * Get current flight in context
      * @return Flight
      **/
@@ -110,9 +133,9 @@ abstract class FlightParentAbstract
             throw new NotFoundHttpException('Unable to get flights. Missing parent entity.');
         }
 
-        if (!$this->flightGroup) {
+        //if (!count($this->flightGroup)) {
             $this->flightGroup = $this->loadFlightGroup();
-        }
+        //}
 
         return $this->flightGroup;
     }
@@ -138,7 +161,7 @@ abstract class FlightParentAbstract
      * Count loaded flights
      * @return integer
      **/
-    final public function getFlightGroupCount()
+    public function getFlightGroupCount()
     {
         return count($this->flightGroup);
     }
@@ -151,6 +174,12 @@ abstract class FlightParentAbstract
     {
         return $this->session->get(get_called_class());
     }
+
+    /**
+     * Get session entity from session
+     * @return mixed
+     **/
+    abstract public function getSessionEntity();
 
     /**
      * Append (or prepend) to session data in this context

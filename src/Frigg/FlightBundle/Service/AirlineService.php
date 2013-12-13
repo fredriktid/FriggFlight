@@ -27,6 +27,21 @@ class AirlineService extends FlightParentAbstract
         return $this->em->getRepository('FriggFlightBundle:Airline')->findAll();
     }
 
+   /**
+     * Get session entity from session
+     * @return object
+     **/
+    public function getSessionEntity()
+    {
+        $entity = $this->em->getRepository('FriggFlightBundle:Airline')->find($this->getSession());
+
+        if (!$entity) {
+           throw new NotFoundHttpException('Unable to find airline entity');
+        }
+
+        return $entity;
+    }
+
     /**
      * Set airline entity
      * @var integer $parentId

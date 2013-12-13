@@ -57,6 +57,18 @@ assetic:
             filters:
                 - cssrewrite
             output: css/jquery-ui-1.10.2.custom.css
+        jquery_datatables_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/lib/jquery.dataTables.css
+            filters:
+                - cssrewrite
+            output: css/jquery.dataTables.css
+        datatables_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/compiled/datatables.css
+            filters:
+                - cssrewrite
+            output: css/datatables.css
         font_awesome_css:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/css/lib/font-awesome.css
@@ -81,6 +93,12 @@ assetic:
             filters:
                 - cssrewrite
             output: css/icons.css
+        chosen_min_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/lib/chosen.min.css
+            filters:
+                - cssrewrite
+            output: css/chosen.min.css
         # themes
         theme_index_css:
             inputs:
@@ -104,6 +122,10 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/js/jquery-ui-1.10.2.custom.min.js
             output: js/jquery-ui-1.10.2.custom.min.js
+        jquery_ui_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/jquery.dataTables.js
+            output: js/jquery.dataTables.js
         knob_js:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/js/jquery.knob.js
@@ -124,9 +146,22 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/js/theme.js
             output: js/theme.js
-
-
-
+        theme_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/theme.js
+            output: js/theme.js
+        chosen_jquery_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/chosen.jquery.min.js
+            output: js/chosen.jquery.min.js
+        chosen_proto_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/chosen.proto.min.js
+            output: js/chosen.proto.min.js
+        chosen_sprite_image:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/img/chosen-sprite.png
+            output: chosen-sprite.png
 
 # Doctrine Configuration
 doctrine:
