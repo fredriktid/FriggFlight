@@ -9,7 +9,7 @@ No documentation is available yet. Meanwhile you can probably figure out how it 
 
 	php app/console router:debug
 
-**Here's what I got so far:**
+**CHANGELOG:**
 
 - [x] [Stage](http://dev.flyapi.no)- and [production](http://www.flyapi.no) environments
 - [x] Imports
@@ -17,7 +17,7 @@ No documentation is available yet. Meanwhile you can probably figure out how it 
     - [x] Airline
     - [x] Airport
     - [x] FlightStatus
-- [x] Relations
+- [x] Mapping
     - [x] Airline to Flight
     - [x] Airport to Flight
     - [x] Flight to FlightStatus
@@ -26,15 +26,13 @@ No documentation is available yet. Meanwhile you can probably figure out how it 
     - [x] CRUD controller actions
     - [x] ViewResponseListener returning XML/JSON/HTML based on request
     - [x] Automatic routing
+    - [x] getFlights() must accomodate flight_status_time
+    - [ ] QueryParameters
+    	- [x] Airport
+    	- [ ] Airline
 - [x] FormTypes
-
-**To-Do list:**
-
-- [ ] Rest API
-	- [ ] QueryParameters
-	- [ ] getFlights() must accomodate flight_status_time
 - [ ] Security
-    - [ ] FOSUserBundle
+    - [x] FOSUserBundle
     - [ ] FOSOAuthServerBundle
     - [ ] Signup, register, receive key
 - [ ] Frontend
