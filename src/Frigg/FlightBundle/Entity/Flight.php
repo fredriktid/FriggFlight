@@ -367,6 +367,20 @@ class Flight
     }
 
     /**
+     * Has departed
+     *
+     * @return boolean
+     */
+    public function hasDeparted()
+    {
+        if ($flightStatus = $this->getFlightStatus()) {
+            return ($flightStatus->getCode() == 'D');
+        }
+
+        return false;
+    }
+
+    /**
      * Set flight_status_time
      *
      * @param string $flightStatusTime

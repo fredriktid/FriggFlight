@@ -41,6 +41,7 @@ class AirportService extends FlightParentAbstract
            throw new NotFoundHttpException('Unable to find airport entity');
         }
 
+        $this->setParent($entity);
         return $entity;
     }
 
@@ -140,25 +141,36 @@ class AirportService extends FlightParentAbstract
 
     public function getGraphData()
     {
+        /*$day = date('d');
+        $month = date('m');
+        $year = date('y');
+
         $flightDirectionMap = array(
             'departures' => 'D',
             'arrivals' => 'A'
         );
 
+        $currentdays = intval(date('t'));
+        $interval = array();
+
+        $i = 0;
+        while ($i++ < $currentdays) {
+            $interval[$i] = $i;
+        }
+
         $data = array();
         foreach($this->flightGroup as $i => $flight) {
-            foreach (range(1, 31) as $interval) {
-                if($flightDirection = array_search($flight->getArrDep(), $flightDirectionMap)) {
-                    $flightInterval = $flight->getScheduleTime()->format('d');
-                    if (!isset($data[$flightDirection][$flightInterval])) {
-                        $data[$flightDirection][$flightInterval] = 0;
-                    }
-                    $data[$flightDirection][$flightInterval]++;
-
+            if($flightDirection = array_search($flight->getArrDep(), $flightDirectionMap)) {
+                $flightInterval = $flight->getScheduleTime()->format('j');
+                if (!isset($data[$flightDirection][$flightInterval])) {
+                    $data[$flightDirection][$flightInterval] = 0;
                 }
+                $data[$flightDirection][$flightInterval]++;
             }
         }
 
-        return $data;
+        return $data + array('ticks' => $interval);
+        */
+        return array();
     }
 }

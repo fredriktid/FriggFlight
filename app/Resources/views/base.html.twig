@@ -7,22 +7,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% block stylesheets %}
             <!-- libraries -->
-            <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" />
-            <link href="{{ asset('css/bootstrap-overrides.css') }}" type="text/css" rel="stylesheet" />
-            <link href="{{ asset('css/jquery-ui-1.10.2.custom.css') }}" rel="stylesheet" type="text/css" />
-            <link href="{{ asset('css/font-awesome.css') }}" type="text/css" rel="stylesheet" />
-            <link href="{{ asset('css/chosen.min.css') }}" type="text/css" rel="stylesheet" />
+            <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" type="text/css"  />
+            <link rel="stylesheet" href="{{ asset('css/bootstrap-overrides.css') }}" type="text/css"  />
+            <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.10.2.custom.css') }}" type="text/css"  />
+            <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}" type="text/css"  />
+            <link rel="stylesheet" href="{{ asset('css/chosen.min.css') }}" type="text/css"  />
 
             <!-- global styles -->
-            <link rel="stylesheet" type="text/css" href="{{ asset('css/layout.css') }}" />
-            <link rel="stylesheet" type="text/css" href="{{ asset('css/elements.css') }}" />
-            <link rel="stylesheet" type="text/css" href="{{ asset('css/icons.css') }}" />
+            <link rel="stylesheet" href="{{ asset('css/layout.css') }}" type="text/css"  />
+            <link rel="stylesheet" href="{{ asset('css/elements.css') }}" type="text/css"  />
+            <link rel="stylesheet" href="{{ asset('css/icons.css') }}" type="text/css"  />
 
             <!-- open sans font -->
-            <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css' />
+            <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" type="text/css" />
 
             <!-- lato font -->
-            <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css' />
+            <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic" type="text/css" />
         {% endblock %}
         <!--[if lt IE 9]>
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -32,7 +32,7 @@
         {% block body %}
         {% endblock %}
         {% block javascripts %}
-            <!-- scripts -->
+            <!-- main libraries -->
             <script src="http://code.jquery.com/jquery-latest.js"></script>
             <script src="{{ asset('js/bootstrap.min.js') }}"></script>
             <script src="{{ asset('js/jquery-ui-1.10.2.custom.min.js') }}"></script>
@@ -41,9 +41,11 @@
             <!-- flot charts -->
             <script src="{{ asset('js/jquery.flot.js') }}"></script>
             <script src="{{ asset('js/jquery.flot.stack.js') }}"></script>
-            <script src="{{ asset('js/chosen.jquery.min.js') }}"></script>
             <script src="{{ asset('js/jquery.flot.resize.js') }}"></script>
+            <!-- other -->
+            <script src="{{ asset('js/chosen.jquery.min.js') }}"></script>
             <script src="{{ asset('js/theme.js') }}"></script>
+            <script src="{{ asset('js/hinclude.js') }}"></script>
             <script type="text/javascript">
                 (function($) {
                     $('select').chosen();

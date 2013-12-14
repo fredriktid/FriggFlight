@@ -18,9 +18,17 @@
                 <span class="icon-bar"></span>
             </button>
             <h1>
-                <a class="navbar-brand" href="{{ path('home') }}">flyapi.no v0.1</a>
+                <a class="navbar-brand" href="{{ path('home') }}">flyapi.no alpha</a>
             </h1>
         </div>
+        <ul class="nav navbar-nav pull-left hidden-xs">
+            <li>
+                <a href="#">Avganger</a>
+            </li>
+            <li>
+                <a href="#">Ankomster</a>
+            </li>
+        </ul>
         <ul class="nav navbar-nav pull-right hidden-xs">
             <li class="hidden-xs hidden-sm">
                 <input class="search" type="text" />
@@ -145,29 +153,51 @@
                     <div class="arrow_border"></div>
                 </div>
                 <a href="{{ path('airports_home') }}">
-                    <i class="icon-share-alt"></i>
-                    <span>Flyplass</span>
+                    <i class="icon-map-marker"></i>
+                    <span>Flyplasser</span>
                 </a>
             </li>
-            <!--
+            <li>
+                <div class="pointer">
+                    <div class="arrow"></div>
+                    <div class="arrow_border"></div>
+                </div>
+                <a href="{{ path('airports_home') }}">
+                    <i class="icon-fighter-jet"></i>
+                    <span>Flyselskaper</span>
+                </a>
+            </li>
+            <li>
+                <div class="pointer">
+                    <div class="arrow"></div>
+                    <div class="arrow_border"></div>
+                </div>
+                <a href="{{ path('airports_home') }}">
+                    <i class="icon-eye-open"></i>
+                    <span>Overvåkning</span>
+                </a>
+            </li>
             <li>
                 <a href="chart-showcase.html">
                     <i class="icon-signal"></i>
-                    <span>Charts</span>
+                    <span>Statistikk</span>
                 </a>
             </li>
+
             <li>
                 <a class="dropdown-toggle" href="#">
-                    <i class="icon-group"></i>
-                    <span>Users</span>
+                    <i class="icon-globe"></i>
+                    <span>REST API</span>
                     <i class="icon-chevron-down"></i>
                 </a>
                 <ul class="submenu">
-                    <li><a href="user-list.html">User list</a></li>
-                    <li><a href="new-user.html">New user form</a></li>
-                    <li><a href="user-profile.html">User profile</a></li>
+                    <li><a href="">Hva er REST API?</a></li>
+                    <li><a href="">Dokumentasjon</a></li>
+                    <li><a href="">Lag ny konto</a></li>
+                    <li><a href="">Logg inn</a></li>
                 </ul>
             </li>
+             <!--
             <li>
                 <a class="dropdown-toggle" href="#">
                     <i class="icon-edit"></i>
@@ -245,7 +275,7 @@
             <a href="#" class="skin first_nav selected">
                 <span class="icon"></span><span class="text">Default skin</span>
             </a>
-            <a href="#" class="skin second_nav" data-file="css/compiled/skins/dark.css">
+            <a href="#" class="skin second_nav" data-file="css/skins/dark.css">
                 <span class="icon"></span><span class="text">Dark skin</span>
             </a>
         </div>

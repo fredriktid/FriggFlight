@@ -1,0 +1,62 @@
+<table class="table-departures">
+    <thead>
+        <tr>
+            <th tabindex="0" rowspan="1" colspan="1">Avgang
+            </th>
+            <th tabindex="0" rowspan="1" colspan="1">Destinasjon
+            </th>
+            <th tabindex="0" rowspan="1" colspan="1">Rutenummer
+            </th>
+            <th tabindex="0" rowspan="1" colspan="1">Flyselskap
+            </th>
+            <th tabindex="0" rowspan="1" colspan="1">Gate
+            </th>
+            <th tabindex="0" rowspan="1" colspan="1">Status
+            </th>
+            <th tabindex="0" rowspan="1" colspan="1">Ny tid
+            </th>
+        </tr>
+    </thead>
+
+    <tfoot>
+        <tr>
+            <th rowspan="1" colspan="1">Avgang</th>
+            <th rowspan="1" colspan="1">Destinasjon</th>
+            <th rowspan="1" colspan="1">Rutenummer</th>
+            <th rowspan="1" colspan="1">Flyselskap</th>
+            <th rowspan="1" colspan="1">Gate</th>
+            <th rowspan="1" colspan="1">Status</th>
+            <th rowspan="1" colspan="1">Ny tid</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        {% for flight in data|slice(0, 100) %}
+            {% set status = flight.getFlightStatus %}
+            {% set grade = false %}
+            {% if flight.getIsDelayed and not flight.hasDeparted %}
+                {% set grade = 'gradeX' %}
+            {% elseif flight.hasDeparted %}
+                {% set grade = 'gradeA' %}
+            {% endif %}
+            <tr{% if grade %} class="{{ grade }}"{% endif %}>
+                <td>{{ flight.getScheduleTime.format('Y-m-d H:i:s') }}</td>
+                <td>{{ flight.getOtherAirport.name }}</td>
+                <td>{{ flight.code }}</td>
+                <td>{{ flight.airline.name }}</td>
+                <td class="center">{{ flight.gate }}</td>
+                <td>
+                    {% if status != null %}
+                        {{ status.getTextNo }}
+                    {% endif %}
+                </td>
+                <td >
+                    {% if status != null %}
+                        {% if status.getCode in ['N', 'E'] %}
+                            {{ flight.getFlightStatusTime.format('Y-m-d H:i:s') }}
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

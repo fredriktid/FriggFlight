@@ -15,6 +15,7 @@ framework:
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
+        hinclude_default_template: FriggFlightBundle::hinclude.html.twig
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:         ~
@@ -99,6 +100,12 @@ assetic:
             filters:
                 - cssrewrite
             output: css/chosen.min.css
+        datatables_custom_css:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/css/compiled/table.css
+            filters:
+                - cssrewrite
+            output: css/table.css
         # themes
         theme_index_css:
             inputs:
@@ -162,6 +169,10 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/img/chosen-sprite.png
             output: chosen-sprite.png
+        hinclude_js:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/hinclude.js
+            output: js/hinclude.js
 
 # Doctrine Configuration
 doctrine:

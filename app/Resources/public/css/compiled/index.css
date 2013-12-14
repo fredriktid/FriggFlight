@@ -207,3 +207,12 @@
   text-transform: none !important;
   letter-spacing: 2px;
 }
+
+.chosen-container {
+  display: inline-block;
+}
+
+h4.title {
+  margin: 0 10px 0 0;
+  display: inline-block;
+}

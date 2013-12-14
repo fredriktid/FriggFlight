@@ -39,6 +39,7 @@ class AirlineService extends FlightParentAbstract
            throw new NotFoundHttpException('Unable to find airline entity');
         }
 
+        $this->setParent($entity);
         return $entity;
     }
 
