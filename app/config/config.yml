@@ -129,10 +129,14 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/js/jquery-ui-1.10.2.custom.min.js
             output: js/jquery-ui-1.10.2.custom.min.js
-        jquery_ui_js:
+        jquery_datatables_js:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/js/jquery.dataTables.js
             output: js/jquery.dataTables.js
+        jquery_datatables_trans_nor:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/public/js/dataTables/dataTables.norwegian.txt
+            output: js/dataTables/dataTables.norwegian.txt
         knob_js:
             inputs:
                 - %kernel.root_dir%/../app/Resources/public/js/jquery.knob.js

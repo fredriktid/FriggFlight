@@ -1,0 +1,17 @@
+{
+    "sProcessing":   "Laster...",
+    "sLengthMenu":   "Vis _MENU_ rader",
+    "sZeroRecords":  "Ingen rader funnet",
+    "sInfo":         "Viser _START_ til _END_ av _TOTAL_ rader",
+    "sInfoEmpty":    "Viser 0 til 0 av 0 rader",
+    "sInfoFiltered": "(filtrert fra _MAX_ totalt antall rader)",
+    "sInfoPostFix":  "",
+    "sSearch":       "S&oslash;k",
+    "sUrl":          "",
+  "oPaginate": {
+        "sFirst":    "F&oslash;rste",
+        "sPrevious": "Forrige",
+        "sNext":     "Neste",
+        "sLast":     "Siste"
+   }
+}

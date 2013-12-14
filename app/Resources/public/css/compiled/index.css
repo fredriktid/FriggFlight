@@ -216,3 +216,7 @@ h4.title {
   margin: 0 10px 0 0;
   display: inline-block;
 }
+
+.table-departures {
+  display: none;
+}

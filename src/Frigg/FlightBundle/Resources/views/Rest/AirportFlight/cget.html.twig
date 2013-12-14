@@ -30,7 +30,7 @@
         </tr>
     </tfoot>
     <tbody>
-        {% for flight in data|slice(0, 100) %}
+        {% for flight in data %}
             {% set status = flight.getFlightStatus %}
             {% set grade = false %}
             {% if flight.getIsDelayed and not flight.hasDeparted %}

@@ -15,11 +15,16 @@
         $(function () {
 
             $('.table-departures').dataTable({
-                "sPaginationType": "full_numbers"
+                "sPaginationType": "full_numbers",
+                "oLanguage": {
+                    "sUrl": "js/dataTables/dataTables.norwegian.txt"
+                }
             });
+            $('.table-departures').slideDown();
 
             // jQuery Knobs
             $(".knob").knob();
+            /*
 
             // jQuery UI Sliders
             $(".slider-sample1").slider({
@@ -122,6 +127,7 @@
                     previousPoint = null;
                 }
             });
+            */
         });
     </script>
 {% endblock %}
@@ -173,6 +179,7 @@
     <div id="pad-wrapper">
 
         <!-- statistics chart built with jQuery Flot -->
+        {#
         <div class="row chart">
             <div class="col-md-12">
                 <div class="clearfix pull-left">
@@ -190,15 +197,22 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div id="statsChart"></div>
+                 <div id="statsChart"></div>
             </div>
         </div>
         <hr>
+        #}
         <div class="row">
             <div class="col-md-12">
                 <h4 class="title">Avganger fra {{ current_airport.code }}</h3>
                 <hr>
-                {{ render(url('get_airport_flights', {'airportId': current_airport.id, 'direction': 'D', from_time: 'now'|date('U') - 3600, '_format': 'html'})) }}
+                {{ render(url('get_airport_flights', {
+                    'airportId': current_airport.id,
+                    'direction': 'D',
+                    'from_time': 'now'|date('U') - 3600,
+                    'to_time': 'now'|date('U') + (12 * 3600),
+                    '_format': 'html'
+                })) }}
             </div>
         </div>
     </div>
