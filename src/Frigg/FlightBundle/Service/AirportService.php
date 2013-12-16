@@ -118,16 +118,17 @@ class AirportService extends FlightParentAbstract
         $query = $qb->select('f')
             ->from('FriggFlightBundle:Flight', 'f')
             ->where($qb->expr()->andX(
+                $qb->expr()->lte('f.schedule_time', ':to_time'),
                 $qb->expr()->orX(
                     $qb->expr()->gte('f.schedule_time', ':from_time'),
                     $qb->expr()->andX(
                         $qb->expr()->isNotNull('f.flight_status_time'),
-                        $qb->expr()->gte('f.flight_status_time', ':from_time')
+                        $qb->expr()->gte('f.flight_status_time', ':status_from_time'),
+                        $qb->expr()->eq('f.flight_status', ':status_newtime_id')
                     )
-                ),
-                $qb->expr()->lte('f.schedule_time', ':to_time')
-           ))
-           ->andWhere('f.airport = :airport');
+                )
+            ))
+            ->andWhere('f.airport = :airport');
 
         if ($direction) {
             $query->andWhere('f.arr_dep = :direction');
@@ -140,13 +141,14 @@ class AirportService extends FlightParentAbstract
         }
 
         $query->orderBy('f.schedule_time', 'ASC')
-            ->setParameter('from_time', new \DateTime(date('Y-m-d H:i:s', (int) $fromTime)), \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter('airport', $this->parentEntity->getId())
+            ->setParameter('from_time', new \DateTime(date('Y-m-d H:i:s', $fromTime)), \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter('to_time', new \DateTime(date('Y-m-d H:i:s', $toTime)), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter('airport', $this->parentEntity->getId());
+            ->setParameter('status_from_time', new \DateTime(date('Y-m-d H:i:s', ($fromTime - (24 * (60 * 60))))), \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter('status_newtime_id', 2);
 
         return $query->getQuery()->getResult();
     }
-
     public function getGraphData()
     {
         /*$day = date('d');
