@@ -117,11 +117,11 @@ class AirportService extends FlightParentAbstract
         $qb = $this->em->createQueryBuilder();
         $query = $qb->select('f')
             ->from('FriggFlightBundle:Flight', 'f')
-           ->where($qb->expr()->andX(
+            ->where($qb->expr()->andX(
                 $qb->expr()->orX(
                     $qb->expr()->gte('f.schedule_time', ':from_time'),
                     $qb->expr()->andX(
-                        $qb->expr()->neq('f.flight_status_time', ':status_default'),
+                        $qb->expr()->isNotNull('f.flight_status_time'),
                         $qb->expr()->gte('f.flight_status_time', ':from_time')
                     )
                 ),
@@ -142,8 +142,7 @@ class AirportService extends FlightParentAbstract
         $query->orderBy('f.schedule_time', 'ASC')
             ->setParameter('from_time', new \DateTime(date('Y-m-d H:i:s', (int) $fromTime)), \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter('to_time', new \DateTime(date('Y-m-d H:i:s', $toTime)), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter('airport', $this->parentEntity->getId())
-            ->setParameter('status_default', NULL);
+            ->setParameter('airport', $this->parentEntity->getId());
 
         return $query->getQuery()->getResult();
     }
