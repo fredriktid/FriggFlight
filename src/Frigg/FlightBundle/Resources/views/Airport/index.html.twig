@@ -1,5 +1,7 @@
 {% extends 'FriggFlightBundle::layout.html.twig' %}
 
+{% block title %}{{ current_airport.name }} ({{ current_airport.code }}){% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/theme/index.css') }}" type="text/css" media="screen" />
@@ -14,7 +16,7 @@
             <div class="col-md-3 col-sm-3 stat">
                 <div class="data">
                     <span class="number">
-                        {{ include('FriggFlightBundle::hinclude.html.twig') }}
+                        <strike>73%</strike>
                     </span>
                     aktivitet
                 </div>
