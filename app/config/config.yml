@@ -100,12 +100,6 @@ assetic:
             filters:
                 - cssrewrite
             output: css/chosen.min.css
-        datatables_custom_css:
-            inputs:
-                - %kernel.root_dir%/../app/Resources/public/css/compiled/table.css
-            filters:
-                - cssrewrite
-            output: css/table.css
         # themes
         theme_index_css:
             inputs:
