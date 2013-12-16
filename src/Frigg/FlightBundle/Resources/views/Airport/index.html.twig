@@ -84,7 +84,7 @@
                 {{ render(url('get_airport_flights', {
                     'airportId': current_airport.id,
                     'direction': 'D',
-                    'from_time': 'now'|date('U') - (60 * 60),
+                    'from_time': 'now'|date('U') - (30 * 60),
                     'to_time': 'now'|date('U') + (12 * (60 * 60)),
                     '_format': 'html'
                 })) }}
