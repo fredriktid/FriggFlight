@@ -2,6 +2,8 @@
 
 {% block title %}{{ current_airport.name }} ({{ current_airport.code }}){% endblock %}
 
+{% block header %}Avganger fra {{ current_airport.name }}{% endblock header %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/theme/index.css') }}" type="text/css" media="screen" />
@@ -81,8 +83,6 @@
         #}
         <div class="row">
             <div class="col-md-12">
-                <h4 class="title">Avganger fra {{ current_airport.code }}</h3>
-                <hr>
                 {{ render(url('get_airport_flights', {
                     'airportId': current_airport.id,
                     'direction': 'D',
