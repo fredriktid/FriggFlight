@@ -99,6 +99,7 @@ class AirportService extends FlightParentAbstract
             ->getResult();
     }
 
+
     /**
      * Fetch scheduled flights group for this airport
      * @return array
@@ -149,38 +150,9 @@ class AirportService extends FlightParentAbstract
 
         return $query->getQuery()->getResult();
     }
+
     public function getGraphData()
     {
-        /*$day = date('d');
-        $month = date('m');
-        $year = date('y');
-
-        $flightDirectionMap = array(
-            'departures' => 'D',
-            'arrivals' => 'A'
-        );
-
-        $currentdays = intval(date('t'));
-        $interval = array();
-
-        $i = 0;
-        while ($i++ < $currentdays) {
-            $interval[$i] = $i;
-        }
-
-        $data = array();
-        foreach($this->flightGroup as $i => $flight) {
-            if($flightDirection = array_search($flight->getArrDep(), $flightDirectionMap)) {
-                $flightInterval = $flight->getScheduleTime()->format('j');
-                if (!isset($data[$flightDirection][$flightInterval])) {
-                    $data[$flightDirection][$flightInterval] = 0;
-                }
-                $data[$flightDirection][$flightInterval]++;
-            }
-        }
-
-        return $data + array('ticks' => $interval);
-        */
         return array();
     }
 }

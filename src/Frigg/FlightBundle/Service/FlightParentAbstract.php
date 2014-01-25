@@ -47,6 +47,16 @@ abstract class FlightParentAbstract
     }
 
     /**
+     * Get value from config
+     * @var string $key
+     * @return mixed
+     **/
+    final public function getConfig($key)
+    {
+        return (isset($this->config[$key])) ? $this->config[$key] : null;
+    }
+
+    /**
      * Get the default Id of the current parent
      * @return integer
      **/

@@ -17,7 +17,7 @@ class ImportCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('frigg_flight:import')
+            ->setName('friggflight:import')
             ->setDescription('Import flights')
             ->addArgument(
                 'type',

@@ -71,6 +71,7 @@ class FlightImport extends AvinorImportAbstract
     {
         $lastUpdated = $this->getLastUpdated();
         $airportService = $this->container->get('frigg_flight.airport_service');
+        $airportImportConfig = $airportService->getConfig('import');
 
         foreach ($airportService->getAvinorAirports() as $i => $airport) {
 
@@ -111,7 +112,7 @@ class FlightImport extends AvinorImportAbstract
                     }
 
                     if (!$airportObject = $this->em->getRepository('FriggFlightBundle:Airport')->findOneByCode($flightNode->airport)) {
-                        $isAvinorAirport = (in_array($flightNode->airport, $avinorAirports));
+                        $isAvinorAirport = (in_array($flightNode->airport, $airportImportConfig['avinor']));
                         $airportObject = new Airport;
                         $airportObject->setCode($flightNode->airport);
                         $airportObject->setIsAvinor($isAvinorAirport);
