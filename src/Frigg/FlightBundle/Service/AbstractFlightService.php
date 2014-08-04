@@ -120,7 +120,7 @@ abstract class AbstractFlightService
             return $this->filters;
         }
 
-        if (array_key_exists($key, $this->filters) {
+        if (array_key_exists($key, $this->filters)) {
             return $this->filters[$key];
         }
 
