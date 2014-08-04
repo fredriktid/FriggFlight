@@ -216,3 +216,5 @@ fos_user:
 
 nelmio_api_doc:
     name: 'FlyAPI.no'
+    motd:
+        template: FriggFlightBundle::API/Components/motd.html.twig
