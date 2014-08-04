@@ -23,7 +23,8 @@
         "friendsofsymfony/rest-bundle": "dev-master",
         "jms/serializer-bundle": "dev-master",
         "friendsofsymfony/oauth-server-bundle": "dev-master",
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "nelmio/api-doc-bundle": "2.7.*@dev"    
     },
     "scripts": {
         "post-install-cmd": [
