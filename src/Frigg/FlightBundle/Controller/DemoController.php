@@ -16,8 +16,6 @@ class DemoController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $this->redirect($this->generateUrl('name_of_route'));
-
         $airportService = $this->container->get('frigg_flight.airport_service');
         $airportService->setSession($request->query->get('airportId'), true);
 
@@ -27,7 +25,7 @@ class DemoController extends Controller
             throw $e;
         }
 
-        return $this->render('FriggFlightBundle:Airport:index.html.twig', array(
+        return $this->render('FriggFlightBundle:Demo:index.html.twig', array(
             'current_airport' => $currentAirport,
             'avinor_airports' => $airportService->getAvinorAirports()
         ));

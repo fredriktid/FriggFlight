@@ -28,7 +28,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
      *  filters={
      *      {"name"="direction", "dataType"="string", "description"="Switch between arriving and departing flights", "pattern"="A|D", "default"="D"},
      *      {"name"="from_time", "dataType"="integer", "description"="From a certain timestamp"},
-     *      {"name"="to_time", "dataType"="integer", "description"="To this timestamp"},
+     *      {"name"="to_time", "dataType"="integer", "description"="To another timestamp"},
      *      {"name"="is_delayed", "dataType"="string", "description"="Only include delayed flights", "pattern"="Y|N", "default"="N"}
      *  }
      * )
@@ -72,7 +72,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
      *  filters={
      *      {"name"="direction", "dataType"="string", "description"="Switch between arriving and departing flights", "pattern"="A|D", "default"="D"},
      *      {"name"="from_time", "dataType"="integer", "description"="From a certain timestamp"},
-     *      {"name"="to_time", "dataType"="integer", "description"="To this timestamp"},
+     *      {"name"="to_time", "dataType"="integer", "description"="To another timestamp"},
      *      {"name"="is_delayed", "dataType"="string", "description"="Only include delayed flights", "pattern"="Y|N", "default"="N"}
      *  }
      * )
