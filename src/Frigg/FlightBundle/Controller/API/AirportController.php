@@ -102,6 +102,10 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function cpostAction(Request $request)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access denied. Only administrators may add data to the API.');
+        }
+
         // Create form type from entity
         $airportEntity = new Airport();
         $form = $this->createForm(new AirportType(), $airportEntity);
@@ -155,6 +159,10 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function putAction(Request $request, $airportId)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access denied. Only administrators may add data to the API.');
+        }
+
         // Load the service
         $airportService = $this->container->get('frigg.airport.flight');
 
@@ -202,6 +210,10 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function deleteAction($airportId)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access denied. Only administrators may delete data from the API');
+        }
+
         // Load service
         $airportService = $this->container->get('frigg.airport.flight');
 

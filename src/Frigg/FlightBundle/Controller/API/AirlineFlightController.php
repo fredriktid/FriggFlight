@@ -133,6 +133,10 @@ class AirlineFlightController extends FOSRestController implements ClassResource
      */
     public function cpostAction(Request $request, $airlineId)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access denied. Only administrators may add data to the API.');
+        }
+
         // Load service
         $airlineService = $this->container->get('frigg.airline.flight');
 
@@ -197,6 +201,10 @@ class AirlineFlightController extends FOSRestController implements ClassResource
      */
     public function putAction(Request $request, $airlineId, $flightId)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access denied. Only administrators may add data to the API');
+        }
+
         // Load instance and associate with given airline
         $airlineService = $this->container->get('frigg.airline.flight');
         $airlineService->setEntityById($airlineId, $flightId);
@@ -246,6 +254,10 @@ class AirlineFlightController extends FOSRestController implements ClassResource
      */
     public function deleteAction($airlineId, $flightId)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access denied. Only administrators may delete data from the API');
+        }
+
         // Load service
         $airlineService = $this->container->get('frigg.airline.flight');
 

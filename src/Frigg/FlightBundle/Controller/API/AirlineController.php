@@ -65,8 +65,6 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
      */
     public function cgetGraphAction(Request $request, $airlineId)
     {
-        $airlineService = $this->container->get('frigg.airport.flight');
-        $airlineService->setParentById($airlineId);
         return null;
     }
 
@@ -86,6 +84,10 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
      */
     public function cpostAction(Request $request)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access denied. Only administrators may add data to the API.');
+        }
+
         // Create Airline form instance based
         $airlineEntity = new Airline();
         $form = $this->createForm(new AirlineType(), $airlineEntity);
@@ -138,6 +140,10 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
      */
     public function putAction(Request $request, $airlineId)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access denied. Only administrators may add data to the API.');
+        }
+
         // Load service
         $airlineService = $this->container->get('frigg.airline.flight');
 
@@ -183,6 +189,10 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
      */
     public function deleteAction($airlineId)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access denied. Only administrators may delete data from the API');
+        }
+
         // Load service
         $airlineService = $this->container->get('frigg.airline.flight');
 
