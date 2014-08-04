@@ -215,4 +215,4 @@ fos_user:
     user_class: Frigg\FlightBundle\Entity\User
 
 nelmio_api_doc:
-    name: FlyAPI.no
+    name: 'FlyAPI.no'
