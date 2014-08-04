@@ -17,7 +17,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
      * @ApiDoc(
      *  section="Airport flights",
      *  resource=true,
-     *  description="Returns a group of flights from an airport that matches the filters",
+     *  description="Returns a group of flights",
      *  statusCodes={
      *      200="Returned when successful",
      *      404="Returned when the airport was not found"
@@ -61,7 +61,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
      * @ApiDoc(
      *  section="Airport flights",
      *  resource=true,
-     *  description="Returns count of flights from an airport that matches the filters",
+     *  description="Returns count of flights from an airport",
      *  statusCodes={
      *      200="Returned when successful",
      *      404="Returned when the airport was not found"
@@ -163,7 +163,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
      * @ApiDoc(
      *  section="Airport flights",
      *  resource=true,
-     *  description="Creates a flight and returns the view.",
+     *  description="Creates a flight and returns the view",
      *  statusCodes={
      *      201="Returned when flight was successfully created",
      *      200="Returned when request did not validate and the form is returned",
@@ -224,7 +224,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
      * @ApiDoc(
      *  section="Airport flights",
      *  resource=true,
-     *  description="Quickcreate a flight with PUT",
+     *  description="Quickcreate a flight",
      *  statusCodes={
      *      204="Returned when the flight has been successfully created",
      *      200="Returned when request did not validate and the form is returned",
@@ -274,7 +274,7 @@ class AirportFlightController extends FOSRestController implements ClassResource
      * @ApiDoc(
      *  section="Airport flights",
      *  resource=true,
-     *  description="Deletes a flight from an airport.",
+     *  description="Delete a flight from an airport",
      *  statusCodes={
      *      204="Returned when flight was successfully deleted",
      *      403="Returned when the request was not authorized to delete the flight",

@@ -183,7 +183,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      * @ApiDoc(
      *  section="Airport",
      *  resource=true,
-     *  description="Deletes an airport.",
+     *  description="Delete an airport",
      *  statusCodes={
      *      204="Returned when airport was successfully deleted",
      *      403="Returned when the request was not authorized",
