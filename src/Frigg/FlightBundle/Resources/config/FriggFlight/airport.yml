@@ -1,7 +1,7 @@
 default: 1119 # OSL
 import:
-    #endpoint: http://flydata.avinor.no/airportNames.asp
-    endpoint: data/airportNames.asp.xml
+    endpoint: http://flydata.avinor.no/airportNames.asp
+    #endpoint: data/airportNames.asp.xml
     avinor:
         - ALF
         - ANX

@@ -15,7 +15,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
 {
     /**
      * @ApiDoc(
-     *  section="Airport",
+     *  section="Airports",
      *  resource=true,
      *  description="Returns a collection of all airports",
      *  statusCodes={
@@ -27,13 +27,36 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function cgetAction(Request $request)
     {
-        $airportService = $this->container->get('frigg_flight.airport_service');
-        return $airportService->getAll();
+        $em = $this->getDoctrine()->getManager();
+        return $em->getRepository('FriggFlightBundle:Airport')->findAll();
     }
 
     /**
      * @ApiDoc(
-     *  section="Airport",
+     *  section="Airports",
+     *  resource=true,
+     *  description="Returns a single airport object",
+     *  statusCodes={
+     *      200="Returned when successful",
+     *      404="Returned when airport does not exist"
+     *  },
+     *  requirements={
+     *      {"name"="airportId", "dataType"="integer", "requirement"="\d+", "description"="Unique airport identifier"},
+     *  }
+     * )
+     *
+     * @Rest\View()
+     */
+    public function getAction($airportId)
+    {
+        $airportService = $this->container->get('frigg.airport.flight');
+        $airportService->setParentById($airportId);
+        return $airportService->getParent();
+    }
+
+    /**
+     * @ApiDoc(
+     *  section="Airports",
      *  resource=true,
      *  description="Returns a collection of Avinor airports",
      *  statusCodes={
@@ -45,58 +68,33 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function cgetAvinorAction()
     {
-        $airportService = $this->container->get('frigg_flight.airport_service');
+        $airportService = $this->container->get('frigg.airport.flight');
         return $airportService->getAvinorAirports();
     }
 
     /**
      * @ApiDoc(
-     *  section="Airport",
+     *  section="Airports",
      *  tags="TO-DO",
-     *  description="Generate data to use in graphs"
+     *  description="Generates and returns graph data"
      * )
      *
      * @Rest\View()
      */
     public function cgetGraphAction(Request $request, $airportId)
     {
-        $airportService = $this->container->get('frigg_flight.airport_service');
-        $airportService->setParentById($airportId);
         return null;
     }
 
     /**
      * @ApiDoc(
-     *  section="Airport",
-     *  resource=true,
-     *  description="Returns a single airport object",
-     *  statusCodes={
-     *      200="Returned when successful",
-     *      404="Returned when airport was not found"
-     *  },
-     *  requirements={
-     *      {"name"="airportId", "dataType"="integer", "requirement"="\d+", "description"="Unique airport identifier"},
-     *  }
-     * )
-     *
-     * @Rest\View()
-     */
-    public function getAction($airportId)
-    {
-        $airportService = $this->container->get('frigg_flight.airport_service');
-        $airportService->setParentById($airportId);
-        return $airportService->getParent();
-    }
-
-    /**
-     * @ApiDoc(
-     *  section="Airport",
+     *  section="Airports",
      *  resource=true,
      *  description="Creates an airport and returns the view",
      *  statusCodes={
      *      201="Returned when airport was successfully created",
      *      200="Returned when request did not validate and the form is returned",
-     *      403="Returned when the request was not authorized to create an airport"
+     *      403="Returned when the request was not authorized"
      *  }
      * )
      *
@@ -104,15 +102,20 @@ class AirportController extends FOSRestController implements ClassResourceInterf
      */
     public function cpostAction(Request $request)
     {
+        // Create form type from entity
         $airportEntity = new Airport();
         $form = $this->createForm(new AirportType(), $airportEntity);
-        $form->bind($request);
 
+        // Validate request data on form
+        $form->bind($request);
         if ($form->isValid()) {
+
+            // Save new airport entity
             $em = $this->getDoctrine()->getManager();
             $em->persist($airportEntity);
             $em->flush();
 
+            // Redirect to entities new view (HTTP 201)
             return $this->redirectView(
                 $this->generateUrl(
                     'get_airport',
@@ -124,6 +127,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
             );
         }
 
+        // Else return the form to client
         return array(
             'form' => $form,
         );
@@ -131,15 +135,15 @@ class AirportController extends FOSRestController implements ClassResourceInterf
 
     /**
      * @ApiDoc(
-     *  section="Airport",
+     *  section="Airports",
      *  resource=true,
-     *  description="Quickcreate an airport",
+     *  description="Quickcreates an airport",
      *  statusCodes={
      *      204="Returned when the flight has been successfully created",
      *      200="Returned when request did not validate and the form is returned",
      *      404={
-     *          "Returned when airport was not found",
-     *          "Or when flight was not found"
+     *          "Returned when airport does not exist",
+     *          "Or when flight does not exist"
      *      }
      *  },
      *  requirements={
@@ -152,7 +156,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     public function putAction(Request $request, $airportId)
     {
         // Load the service
-        $airportService = $this->container->get('frigg_flight.airport_service');
+        $airportService = $this->container->get('frigg.airport.flight');
 
         // Set given airport in service
         $airportService->setParentById($airportId);
@@ -181,13 +185,13 @@ class AirportController extends FOSRestController implements ClassResourceInterf
 
     /**
      * @ApiDoc(
-     *  section="Airport",
+     *  section="Airports",
      *  resource=true,
      *  description="Delete an airport",
      *  statusCodes={
      *      204="Returned when airport was successfully deleted",
      *      403="Returned when the request was not authorized",
-     *      404="Returned when airport was not found"
+     *      404="Returned when airport does not exist"
      *  },
      *  requirements={
      *      {"name"="airportId", "dataType"="integer", "requirement"="\d+", "description"="Unique airport identifier"}
@@ -199,7 +203,7 @@ class AirportController extends FOSRestController implements ClassResourceInterf
     public function deleteAction($airportId)
     {
         // Load service
-        $airportService = $this->container->get('frigg_flight.airport_service');
+        $airportService = $this->container->get('frigg.airport.flight');
 
         // Set airport in service
         $airportService->setParentById($airportId);

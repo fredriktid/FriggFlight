@@ -4,9 +4,9 @@ namespace Frigg\FlightBundle\Import;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Frigg\FlightBundle\Entity\FlightStatus;
+use Frigg\FlightBundle\Entity\Airline;
 
-class FlightStatusImport extends AvinorImportAbstract
+class AirlineImportService extends AbstractImportService
 {
     protected $config = array();
 
@@ -27,28 +27,27 @@ class FlightStatusImport extends AvinorImportAbstract
      **/
     public function output()
     {
-        return sprintf('Imported %d flight statuses', count($this->data));
+        return sprintf('Imported %d airlines', count($this->data));
     }
 
     /**
-     * Execute flight status importer
-     * @return FlightStatusImport
+     * Execute airline importer
+     * @return AirlineImportService
      **/
     public function run()
     {
         if ($response = $this->request($this->config['import']['endpoint'])) {
             foreach ($response as $item) {
                 if ($item['code'] && $item['code']) {
-                    if (!$flightStatus = $this->em->getRepository('FriggFlightBundle:FlightStatus')->findOneByCode($item['code'])) {
-                        $flightStatus = new FlightStatus;
+                    if (!$airline = $this->em->getRepository('FriggFlightBundle:Airline')->findOneByCode($item['code'])) {
+                        $airline = new Airline;
                     }
 
-                    $flightStatus->setCode($item['code']);
-                    $flightStatus->setTextEng($item['statusTextEn']);
-                    $flightStatus->setTextNo($item['statusTextNo']);
+                    $airline->setCode($item['code']);
+                    $airline->setName($item['name']);
 
-                    $this->em->persist($flightStatus);
-                    $this->data[] = $flightStatus->getId();
+                    $this->em->persist($airline);
+                    $this->data[] = $airline->getId();
                 }
             }
 

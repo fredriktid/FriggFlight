@@ -17,12 +17,12 @@ class ImportCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('friggflight:import')
-            ->setDescription('Import flights')
+            ->setName('frigg:import')
+            ->setDescription('Import data from Avinor')
             ->addArgument(
                 'type',
                 InputArgument::REQUIRED,
-                'What to import (e.g. flight)?'
+                'What to import (flight, airline, airport, etc)'
             )
             ->addOption(
                 'from',
@@ -63,7 +63,7 @@ class ImportCommand extends ContainerAwareCommand
                 $time = array();
                 $time['from'] = (int) $input->getOption('from');
                 $time['to'] = (int) $input->getOption('to');
-                $importer = $container->get('frigg_flight.flight_import');
+                $importer = $container->get('frigg.flight.import');
                 $importer->setUpdates($input->getOption('updates'));
                 $importer->setTime($time);
                 $importer->run();
@@ -71,28 +71,28 @@ class ImportCommand extends ContainerAwareCommand
                 break;
 
             case 'flight_status':
-                $output->writeln('Running flight status importer');
-                $importer = $container->get('frigg_flight.flight_status_import');
+                $output->writeln('Running status importer');
+                $importer = $container->get('frigg.status.import');
                 $importer->run();
                 $output->writeln($importer->output());
                 break;
 
             case 'airport':
                 $output->writeln('Running airport importer');
-                $importer = $container->get('frigg_flight.airport_import');
+                $importer = $container->get('frigg.airport.import');
                 $importer->run();
                 $output->writeln($importer->output());
                 break;
 
             case 'airline':
                 $output->writeln('Running airline importer');
-                $importer = $container->get('frigg_flight.airline_import');
+                $importer = $container->get('frigg.airline.import');
                 $importer->run();
                 $output->writeln($importer->output());
                 break;
 
             default:
-                $output->writeln('Unknown type.');
+                $output->writeln(sprintf('Unknown type %s.', $type));
                 break;
         }
 

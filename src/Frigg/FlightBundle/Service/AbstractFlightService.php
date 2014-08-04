@@ -7,16 +7,16 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-abstract class FlightParentAbstract
+abstract class AbstractFlightService
 {
     protected $em;
     protected $config;
     protected $session;
 
-    protected $parentEntity = null;
-    protected $flightEntity = null;
-    protected $flightGroup = array();
-    protected $params = array();
+    protected $parent = null;
+    protected $entity = null;
+    protected $group = array();
+    protected $filters = array();
 
     /**
      * Flight parent constructor
@@ -32,158 +32,25 @@ abstract class FlightParentAbstract
     }
 
     /**
-     * Get all parent entities
+     * Fetch scheduled flights group for this context
      * @return array
      **/
-    abstract public function getAll();
-
-    /**
-     * Get parent entity in context
-     * @return mixed
-     **/
-    final public function getParent()
-    {
-        return $this->parentEntity;
-    }
-
-    /**
-     * Get value from config
-     * @var string $key
-     * @return mixed
-     **/
-    final public function getConfig($key)
-    {
-        return (isset($this->config[$key])) ? $this->config[$key] : null;
-    }
-
-    /**
-     * Get the default Id of the current parent
-     * @return integer
-     **/
-    final public function getDefaultParentId()
-    {
-        return (isset($this->config['default']) ? $this->config['default'] : null);
-    }
-
-    /**
-     * Set parent entity in context
-     * @var mixed $parent
-     * @return FlightParentAbstract
-     **/
-    final public function setParent($parentEntity)
-    {
-        $this->parentEntity = $parentEntity;
-        return $this;
-    }
+    abstract public function loadGroup();
 
     /**
      * Set parent entity by Id in context
      * @var integer $parentId
-     * @return FlightParentAbstract
+     * @return AbstractFlightService
      **/
     abstract public function setParentById($parentId);
-
-    /**
-     * Get a parameter value
-     * @var string $key
-     * @return mixed
-     **/
-    public function getParam($key)
-    {
-        return (isset($this->params[$key])) ? $this->params[$key] : null;
-    }
-
-    /**
-     * Set a parameter key
-     * @var string $key
-     * @var mixed $value
-     * @return FlightParentAbstract
-     **/
-    public function setParam($key, $value)
-    {
-        $this->params[$key] = $value;
-        return $this;
-    }
-
-    /**
-     * Get current flight in context
-     * @return Flight
-     **/
-    final public function getFlight()
-    {
-        return $this->flightEntity;
-    }
-
-    /**
-     * Set flight in context
-     * @var Flight $flightEntity
-     * @return FlightParentAbstract
-     **/
-    final public function setFlight($flightEntity)
-    {
-        $this->flightEntity = $flightEntity;
-        return $this;
-    }
 
     /**
      * Set flight entity in context of parent
      * @var integer $parentId
      * @var integer $flightId
-     * @return FlightParentAbstract
+     * @return AbstractFlightService
      **/
-    abstract public function setFlightById($parentId, $flightId);
-
-    /**
-     * Get all loaded flights
-     * @return array
-     **/
-    final public function getFlightGroup()
-    {
-        if (!$this->parentEntity) {
-            throw new NotFoundHttpException('Unable to get flights. Missing parent entity.');
-        }
-
-        //if (!count($this->flightGroup)) {
-            $this->flightGroup = $this->loadFlightGroup();
-        //}
-
-        return $this->flightGroup;
-    }
-
-    /**
-     * Set flights
-     * @var array $flightGroup
-     * @return FlightParentAbstract
-     **/
-    final public function setFlightGroup($flightGroup)
-    {
-        $this->flightGroup = $flightGroup;
-        return $this;
-    }
-
-    /**
-     * Fetch scheduled flights group for this context
-     * @return array
-     **/
-    abstract protected function loadFlightGroup();
-
-    /**
-     * Count loaded flights
-     * @return integer
-     **/
-    public function getFlightGroupCount()
-    {
-        return count($this->flightGroup);
-    }
-
-    /**
-     * Get session data in this context
-     * @return mixed
-     **/
-    public function getSession()
-    {
-        return $this->session->get(get_called_class());
-    }
+    abstract public function setEntityById($parentId, $flightId);
 
     /**
      * Get session entity from session
@@ -192,13 +59,157 @@ abstract class FlightParentAbstract
     abstract public function getSessionEntity();
 
     /**
+     * Set parent entity in context
+     * @var mixed $parent
+     * @return AbstractFlightService
+     **/
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    /**
+     * Get parent entity in context
+     * @return mixed
+     **/
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Get value from config
+     * @var string $key
+     * @return mixed
+     **/
+    public function getConfig($key = null)
+    {
+        if ($key === null) {
+            return $this->config;
+        }
+
+        if (array_key_exists($key, $this->config)) {
+            return $this->config[$key];
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the default Id of the current parent
+     * @return integer
+     **/
+    public function getDefaultParentId()
+    {
+        if (array_key_exists('default', $this->config)) {
+            return $this->config['default'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a parameter value
+     * @var string $key
+     * @return mixed
+     **/
+    public function getFilter($key = null)
+    {
+        if ($key === null) {
+            return $this->filters;
+        }
+
+        if (array_key_exists($key, $this->filters) {
+            return $this->filters[$key];
+        }
+
+        return null;
+    }
+
+    /**
+     * Set a parameter key
+     * @var string $key
+     * @var mixed $value
+     * @return AbstractFlightService
+     **/
+    public function setFilter($key, $value = null)
+    {
+        if (is_array($key)) {
+            $this->filters = $key;
+            return $this;
+        }
+
+        $this->filters[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * Get current flight in context
+     * @return Flight
+     **/
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+    /**
+     * Set flight in context
+     * @var Flight $entity
+     * @return AbstractFlightService
+     **/
+    public function setEntity($entity)
+    {
+        $this->entity = $entity;
+        return $this;
+    }
+
+    /**
+     * Get all loaded flights
+     * @return array
+     **/
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * Set flights
+     * @var array $group
+     * @return AbstractFlightService
+     **/
+    public function setGroup($group)
+    {
+        $this->group = $group;
+        return $this;
+    }
+
+    /**
+     * Count loaded flights
+     * @return integer
+     **/
+    public function countGroup()
+    {
+        return count($this->group);
+    }
+
+    /**
+     * Get session data in this context
+     * @return mixed
+     **/
+    public function sessionValue()
+    {
+        return $this->session->get(get_called_class());
+    }
+
+    /**
      * Append (or prepend) to session data in this context
      * @var mixed $value
-     * @return FlightParentAbstract
+     * @return AbstractFlightService
      **/
     public function appendSession($value, $clear = false, $prependInstead = false)
     {
-        $sessionValue = $this->getSession();
+        $sessionValue = $this->sessionValue();
 
         if ($clear || is_null($sessionValue)) {
             $sessionValue = array();
@@ -222,7 +233,7 @@ abstract class FlightParentAbstract
      * Set session data in this context
      * @var mixed $value
      * @var bool $defaultToEntityId
-     * @return FlightParentAbstract
+     * @return AbstractFlightService
      **/
     public function setSession($value, $defaultToEntityId = false)
     {
@@ -235,7 +246,7 @@ abstract class FlightParentAbstract
             ),
             array(
                 'type' => 'function',
-                'data' => 'getSession',
+                'data' => 'sessionValue',
                 'params' => array()
             )
         );
@@ -260,7 +271,7 @@ abstract class FlightParentAbstract
         }
 
         if (!is_null($sessionValue)) {
-            $currentSession = $this->getSession();
+            $currentSession = $this->sessionValue();
             if ($sessionValue !== $currentSession) {
                 $this->session->set(get_called_class(), $sessionValue);
             }

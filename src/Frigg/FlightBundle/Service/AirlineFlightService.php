@@ -6,12 +6,10 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AirportService extends FlightParentAbstract
+class AirlineFlightService extends AbstractFlightService
 {
-    protected $params = array();
-
     /**
-     * Airport subclass constructor
+     * Airline subclass constructor
      * @var EntityManager $em
      * @var string $config
      **/
@@ -20,25 +18,16 @@ class AirportService extends FlightParentAbstract
         parent::__construct($em, $session, $config);
     }
 
-    /**
-     * Get all airport entities
-     * @return array
-     **/
-    public function getAll()
-    {
-        return $this->em->getRepository('FriggFlightBundle:Airport')->findAll();
-    }
-
    /**
      * Get session entity from session
      * @return object
      **/
     public function getSessionEntity()
     {
-        $entity = $this->em->getRepository('FriggFlightBundle:Airport')->find($this->getSession());
+        $entity = $this->em->getRepository('FriggFlightBundle:Airline')->find($this->sessionValue());
 
         if (!$entity) {
-           throw new NotFoundHttpException('Unable to find airport entity');
+           throw new NotFoundHttpException('Unable to find airline entity');
         }
 
         $this->setParent($entity);
@@ -46,74 +35,59 @@ class AirportService extends FlightParentAbstract
     }
 
     /**
-     * Set airport entity
+     * Set airline entity
      * @var integer $parentId
-     * @return AirportService
+     * @return AirlineFlightService
      **/
     public function setParentById($parentId)
     {
-        $airportEntity = $this->em->getRepository('FriggFlightBundle:Airport')->find($parentId);
+        $entity = $this->em->getRepository('FriggFlightBundle:Airline')->find($parentId);
 
-        if (!$airportEntity) {
-            throw new NotFoundHttpException('Unable to find airport entity');
+        if (!$entity) {
+            throw new NotFoundHttpException('Unable to find airline entity');
         }
 
-        $this->setParent($airportEntity);
+        $this->setParent($entity);
         return $this;
     }
 
     /**
-     * Set flight entity in context of parent
+     * Set new flight linked with this airline
      * @var integer $parentId
      * @var integer $flightId
-     * @return AirportService
+     * @return AirlineFlightService
      **/
-    public function setFlightById($parentId, $flightId)
+    public function setEntityById($parentId, $flightId)
     {
-        $flightEntity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
+        $entity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
             array(
                 'id' => $flightId,
-                'airport' => $parentId,
+                'airline' => $parentId,
             )
         );
 
-        if (!$flightEntity) {
+        if (!$entity) {
             throw new NotFoundHttpException('Unable to find flight entity');
         }
 
-        $this->setFlight($flightEntity);
+        $this->setEntity($entity);
         return $this;
     }
 
-    /**
-     * Get all Avinor airports
+     /**
+     * Fetch scheduled flights group for this airline
      * @return array
      **/
-    public function getAvinorAirports()
+    public function loadGroup()
     {
-        return $this->em->createQueryBuilder()->select('a')
-            ->from('FriggFlightBundle:Airport', 'a')
-            ->where('a.is_avinor = :is_avinor')
-            ->setParameter('is_avinor', true)
-            ->getQuery()
-            ->getResult();
-    }
-
-
-    /**
-     * Fetch scheduled flights group for this airport
-     * @return array
-     **/
-    protected function loadFlightGroup()
-    {
-        if (!$this->parentEntity) {
-            throw new NotFoundHttpException('Unable to load flights. Missing parent entity.');
+        if (!$airline = $this->getParent()) {
+            throw new NotFoundHttpException('Unable to load flights, missing airline in context.');
         }
 
-        $direction = ($this->getParam('direction') == 'A' ? 'A' : 'D');
-        $isDelayed = ($this->getParam('is_delayed') == 'Y');
-        $fromTime = ($this->getParam('from_time')) ? $this->getParam('from_time') : mktime(0, 0, 0);
-        $toTime = ($this->getParam('to_time')) ? $this->getParam('to_time') : mktime(23, 59, 59);
+        $direction = ($this->getFilter('direction') == 'A' ? 'A' : 'D');
+        $isDelayed = ($this->getFilter('is_delayed') == 'Y');
+        $fromTime = ($this->getFilter('from_time')) ? $this->getFilter('from_time') : mktime(0, 0, 0);
+        $toTime = ($this->getFilter('to_time')) ? $this->getFilter('to_time') : mktime(23, 59, 59);
 
         $qb = $this->em->createQueryBuilder();
         $query = $qb->select('f')
@@ -129,7 +103,7 @@ class AirportService extends FlightParentAbstract
                     )
                 )
             ))
-            ->andWhere('f.airport = :airport');
+            ->andWhere('f.airline = :airline');
 
         if ($direction) {
             $query->andWhere('f.arr_dep = :direction');
@@ -142,17 +116,15 @@ class AirportService extends FlightParentAbstract
         }
 
         $query->orderBy('f.schedule_time', 'ASC')
-            ->setParameter('airport', $this->parentEntity->getId())
+            ->setParameter('airline', $airline->getId())
             ->setParameter('from_time', new \DateTime(date('Y-m-d H:i:s', $fromTime)), \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter('to_time', new \DateTime(date('Y-m-d H:i:s', $toTime)), \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter('status_from_time', new \DateTime(date('Y-m-d H:i:s', ($fromTime - (24 * (60 * 60))))), \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter('status_newtime_id', 2);
 
-        return $query->getQuery()->getResult();
-    }
+        $result = $query->getQuery()->getResult();
+        $this->setGroup($result);
+        return $this;
 
-    public function getGraphData()
-    {
-        return array();
     }
 }

@@ -16,17 +16,15 @@ class DemoController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $airportService = $this->container->get('frigg_flight.airport_service');
+        // Load airport service as an example
+        $airportService = $this->container->get('frigg.airport.flight');
+
+        // Try to remember last airport
         $airportService->setSession($request->query->get('airportId'), true);
 
-        try {
-            $currentAirport = $airportService->getSessionEntity();
-        } catch (\Exception $e) {
-            throw $e;
-        }
-
+        // Return data to template
         return $this->render('FriggFlightBundle:Demo:index.html.twig', array(
-            'current_airport' => $currentAirport,
+            'current_airport' => $airportService->getSessionEntity(),
             'avinor_airports' => $airportService->getAvinorAirports()
         ));
     }

@@ -5,7 +5,7 @@ namespace Frigg\FlightBundle\Import;
 use Frigg\FlightBundle\Entity\LastUpdated;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-abstract class AvinorImportAbstract
+abstract class AbstractImportService
 {
     protected $em = null;
     protected $container = null;
@@ -31,7 +31,7 @@ abstract class AvinorImportAbstract
 
     /**
      * Execute importer
-     * @return AvinorImportAbstract
+     * @return AbstractImportService
      **/
     abstract public function run();
 
@@ -70,7 +70,7 @@ abstract class AvinorImportAbstract
 
    /**
      * Update last updated timestamp to now
-     * @return AvinorImportAbstract
+     * @return AbstractImportService
      **/
     final protected function setLastUpdated()
     {

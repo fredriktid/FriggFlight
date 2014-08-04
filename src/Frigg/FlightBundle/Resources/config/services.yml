@@ -1,40 +1,45 @@
 parameters:
-    frigg_flight.flight.config: "%kernel.root_dir%/../src/Frigg/FlightBundle/Resources/config/FriggFlight/flight.yml"
-    frigg_flight.flight_import.class: Frigg\FlightBundle\Import\FlightImport
+    # Flight settings
+    frigg.flight.config.file: "%kernel.root_dir%/../src/Frigg/FlightBundle/Resources/config/FriggFlight/flight.yml"
+    frigg.flight.import.class: Frigg\FlightBundle\Import\FlightImportService
 
-    frigg_flight.flight_status.config: "%kernel.root_dir%/../src/Frigg/FlightBundle/Resources/config/FriggFlight/flight_status.yml"
-    frigg_flight.flight_status_import.class: Frigg\FlightBundle\Import\FlightStatusImport
+    # Status settings
+    frigg.status.config.file: "%kernel.root_dir%/../src/Frigg/FlightBundle/Resources/config/FriggFlight/status.yml"
+    frigg.status.import.class: Frigg\FlightBundle\Import\StatusImportService
 
-    frigg_flight.airport.config: "%kernel.root_dir%/../src/Frigg/FlightBundle/Resources/config/FriggFlight/airport.yml"
-    frigg_flight.airport_import.class: Frigg\FlightBundle\Import\AirportImport
-    frigg_flight.airport_service.class: Frigg\FlightBundle\Service\AirportService
+    # Airport settings
+    frigg.airport.config.file: "%kernel.root_dir%/../src/Frigg/FlightBundle/Resources/config/FriggFlight/airport.yml"
+    frigg.airport.import.class: Frigg\FlightBundle\Import\AirportImportService
+    frigg.airport.flight.class: Frigg\FlightBundle\Service\AirportFlightService
 
-    frigg_flight.airline.config: "%kernel.root_dir%/../src/Frigg/FlightBundle/Resources/config/FriggFlight/airline.yml"
-    frigg_flight.airline_import.class: Frigg\FlightBundle\Import\AirlineImport
-    frigg_flight.airline_service.class: Frigg\FlightBundle\Service\AirlineService
+    # Airline settings
+    frigg.airline.config.file: "%kernel.root_dir%/../src/Frigg/FlightBundle/Resources/config/FriggFlight/airline.yml"
+    frigg.airline.import.class: Frigg\FlightBundle\Import\AirlineImportService
+    frigg.airline.flight.class: Frigg\FlightBundle\Service\AirlineFlightService
 
 services:
-    frigg_flight.flight_import:
-        class: %frigg_flight.flight_import.class%
-        arguments: [ @service_container, %frigg_flight.flight.config% ]
+    # Importer services
+    frigg.flight.import:
+        class: %frigg.flight.import.class%
+        arguments: [ @service_container, %frigg.flight.config.file% ]
 
-    frigg_flight.flight_status_import:
-        class: %frigg_flight.flight_status_import.class%
-        arguments: [ @service_container, %frigg_flight.flight_status.config%  ]
+    frigg.status.import:
+        class: %frigg.status.import.class%
+        arguments: [ @service_container, %frigg.status.config.file%  ]
 
-    frigg_flight.airport_import:
-        class: %frigg_flight.airport_import.class%
-        arguments: [ @service_container, %frigg_flight.airport.config%  ]
+    frigg.airport.import:
+        class: %frigg.airport.import.class%
+        arguments: [ @service_container, %frigg.airport.config.file%  ]
 
-    frigg_flight.airport_service:
-        class: %frigg_flight.airport_service.class%
-        arguments: [ @doctrine.orm.entity_manager, @session, %frigg_flight.airport.config% ]
+    frigg.airline.import:
+        class: %frigg.airline.import.class%
+        arguments: [ @service_container, %frigg.airline.config.file%  ]
 
-    frigg_flight.airline_import:
-        class: %frigg_flight.airline_import.class%
-        arguments: [ @service_container, %frigg_flight.airline.config%  ]
+    # Flight services
+    frigg.airport.flight:
+        class: %frigg.airport.flight.class%
+        arguments: [ @doctrine.orm.entity_manager, @session, %frigg.airport.config.file% ]
 
-    frigg_flight.airline_service:
-        class: %frigg_flight.airline_service.class%
-        arguments: [ @doctrine.orm.entity_manager, @session, %frigg_flight.airline.config% ]
-
+    frigg.airline.flight:
+        class: %frigg.airline.flight.class%
+        arguments: [ @doctrine.orm.entity_manager, @session, %frigg.airline.config.file% ]
