@@ -11,7 +11,7 @@ No documentation is available yet. Meanwhile you can probably figure out how it 
 
 **CHANGELOG:**
 
-- [x] [Stage](http://dev.flyapi.no)- and [production](http://www.flyapi.no) environments
+- [x] Stage- and production environments
 - [x] Imports
     - [x] Flight w/options
     - [x] Airline
@@ -27,20 +27,20 @@ No documentation is available yet. Meanwhile you can probably figure out how it 
     - [x] ViewResponseListener returning XML/JSON/HTML based on request
     - [x] Automatic routing
     - [x] getFlights() must accomodate flight_status_time
-    - [ ] QueryParameters
+    - [x] QueryParameters
     	- [x] Airport
-    	- [ ] Airline
+    	- [x] Airline
+    	- [ ] Extend with more parameters
 - [x] FormTypes
 - [ ] Security
+	- [x] Only admin can POST/PUT/DELETE 
     - [x] FOSUserBundle
     - [ ] FOSOAuthServerBundle
     - [ ] Signup, register, receive key
-- [ ] Frontend
-    - [ ] Dashboard
-    - [ ] Statistics
-    - [ ] Flight surveillance
-    - [ ] User accounts
-    - [ ] Documentation
-- [ ] Deployment procedure using Git post-update-hooks
-- [ ] Server monitoring w/alerts
+- [x] [A Demo site](http://www.flyapi.no/demo)
+- [ ] Documentation
+	- [x] NelmioApiDocBundle
+	- [x] Write the most important about each action
+	- [ ] Proof read and details
+- [x] Deployment procedure using Git post-update-hooks
 - [ ] Unit tests
