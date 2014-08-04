@@ -218,4 +218,4 @@ nelmio_api_doc:
     name: 'FlyAPI.no'
     exclude_sections: []
     motd:
-        template: 'FriggFlightBundle::API/Components/motd.html.twig'
+        template: FriggFlightBundle::API/Components/motd.html.twig
