@@ -110,7 +110,7 @@ class AirportService extends FlightParentAbstract
             throw new NotFoundHttpException('Unable to load flights. Missing parent entity.');
         }
 
-        $direction = $this->getParam('direction');
+        $direction = ($this->getParam('direction') == 'A' ? 'A' : 'D');
         $isDelayed = ($this->getParam('is_delayed') == 'Y');
         $fromTime = ($this->getParam('from_time')) ? $this->getParam('from_time') : mktime(0, 0, 0);
         $toTime = ($this->getParam('to_time')) ? $this->getParam('to_time') : mktime(23, 59, 59);

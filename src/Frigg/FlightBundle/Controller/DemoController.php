@@ -9,14 +9,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 
-class AirportController extends Controller
+class DemoController extends Controller
 {
     /**
-     * @Route("/", name="home")
-     * @Route("/airports", name="airports_home")
+     * @Route("/demo", name="demo")
      */
     public function indexAction(Request $request)
     {
+        $this->redirect($this->generateUrl('name_of_route'));
+
         $airportService = $this->container->get('frigg_flight.airport_service');
         $airportService->setSession($request->query->get('airportId'), true);
 

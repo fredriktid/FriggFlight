@@ -1,6 +1,6 @@
 <?php
 
-namespace Frigg\FlightBundle\Controller\Rest;
+namespace Frigg\FlightBundle\Controller\API;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;

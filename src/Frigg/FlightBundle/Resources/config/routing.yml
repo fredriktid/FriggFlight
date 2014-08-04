@@ -1,15 +1,15 @@
 airport:
     type: rest
-    resource: Frigg\FlightBundle\Controller\Rest\AirportController
+    resource: Frigg\FlightBundle\Controller\API\AirportController
 
 airport_flight:
     type: rest
-    resource: Frigg\FlightBundle\Controller\Rest\AirportFlightController
+    resource: Frigg\FlightBundle\Controller\API\AirportFlightController
 
 airline:
     type: rest
-    resource: Frigg\FlightBundle\Controller\Rest\AirlineController
+    resource: Frigg\FlightBundle\Controller\API\AirlineController
 
 airline_flight:
     type: rest
-    resource: Frigg\FlightBundle\Controller\Rest\AirlineFlightController
+    resource: Frigg\FlightBundle\Controller\API\AirlineFlightController
