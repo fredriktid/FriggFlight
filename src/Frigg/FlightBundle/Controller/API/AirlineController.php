@@ -7,7 +7,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Frigg\FlightBundle\Entity\Airline;
 use Frigg\FlightBundle\Form\AirlineType;
@@ -87,7 +87,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
     public function cpostAction(Request $request)
     {
         if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Access denied. Only administrators may add data to the API.');
+            throw new AccessDeniedHttpException('Access denied. Only administrators may add data to the API.');
         }
 
         // Create Airline form instance based
@@ -143,7 +143,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
     public function putAction(Request $request, $airlineId)
     {
         if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Access denied. Only administrators may add data to the API.');
+            throw new AccessDeniedHttpException('Access denied. Only administrators may add data to the API.');
         }
 
         // Load service
@@ -192,7 +192,7 @@ class AirlineController extends FOSRestController implements ClassResourceInterf
     public function deleteAction($airlineId)
     {
         if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Access denied. Only administrators may delete data from the API');
+            throw new AccessDeniedHttpException('Access denied. Only administrators may delete data from the API');
         }
 
         // Load service
