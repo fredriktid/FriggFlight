@@ -16,6 +16,6 @@ class IndexController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $this->redirect($this->generateUrl('nelmio_api_doc_index'));
+        return $this->redirect($this->generateUrl('nelmio_api_doc_index'));
     }
 }

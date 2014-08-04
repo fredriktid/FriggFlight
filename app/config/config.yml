@@ -214,5 +214,5 @@ fos_user:
     firewall_name: main
     user_class: Frigg\FlightBundle\Entity\User
 
-nelmio_api_doc: ~
-
+nelmio_api_doc:
+    name: FlyAPI.no
