@@ -1,20 +1,13 @@
 <table class="table-departures">
     <thead>
         <tr>
-            <th tabindex="0" rowspan="1" colspan="1">Avgang
-            </th>
-            <th tabindex="0" rowspan="1" colspan="1">Destinasjon
-            </th>
-            <th tabindex="0" rowspan="1" colspan="1">Rutenummer
-            </th>
-            <th tabindex="0" rowspan="1" colspan="1">Flyselskap
-            </th>
-            <th tabindex="0" rowspan="1" colspan="1">Gate
-            </th>
-            <th tabindex="0" rowspan="1" colspan="1">Status
-            </th>
-            <th tabindex="0" rowspan="1" colspan="1">Ny tid
-            </th>
+            <th tabindex="0" rowspan="1" colspan="1">Avgang</th>
+            <th tabindex="0" rowspan="1" colspan="1">Destinasjon</th>
+            <th tabindex="0" rowspan="1" colspan="1">Rutenummer</th>
+            <th tabindex="0" rowspan="1" colspan="1">Flyselskap</th>
+            <th tabindex="0" rowspan="1" colspan="1">Gate</th>
+            <th tabindex="0" rowspan="1" colspan="1">Status</th>
+            <th tabindex="0" rowspan="1" colspan="1">Ny tid</th>
         </tr>
     </thead>
 
@@ -33,11 +26,13 @@
         {% for flight in data %}
             {% set status = flight.getFlightStatus %}
             {% set grade = false %}
-            {% if flight.getIsDelayed and not flight.hasDeparted %}
-                {% set grade = 'gradeX' %}
-            {% elseif flight.hasDeparted %}
+
+            {% if flight.hasDeparted %}
                 {% set grade = 'gradeA' %}
+            {% elseif flight.getIsDelayed or flight.isCancelled %}
+                {% set grade = 'gradeX' %}
             {% endif %}
+
             <tr{% if grade %} class="{{ grade }}"{% endif %}>
                 <td>{{ flight.getScheduleTime.format('Y-m-d H:i:s') }}</td>
                 <td>{{ flight.getOtherAirport.name }}</td>

@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AirportService extends FlightParentAbstract
+class AirportFlightService extends AbstractFlightService
 {
     protected $params = array();
 
@@ -35,7 +35,7 @@ class AirportService extends FlightParentAbstract
      **/
     public function getSessionEntity()
     {
-        $entity = $this->em->getRepository('FriggFlightBundle:Airport')->find($this->getSession());
+        $entity = $this->em->getRepository('FriggFlightBundle:Airport')->find($this->sessionValue());
 
         if (!$entity) {
            throw new NotFoundHttpException('Unable to find airport entity');
@@ -48,7 +48,7 @@ class AirportService extends FlightParentAbstract
     /**
      * Set airport entity
      * @var integer $parentId
-     * @return AirportService
+     * @return AirportFlightService
      **/
     public function setParentById($parentId)
     {
@@ -66,22 +66,22 @@ class AirportService extends FlightParentAbstract
      * Set flight entity in context of parent
      * @var integer $parentId
      * @var integer $flightId
-     * @return AirportService
+     * @return AirportFlightService
      **/
-    public function setFlightById($parentId, $flightId)
+    public function setEntityById($parentId, $flightId)
     {
-        $flightEntity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
+        $entity = $this->em->getRepository('FriggFlightBundle:Flight')->findOneBy(
             array(
                 'id' => $flightId,
                 'airport' => $parentId,
             )
         );
 
-        if (!$flightEntity) {
+        if (!$entity) {
             throw new NotFoundHttpException('Unable to find flight entity');
         }
 
-        $this->setFlight($flightEntity);
+        $this->setEntity($entity);
         return $this;
     }
 
@@ -103,31 +103,32 @@ class AirportService extends FlightParentAbstract
      * Fetch scheduled flights group for this airport
      * @return array
      **/
-    protected function loadFlightGroup()
+    public function loadGroup()
     {
-        if (!$this->parentEntity) {
+        if (!$this->parent) {
             throw new NotFoundHttpException('Unable to load flights. Missing parent entity.');
         }
 
-        $direction = $this->getParam('direction');
-        $isDelayed = ($this->getParam('is_delayed') == 'Y');
-        $fromTime = ($this->getParam('from_time')) ? $this->getParam('from_time') : mktime(0, 0, 0);
-        $toTime = ($this->getParam('to_time')) ? $this->getParam('to_time') : mktime(23, 59, 59);
+        $direction = ($this->getFilter('direction') == 'A' ? 'A' : 'D');
+        $isDelayed = ($this->getFilter('is_delayed') == 'Y');
+        $fromTime = ($this->getFilter('from_time')) ? $this->getFilter('from_time') : mktime(0, 0, 0);
+        $toTime = ($this->getFilter('to_time')) ? $this->getFilter('to_time') : mktime(23, 59, 59);
 
         $qb = $this->em->createQueryBuilder();
         $query = $qb->select('f')
             ->from('FriggFlightBundle:Flight', 'f')
-           ->where($qb->expr()->andX(
+            ->where($qb->expr()->andX(
+                $qb->expr()->lte('f.schedule_time', ':to_time'),
                 $qb->expr()->orX(
                     $qb->expr()->gte('f.schedule_time', ':from_time'),
                     $qb->expr()->andX(
-                        $qb->expr()->neq('f.flight_status_time', ':status_default'),
-                        $qb->expr()->gte('f.flight_status_time', ':from_time')
+                        $qb->expr()->isNotNull('f.flight_status_time'),
+                        $qb->expr()->gte('f.flight_status_time', ':status_from_time'),
+                        $qb->expr()->eq('f.flight_status', ':status_newtime_id')
                     )
-                ),
-                $qb->expr()->lte('f.schedule_time', ':to_time')
-           ))
-           ->andWhere('f.airport = :airport');
+                )
+            ))
+            ->andWhere('f.airport = :airport');
 
         if ($direction) {
             $query->andWhere('f.arr_dep = :direction');
@@ -140,46 +141,19 @@ class AirportService extends FlightParentAbstract
         }
 
         $query->orderBy('f.schedule_time', 'ASC')
-            ->setParameter('from_time', new \DateTime(date('Y-m-d H:i:s', (int) $fromTime)), \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter('airport', $this->parent->getId())
+            ->setParameter('from_time', new \DateTime(date('Y-m-d H:i:s', $fromTime)), \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter('to_time', new \DateTime(date('Y-m-d H:i:s', $toTime)), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter('airport', $this->parentEntity->getId())
-            ->setParameter('status_default', NULL);
+            ->setParameter('status_from_time', new \DateTime(date('Y-m-d H:i:s', ($fromTime - (24 * (60 * 60))))), \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter('status_newtime_id', 2);
 
-        return $query->getQuery()->getResult();
+        $result = $query->getQuery()->getResult();
+        $this->setGroup($result);
+        return $this;
     }
 
     public function getGraphData()
     {
-        /*$day = date('d');
-        $month = date('m');
-        $year = date('y');
-
-        $flightDirectionMap = array(
-            'departures' => 'D',
-            'arrivals' => 'A'
-        );
-
-        $currentdays = intval(date('t'));
-        $interval = array();
-
-        $i = 0;
-        while ($i++ < $currentdays) {
-            $interval[$i] = $i;
-        }
-
-        $data = array();
-        foreach($this->flightGroup as $i => $flight) {
-            if($flightDirection = array_search($flight->getArrDep(), $flightDirectionMap)) {
-                $flightInterval = $flight->getScheduleTime()->format('j');
-                if (!isset($data[$flightDirection][$flightInterval])) {
-                    $data[$flightDirection][$flightInterval] = 0;
-                }
-                $data[$flightDirection][$flightInterval]++;
-            }
-        }
-
-        return $data + array('ticks' => $interval);
-        */
         return array();
     }
 }

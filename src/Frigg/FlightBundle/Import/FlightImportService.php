@@ -9,7 +9,7 @@ use Frigg\FlightBundle\Entity\FlightStatus;
 use Frigg\FlightBundle\Entity\Airline;
 use Frigg\FlightBundle\Entity\Airport;
 
-class FlightImport extends AvinorImportAbstract
+class FlightImportService extends AbstractImportService
 {
     protected $config;
     protected $time;
@@ -41,7 +41,7 @@ class FlightImport extends AvinorImportAbstract
 
     /**
      * Switch for only-updates vs full import
-     * @return FlightImport
+     * @return FlightImportService
      **/
     public function setUpdates($switch)
     {
@@ -52,7 +52,7 @@ class FlightImport extends AvinorImportAbstract
     /**
      * Set a new time interval for import
      * @var array $time Interval of hours for import
-     * @return FlightImport
+     * @return FlightImportService
      **/
     public function setTime($time)
     {
@@ -65,12 +65,13 @@ class FlightImport extends AvinorImportAbstract
 
     /**
      * Execute flight importer
-     * @return FlightImport
+     * @return FlightImportService
      **/
     public function run()
     {
         $lastUpdated = $this->getLastUpdated();
-        $airportService = $this->container->get('frigg_flight.airport_service');
+        $airportService = $this->container->get('frigg.airport.flight');
+        $airportImportConfig = $airportService->getConfig('import');
 
         foreach ($airportService->getAvinorAirports() as $i => $airport) {
 
@@ -111,7 +112,7 @@ class FlightImport extends AvinorImportAbstract
                     }
 
                     if (!$airportObject = $this->em->getRepository('FriggFlightBundle:Airport')->findOneByCode($flightNode->airport)) {
-                        $isAvinorAirport = (in_array($flightNode->airport, $avinorAirports));
+                        $isAvinorAirport = (in_array($flightNode->airport, $airportImportConfig['avinor']));
                         $airportObject = new Airport;
                         $airportObject->setCode($flightNode->airport);
                         $airportObject->setIsAvinor($isAvinorAirport);

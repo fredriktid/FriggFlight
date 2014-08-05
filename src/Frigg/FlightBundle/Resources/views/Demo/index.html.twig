@@ -1,12 +1,100 @@
 {% extends 'FriggFlightBundle::layout.html.twig' %}
 
+{% block title %}{{ current_airport.name }} ({{ current_airport.code }}){% endblock %}
+
+{% block header %}Avganger fra {{ current_airport.name }}{% endblock header %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/theme/index.css') }}" type="text/css" media="screen" />
     <link rel="stylesheet" href="{{ asset('css/jquery.dataTables.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/datatables.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('css/table.css') }}" type="text/css" />
 {% endblock %}
+
+{% block content %}
+    <!-- upper main stats -->
+    <div id="main-stats">
+        <div class="row stats-row">
+            <div class="col-md-3 col-sm-3 stat">
+                <div class="data">
+                    <span class="number">
+                        <strike>73%</strike>
+                    </span>
+                    aktivitet
+                </div>
+                <span class="date">akkurat nå</span>
+            </div>
+            <div class="col-md-3 col-sm-3 stat">
+                <div class="data">
+                    <span class="number">
+                    {{ render_hinclude(url('get_airport_flights_count', {'airportId': current_airport.id, 'direction': 'D', '_format': 'html'})) }}
+                    </span>
+                    avganger
+                </div>
+                <span class="date">i dag</span>
+            </div>
+            <div class="col-md-3 col-sm-3 stat">
+                <div class="data">
+                    <span class="number">
+                        {{ render_hinclude(url('get_airport_flights_count', {'airportId': current_airport.id, 'direction': 'A', '_format': 'html'})) }}
+                    </span>
+                    ankomster
+                </div>
+                <span class="date">i dag</span>
+            </div>
+            <div class="col-md-3 col-sm-3 stat last">
+                <div class="data">
+                    <span class="number">
+                        {{ render_hinclude(url('get_airport_flights_count', {'airportId': current_airport.id, 'is_delayed': 'Y', '_format': 'html'})) }}
+                    </span>
+                    forsinkelser
+                </div>
+                <span class="date">i dag</span>
+            </div>
+        </div>
+    </div>
+    <!-- end upper main stats -->
+
+    <div id="pad-wrapper">
+
+        <!-- statistics chart built with jQuery Flot -->
+        {#
+        <div class="row chart">
+            <div class="col-md-12">
+                <div class="clearfix pull-left">
+                    <h4 class="title inline-block">Velg en flyplass</h4>
+                    <select>
+                        {% for airport in avinor_airports %}
+                            <option value="{{ airport.id }}"{% if airport.id == current_airport.id %} selected{% endif %}>{{ airport.name }} ({{ airport.code}})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="btn-group pull-right">
+                    <button class="glow left">DAY</button>
+                    <button class="glow middle active">MONTH</button>
+                    <button class="glow right">YEAR</button>
+                </div>
+            </div>
+            <div class="col-md-12">
+                 <div id="statsChart"></div>
+            </div>
+        </div>
+        <hr>
+        #}
+        <div class="row">
+            <div class="col-md-12">
+                {{ render(url('get_airport_flights', {
+                    'airportId': current_airport.id,
+                    'direction': 'D',
+                    'from_time': 'now'|date('U') - (30 * 60),
+                    'to_time': 'now'|date('U') + (12 * (60 * 60)),
+                    '_format': 'html'
+                })) }}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
 
 {% block javascripts %}
     {{ parent() }}
@@ -20,7 +108,7 @@
                     "sUrl": "js/dataTables/dataTables.norwegian.txt"
                 }
             });
-            $('.table-departures').slideDown();
+            $('.table-departures').fadeIn('slow');
 
             // jQuery Knobs
             $(".knob").knob();
@@ -131,89 +219,3 @@
         });
     </script>
 {% endblock %}
-
-{% block content %}
-    <!-- upper main stats -->
-    <div id="main-stats">
-        <div class="row stats-row">
-            <div class="col-md-3 col-sm-3 stat">
-                <div class="data">
-                    <span class="number">
-                        {{ include('FriggFlightBundle::hinclude.html.twig') }}
-                    </span>
-                    aktivitet
-                </div>
-                <span class="date">akkurat nå</span>
-            </div>
-            <div class="col-md-3 col-sm-3 stat">
-                <div class="data">
-                    <span class="number">
-                    {{ render_hinclude(url('get_airport_flights_count', {'airportId': current_airport.id, 'direction': 'D', '_format': 'html'})) }}
-                    </span>
-                    avganger
-                </div>
-                <span class="date">i dag</span>
-            </div>
-            <div class="col-md-3 col-sm-3 stat">
-                <div class="data">
-                    <span class="number">
-                        {{ render_hinclude(url('get_airport_flights_count', {'airportId': current_airport.id, 'direction': 'A', '_format': 'html'})) }}
-                    </span>
-                    ankomster
-                </div>
-                <span class="date">i dag</span>
-            </div>
-            <div class="col-md-3 col-sm-3 stat last">
-                <div class="data">
-                    <span class="number">
-                        {{ render_hinclude(url('get_airport_flights_count', {'airportId': current_airport.id, 'is_delayed': 'Y', '_format': 'html'})) }}
-                    </span>
-                    forsinkelser
-                </div>
-                <span class="date">i dag</span>
-            </div>
-        </div>
-    </div>
-    <!-- end upper main stats -->
-
-    <div id="pad-wrapper">
-
-        <!-- statistics chart built with jQuery Flot -->
-        {#
-        <div class="row chart">
-            <div class="col-md-12">
-                <div class="clearfix pull-left">
-                    <h4 class="title inline-block">Velg en flyplass</h4>
-                    <select>
-                        {% for airport in avinor_airports %}
-                            <option value="{{ airport.id }}"{% if airport.id == current_airport.id %} selected{% endif %}>{{ airport.name }} ({{ airport.code}})</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="btn-group pull-right">
-                    <button class="glow left">DAY</button>
-                    <button class="glow middle active">MONTH</button>
-                    <button class="glow right">YEAR</button>
-                </div>
-            </div>
-            <div class="col-md-12">
-                 <div id="statsChart"></div>
-            </div>
-        </div>
-        <hr>
-        #}
-        <div class="row">
-            <div class="col-md-12">
-                <h4 class="title">Avganger fra {{ current_airport.code }}</h3>
-                <hr>
-                {{ render(url('get_airport_flights', {
-                    'airportId': current_airport.id,
-                    'direction': 'D',
-                    'from_time': 'now'|date('U') - 3600,
-                    'to_time': 'now'|date('U') + (12 * 3600),
-                    '_format': 'html'
-                })) }}
-            </div>
-        </div>
-    </div>
-{% endblock content %}

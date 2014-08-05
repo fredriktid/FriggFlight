@@ -381,6 +381,20 @@ class Flight
     }
 
     /**
+     * Is cancelled
+     *
+     * @return boolean
+     */
+    public function isCancelled()
+    {
+        if ($flightStatus = $this->getFlightStatus()) {
+            return ($flightStatus->getCode() == 'C');
+        }
+
+        return false;
+    }
+
+    /**
      * Set flight_status_time
      *
      * @param string $flightStatusTime

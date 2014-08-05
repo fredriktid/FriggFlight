@@ -6,7 +6,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Frigg\FlightBundle\Entity\Airport;
 
-class AirportImport extends AvinorImportAbstract
+class AirportImportService extends AbstractImportService
 {
     protected $config = array();
 
@@ -32,7 +32,7 @@ class AirportImport extends AvinorImportAbstract
 
     /**
      * Execute airport importer
-     * @return AirportImport
+     * @return AirportImportService
      **/
     public function run()
     {

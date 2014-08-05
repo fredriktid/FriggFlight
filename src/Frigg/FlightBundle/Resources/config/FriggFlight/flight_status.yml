@@ -1,3 +1,0 @@
-import:
-    #endpoint: http://flydata.avinor.no/flightStatuses.asp
-    endpoint: data/flightStatuses.asp.xml
