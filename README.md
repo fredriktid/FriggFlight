@@ -27,12 +27,12 @@ A modern REST API of the data [provided by Avinor](http://www.avinor.no/avinor/t
     	- [ ] Extend with more parameters
 - [x] FormTypes
 - [ ] Security
-	- [x] Only admin can POST/PUT/DELETE 
+	- [x] Only admin can POST/PUT/DELETE
     - [x] FOSUserBundle
     - [ ] FOSOAuthServerBundle
     - [ ] Signup, register, receive key
 - [x] [A Demo site](http://www.flyapi.no/demo)
-- [ ] Documentation
+- [ ] [Documentation](http://www.flyapi.no)
 	- [x] NelmioApiDocBundle
 	- [x] Write the most important about each action
 	- [ ] Proof read and details

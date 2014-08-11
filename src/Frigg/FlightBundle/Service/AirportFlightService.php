@@ -99,7 +99,6 @@ class AirportFlightService extends AbstractFlightService
             ->getResult();
     }
 
-
     /**
      * Fetch scheduled flights group for this airport
      * @return array
